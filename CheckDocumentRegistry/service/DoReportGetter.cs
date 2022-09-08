@@ -4,9 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
+
 namespace CheckDocumentRegistry
 {
-    internal class ReportCreator
+    public class DoReportGetter
     {
+     
+
     }
 }

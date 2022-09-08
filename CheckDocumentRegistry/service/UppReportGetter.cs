@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CheckDocumentRegistry
+namespace CheckDocumentRegistry.service
 {
-    internal class ReportCreator
+    internal class UppReportGetter
     {
     }
 }

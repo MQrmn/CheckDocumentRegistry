@@ -1,12 +1,12 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 
-namespace DocumentsComparator
+namespace CheckDocumentRegistry
 {
-    public class GetDataFromTablesRepository
+    public class SpreadSheetRepository
     {
-        const string filePath = @"C:\1C\DocumentReportUPP.xlsx";
-        public string[][] GetDocumentsFromTable(string filePath = filePath)
+        
+        public string[][] GetDocumentsFromTable(string filePath)
         {
             using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(filePath, false))
             {
@@ -23,9 +23,7 @@ namespace DocumentsComparator
                     
                     return allDocuments;
                 }
-
             }
-
             string[][] emptyDocuments = new string[1][];
             return emptyDocuments;
         }
@@ -76,7 +74,6 @@ namespace DocumentsComparator
 
                 else if (currentCell.DataType == CellValues.Error)
                     parsedRow[cellCount] = null;
-                
             }
 
             return parsedRow;

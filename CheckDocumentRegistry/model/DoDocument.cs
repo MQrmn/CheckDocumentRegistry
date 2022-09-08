@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DocumentsComparator
+namespace CheckDocumentRegistry
 {
     public class DoDocument
     {
-        public string docType { get; }
+        public int docType { get; }
         public string docTitle { get; }
         public string docCompany { get; }
         public string docCounterparty { get; }
@@ -21,7 +21,7 @@ namespace DocumentsComparator
         public DoDocument(string[] docValues)
         {
 
-            this.docType = docValues[0];
+            this.docType = this.GetDocType(docValues[0]);
             this.docTitle = docValues[1];
             this.docCompany = docValues[2];
             this.docCounterparty = docValues[3];
@@ -30,6 +30,16 @@ namespace DocumentsComparator
             this.docSum = docValues[6];
             if (docValues[7] != null) this.isUpd = true;
 
+        }
+
+        int GetDocType(string input)
+        {
+            return input switch
+            {
+                "Приобретение товаров и услуг" => 1,
+                "Входящая Счет-Фактура" => 2,
+                _ => 0
+            };
         }
 
         
