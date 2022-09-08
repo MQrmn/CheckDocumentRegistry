@@ -5,94 +5,81 @@ namespace DocumentsComparator
 {
     public class GetDataFromTablesRepository
     {
-        const string filePath = @"C:\1C\DocumentReport.xlsx";
+        const string filePath = @"C:\1C\DocumentReportUPP.xlsx";
         public string[][] GetDocumentsFromTable(string filePath = filePath)
         {
             using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(filePath, false))
             {
                 WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
-                Sheets thesheetcollection = workbookPart.Workbook.GetFirstChild<Sheets>();
+                Sheets sheetCollection = workbookPart.Workbook.GetFirstChild<Sheets>();
 
-                foreach (Sheet thesheet in thesheetcollection.OfType<Sheet>())
+                foreach (Sheet sheet in sheetCollection.OfType<Sheet>())
                 {
-                    Worksheet theWorksheet = ((WorksheetPart)workbookPart.GetPartById(thesheet.Id)).Worksheet;
-                    SheetData theSheetdata = theWorksheet.GetFirstChild<SheetData>();
+                    Worksheet workSheet = ((WorksheetPart)workbookPart.GetPartById(sheet.Id)).Worksheet;
+                    SheetData sheetData = workSheet.GetFirstChild<SheetData>();
 
-                    int rowNumber = theSheetdata.ChildElements.Count();
-                    string[][] allDocuments = GetDocumentsArray(workbookPart, theSheetdata, rowNumber);
+                    int rowNumber = sheetData.ChildElements.Count();
+                    string[][] allDocuments = GetDocumentsArray(workbookPart, sheetData, rowNumber);
                     
                     return allDocuments;
                 }
 
             }
 
-            string[][] emptyDocuments = new string[1][] { new string[] { null } } ;
+            string[][] emptyDocuments = new string[1][];
             return emptyDocuments;
         }
 
-        string[][] GetDocumentsArray(WorkbookPart workbookPart, SheetData theSheetdata, int rowNumber)
+        string[][] GetDocumentsArray(WorkbookPart workbookPart, SheetData sheetData, int rowNumber)
         {
             string[][] allDocuments = new string[rowNumber][];
             int i = 0;
 
             for (int rowCount = 0; rowCount < rowNumber; rowCount++)
             {
-                string[] docValues = this.GetParsedRow(workbookPart, theSheetdata, rowCount);
+                string[] docValues = this.GetParsedRow(workbookPart, sheetData, rowCount);
                 allDocuments[rowCount] = docValues;
-                //break;
             }
 
             return allDocuments;
         }
 
-        string[] GetParsedRow(WorkbookPart workbookPart, SheetData theSheetdata, int rCnt)
+        string[] GetParsedRow(WorkbookPart workbookPart, SheetData sheetData, int rowCount)
         {
-            int cellNumber = theSheetdata.ElementAt(rCnt).ChildElements.Count();
-            string[] returedString = new string[cellNumber];
+            int cellNumber = sheetData.ElementAt(rowCount).ChildElements.Count();
+            string[] parsedRow = new string[cellNumber];
 
-            // Перебираю ячейки в строке
-            for (int cellCount = 0;
-                cellCount < theSheetdata.ElementAt(rCnt).ChildElements.Count()
-                ; cellCount++)
+            // Going through the cells in the row
+            for (
+                int cellCount = 0;
+                cellCount < sheetData.ElementAt(rowCount).ChildElements.Count(); 
+                cellCount++
+                )
             {
-                Cell thecurrentcell = (Cell)theSheetdata.ElementAt(rCnt).ChildElements.ElementAt(cellCount);
+                Cell currentCell = (Cell)sheetData.ElementAt(rowCount).ChildElements.ElementAt(cellCount);
 
-                //Console.WriteLine("1 " + thecurrentcell.InnerText);
-                //string currentcellvalue = string.Empty;
-                if (thecurrentcell.DataType != null)
+                if (currentCell.DataType == null)
                 {
-                    //Console.WriteLine("2 " + thecurrentcell.InnerText.GetType());
-                    if (thecurrentcell.DataType == CellValues.SharedString)
-                    {
-
-                        int id;
-                        if (Int32.TryParse(thecurrentcell.InnerText, out id))
-                        {
-                            SharedStringItem item = workbookPart.SharedStringTablePart.SharedStringTable.Elements<SharedStringItem>().ElementAt(id);
-                            if (item.Text != null)
-                            {
-                                //Console.WriteLine(item.Text.Text);
-                                returedString[cellCount] = item.Text.Text;
-                            }
-                        }
-                    }
-
-                    else if (thecurrentcell.DataType == CellValues.Number)
-                    {
-                        //Console.WriteLine(thecurrentcell.InnerText.GetType());
-                        returedString[cellCount] = thecurrentcell.InnerText;
-                    }
-
-                    else if (thecurrentcell.DataType == CellValues.Error)
-                        returedString[cellCount] = null;
-                    //Console.WriteLine(thecurrentcell.InnerText.GetType());
-   
+                    parsedRow[cellCount] = currentCell.InnerText;
+                    continue;
                 }
-                else
-                    returedString[cellCount] = thecurrentcell.InnerText;
+
+                if (currentCell.DataType == CellValues.SharedString)
+                {
+                    int id = Int32.Parse(currentCell.InnerText);
+                    SharedStringItem item = workbookPart.SharedStringTablePart.SharedStringTable.Elements<SharedStringItem>().ElementAt(id);
+                    parsedRow[cellCount] = item.Text.Text;
+                }
+
+                else if (currentCell.DataType == CellValues.Number)
+                    parsedRow[cellCount] = currentCell.InnerText;
+
+                else if (currentCell.DataType == CellValues.Error)
+                    parsedRow[cellCount] = null;
+                
             }
 
-            return returedString;
+            return parsedRow;
 
         }
     }
