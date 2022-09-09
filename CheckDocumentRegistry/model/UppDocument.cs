@@ -1,4 +1,6 @@
 ﻿
+using System.Text.RegularExpressions;
+
 namespace CheckDocumentRegistry
 {
     internal class UppDocument
@@ -8,7 +10,7 @@ namespace CheckDocumentRegistry
         public string docCompany { get; }
         public string docCounterparty { get; }
         public string docNumber { get; }
-        public string docSum { get; }
+        public float docSum { get; }
         public bool isUpd { get; set; }
          
         public UppDocument(string[] docValues)
@@ -18,7 +20,7 @@ namespace CheckDocumentRegistry
             this.docCompany = docValues[5];
             this.docCounterparty = docValues[6];
             this.docNumber = docValues[2];
-            this.docSum = docValues[7]; 
+            this.docSum = this.GetDocSum(docValues[7]); 
         }
 
         int GetDocType(string input)
@@ -30,6 +32,13 @@ namespace CheckDocumentRegistry
                 _ => 0
 
             };
+        }
+
+        float GetDocSum(string stringSum)
+        {
+            string pattern = @"[\.]";
+            string regexResult = Regex.Replace(stringSum, pattern, ",", RegexOptions.IgnoreCase);
+            return float.Parse(regexResult);
         }
 
 

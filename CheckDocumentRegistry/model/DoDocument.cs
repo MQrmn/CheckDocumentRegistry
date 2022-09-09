@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace CheckDocumentRegistry
 {
@@ -14,7 +11,7 @@ namespace CheckDocumentRegistry
         public string docCounterparty { get; }
         public string docNumber { get; }
         public string docDate { get; }
-        public string docSum { get; }
+        public float docSum { get; }
         public bool isUpd { get; }
 
 
@@ -27,14 +24,14 @@ namespace CheckDocumentRegistry
             this.docCounterparty = docValues[3];
             this.docNumber = docValues[4];
             this.docDate = docValues[5];
-            this.docSum = docValues[6];
+            this.docSum = this.GetDocSum(docValues[6]);
             if (docValues[7] != null) this.isUpd = true;
 
         }
 
-        int GetDocType(string input)
+        int GetDocType(string rawDocType)
         {
-            return input switch
+            return rawDocType switch
             {
                 "Приобретение товаров и услуг" => 1,
                 "Входящая Счет-Фактура" => 2,
@@ -42,6 +39,12 @@ namespace CheckDocumentRegistry
             };
         }
 
+        float GetDocSum(string stringSum)
+        {
+            string pattern = @"[A-Z\s]";
+            string regexResult = Regex.Replace(stringSum, pattern, String.Empty, RegexOptions.IgnoreCase);
+            return float.Parse(regexResult);
+        }
         
 
     }
