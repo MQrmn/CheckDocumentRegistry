@@ -5,13 +5,14 @@ namespace CheckDocumentRegistry
     {
         static void Main()
         {
+            string folder = "All";
             string[] args = new string[6];
             args[0] = "-do";
-            args[1] = @"C:\1C\DocumentReportDO.xlsx";
+            args[1] = $"C:\\1C\\{folder}\\DocumentReportDO.xlsx";
             args[2] = "-upp";
-            args[3] = @"C:\1C\DocumentReportUPP.xlsx";
+            args[3] = $"C:\\1C\\{folder}\\DocumentReportUPP.xlsx";
             args[4] = "-o";
-            args[5] = @"C:\1C\Output.xlsx";
+            args[5] = $"C:\\1C\\output.xlsx";
 
             ArgsParser parsedArgs = new ArgsParser(args);
 
@@ -20,10 +21,6 @@ namespace CheckDocumentRegistry
                 DocumentsComparator documentsComparator = new DocumentsComparator(parsedArgs);
                 documentsComparator.Run();
             }
-                
-
-            
-
             
         }
     }

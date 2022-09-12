@@ -3,34 +3,30 @@ using System.Text.RegularExpressions;
 
 namespace CheckDocumentRegistry
 {
-    internal class UppDocument
+    public class UppDocument : Document
     {
-        public string docDate { get; }
-        public int docType { get; }
-        public string docCompany { get; }
-        public string docCounterparty { get; }
-        public string docNumber { get; }
-        public float docSum { get; }
-        public bool isUpd { get; set; }
-         
+
         public UppDocument(string[] docValues)
         {
-            this.docDate = docValues[1];
-            this.docType = this.GetDocType(docValues[3]);
+            this.docType = this.GetDocType(docValues[0]);
+            this.docTitle = docValues[1];
+            this.docDate = docValues[2];
+            this.docCounterparty = docValues[3];
+            this.docNumber = docValues[4];
             this.docCompany = docValues[5];
-            this.docCounterparty = docValues[6];
-            this.docNumber = docValues[2];
-            this.docSum = this.GetDocSum(docValues[7]); 
+            
+            if (docValues[6] != String.Empty)
+                this.docSum = this.GetDocSum(docValues[6]);
+            
         }
 
         int GetDocType(string input)
         {
             return input switch
             {
-                "Поступление товаров и услуг" => 1,
-                "Счет-фактура полученный" => 2,
+                "Да Поступление товаров и услуг" => 1,
+                "Да Счет-фактура полученный" => 2,
                 _ => 0
-
             };
         }
 
@@ -41,6 +37,18 @@ namespace CheckDocumentRegistry
             return float.Parse(regexResult);
         }
 
+        public string[] GetArray()
+        {
+            string[] result = new string[] { this.docType.ToString(),
+                                             this.docTitle,
+                                             this.docDate,
+                                             this.docCounterparty,
+                                             this.docNumber,
+                                             this.docCompany,
+                                             this.docSum.ToString()
+            };
+            return result;
+        }
 
     }
 }

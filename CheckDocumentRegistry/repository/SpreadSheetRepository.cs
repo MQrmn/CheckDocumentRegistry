@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using System.Text.RegularExpressions;
 
 namespace CheckDocumentRegistry
 {
@@ -16,6 +17,7 @@ namespace CheckDocumentRegistry
                 foreach (Sheet sheet in sheetCollection.OfType<Sheet>())
                 {
                     Worksheet workSheet = ((WorksheetPart)workbookPart.GetPartById(sheet.Id)).Worksheet;
+
                     SheetData sheetData = workSheet.GetFirstChild<SheetData>();
 
                     int rowNumber = sheetData.ChildElements.Count();
@@ -58,7 +60,10 @@ namespace CheckDocumentRegistry
 
                 if (currentCell.DataType == null)
                 {
-                    parsedRow[cellCount] = currentCell.InnerText;
+                    if (cellCount == 4)
+                        parsedRow[cellCount] = Regex.Replace(currentCell.InnerText, @"\.0", String.Empty);
+                    else
+                        parsedRow[cellCount] = currentCell.InnerText;
                     continue;
                 }
 
@@ -70,7 +75,10 @@ namespace CheckDocumentRegistry
                 }
 
                 else if (currentCell.DataType == CellValues.Number)
+                {
                     parsedRow[cellCount] = currentCell.InnerText;
+                    
+                }
 
                 else if (currentCell.DataType == CellValues.Error)
                     parsedRow[cellCount] = null;
