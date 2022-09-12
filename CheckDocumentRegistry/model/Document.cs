@@ -19,13 +19,16 @@ namespace CheckDocumentRegistry
 
         public string[] GetArray()
         {
-            string[] result = new string[] { this.docType.ToString(),
+            string isUpd = this.isUpd ? "Да" : "Нет";
+
+            string[] result = new string[] { 
                                              this.docTitle,
-                                             this.docDate,
                                              this.docCounterparty,
-                                             this.docNumber,
                                              this.docCompany,
-                                             this.docSum.ToString()
+                                             this.docDate,
+                                             this.docNumber,
+                                             this.docSum.ToString(),
+                                             isUpd
             };
             return result;
         }

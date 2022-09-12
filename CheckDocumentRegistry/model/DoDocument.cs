@@ -29,7 +29,6 @@ namespace CheckDocumentRegistry
                 "Приобретение товаров и услуг" => 1,
                 "Входящий Акт выполненных работ" => 1,
                 "Входящая Счет-Фактура" => 2,
-                
                 _ => 0
             };
         }
@@ -38,6 +37,7 @@ namespace CheckDocumentRegistry
         {
             string pattern = @"[A-Z\s]";
             string regexResult = Regex.Replace(stringSum, pattern, String.Empty, RegexOptions.IgnoreCase);
+
             return float.Parse(regexResult);
         }
         

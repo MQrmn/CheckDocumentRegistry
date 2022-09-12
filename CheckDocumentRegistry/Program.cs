@@ -5,7 +5,7 @@ namespace CheckDocumentRegistry
     {
         static void Main()
         {
-            string folder = "All";
+            string folder = "100";
             string[] args = new string[6];
             args[0] = "-do";
             args[1] = $"C:\\1C\\{folder}\\DocumentReportDO.xlsx";
