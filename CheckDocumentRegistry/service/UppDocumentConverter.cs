@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CheckDocumentRegistry.service
+namespace CheckDocumentRegistry
 {
     internal class UppDocumentConverter
     {
