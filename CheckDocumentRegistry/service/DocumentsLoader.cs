@@ -1,43 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace CheckDocumentRegistry
 {
-    internal class DocumentsLoader
+    public class DocumentsLoader
     {
-
-        List<DoDocument> doDocuments = new List<DoDocument>();
-        List<UppDocument> uppDocuments = new List<UppDocument>();
         SpreadSheetRepository spreadSheetRepository = new SpreadSheetRepository();
-        DoDocumentConverter doDocumentConverter = new DoDocumentConverter();
-        UppDocumentConverter uppDocumentConverter = new UppDocumentConverter();
+        public List<Document> doDocuments { get; }
+        public List<Document> uppDocuments { get; }
 
-
-
-        public List<DoDocument> GetDoDocuments(string filePath)
+        public DocumentsLoader(string doPath, string uppPath)
         {
-            Console.WriteLine($"Reading Table {filePath} ");
+            this.doDocuments = this.GetDoDocuments(doPath);
+            this.uppDocuments = this.GetUppDocuments(uppPath);
+        }
+
+        public List<Document> GetDoDocuments(string filePath)
+        {
+            Console.WriteLine($"Reading Table {filePath}");
             string[][] doDocumentsData = this.spreadSheetRepository.GetDocumentsFromTable(filePath);
 
             Console.WriteLine("Converting Do data");
-            this.doDocuments = this.doDocumentConverter.ConvertArrToDocuments(doDocumentsData);
+            List<Document> documents = Converter.ConvertDoDocuments(doDocumentsData);
 
-            return this.doDocuments;
+            return documents;
         }
 
-        public List<UppDocument> GetUppDocuments(string filePath)
+        public List<Document> GetUppDocuments(string filePath)
         {
-            Console.WriteLine($"Reading Table {filePath} ");
+            Console.WriteLine($"Reading Table {filePath}");
             string[][] uppDocumentsData = this.spreadSheetRepository.GetDocumentsFromTable(filePath);
 
             Console.WriteLine("Converting Upp data");
-            this.uppDocuments = this.uppDocumentConverter.ConvertArrToDocuments(uppDocumentsData);
+            List<Document> documents = Converter.ConvertUppDocuments(uppDocumentsData);
 
-            return this.uppDocuments;
+            return documents;
         }
-
     }
 }
