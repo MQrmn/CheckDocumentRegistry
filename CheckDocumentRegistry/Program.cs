@@ -5,15 +5,13 @@ namespace CheckDocumentRegistry
     {
         static void Main(string[] args)
         {
-            Arguments arguments = new Arguments(args);
+            ArgsParser arguments = new(args);
 
-            //ArgsParser parsedArgs = new ArgsParser(args);
+            DocumentsLoader documents = new(arguments.doSpreadSheetPath, arguments.uppSpreadSheetPath);
 
-            DocumentsLoader documents = new DocumentsLoader(arguments.doSpreadSheetPath, arguments.uppSpreadSheetPath);
+            Comparator compareResult = new(documents.doDocuments, documents.uppDocuments);
 
-            Comparator comparator = new Comparator(documents.doDocuments, documents.uppDocuments);
-
-            ReportCreator.CreateReports(comparator, arguments);
+            ReportCreator.CreateReports(compareResult, arguments);
 
         }
     }
