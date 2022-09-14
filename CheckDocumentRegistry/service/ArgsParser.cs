@@ -15,48 +15,48 @@ namespace CheckDocumentRegistry
         string unMatchedDoPathKey = "-umdo";
         string unMatchedUppPathKey = "-umupp";
         string tmpPath = "100";
-
-        DefaultsRepository defaults = new();
-
+        
         public ArgsParser(string[] args)
-        {
-            this.doSpreadSheetPath = this.SetDoSpreadSheetPath(args);
-            this.uppSpreadSheetPath = this.SetUppSpreadSheetPath(args);
-            this.matchedDoPath = this.SetMatchedDoPath(args);
-            this.matchedUppPath = this.SetMatchedUppPath(args);
-            this.unMatchedDoPath = this.SetUnMatchedDoPath(args);
-            this.unMatchedUppPath = this.SetUnMatchedUppPath(args);
+        { 
+            Arguments def = DefaultsRepository.GetDefaults();
+
+            this.doSpreadSheetPath  =   this.SetDoSpreadSheetPath(def.doSpreadSheetPath, args);
+            this.uppSpreadSheetPath =   this.SetUppSpreadSheetPath(def.uppSpreadSheetPath, args);
+            this.matchedDoPath      =   this.SetMatchedDoPath(def.matchedDoPath, args);
+            this.matchedUppPath     =   this.SetMatchedUppPath(def.matchedUppPath, args);
+            this.unMatchedDoPath    =   this.SetUnMatchedDoPath(def.unMatchedDoPath, args);
+            this.unMatchedUppPath   =   this.SetUnMatchedUppPath(def.unMatchedUppPath, args);
 
         }
 
-        string SetDoSpreadSheetPath(string[] args)
+        string SetDoSpreadSheetPath(string def, string[] args)
         {
-            return @$"C:\1C\{tmpPath}\DocumentReportDO.xlsx";
+            return def;
         }
 
-        string SetUppSpreadSheetPath(string[] args)
+        string SetUppSpreadSheetPath(string def, string[] args)
         {
-            return $"C:\\1C\\{tmpPath}\\DocumentReportUPP.xlsx";
+            return def;
         }
 
-        string SetMatchedDoPath(string[] args)
+        string SetMatchedDoPath(string def, string[] args)
         {
-            return "C:\\1C\\МatchedDoDocuments.xlsx";
+            return def;
         }
 
-        string SetMatchedUppPath(string[] args)
+        string SetMatchedUppPath(string def, string[] args)
         {
-            return "C:\\1C\\МatchedUppDocuments.xlsx";
+            return def;
         }
 
-        string SetUnMatchedDoPath(string[] args)
+        string SetUnMatchedDoPath(string def, string[] args)
         {
-            return "C:\\1C\\UnМatchedDoDocuments.xlsx";
+            return def;
         }
 
-        string SetUnMatchedUppPath(string[] args)
+        string SetUnMatchedUppPath(string def, string[] args)
         {
-            return "C:\\1C\\UnМatchedUppDocuments.xlsx";
+            return def;
         }
     }
 }
