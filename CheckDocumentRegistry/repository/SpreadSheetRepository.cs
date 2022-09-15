@@ -58,6 +58,7 @@ namespace CheckDocumentRegistry
             {
                 Cell currentCell = (Cell)sheetData.ElementAt(rowCount).ChildElements.ElementAt(cellCount);
 
+
                 if (currentCell.DataType == null)
                 {
                     if (cellCount == 4)
