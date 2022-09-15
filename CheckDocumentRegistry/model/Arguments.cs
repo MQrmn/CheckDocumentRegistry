@@ -17,12 +17,12 @@ namespace CheckDocumentRegistry
 
         public Arguments(bool isDefault)
         {
-            this.doSpreadSheetPath = "DocumentReportDO.xlsx";
-            this.uppSpreadSheetPath = "DocumentReportUPP.xlsx";
-            this.matchedDoPath = "МatchedDoDocuments.xlsx";
-            this.matchedUppPath = "МatchedUppDocuments.xlsx";
-            this.unMatchedDoPath = "UnМatchedDoDocuments.xlsx";
-            this.unMatchedUppPath = "UnМatchedUppDocuments.xlsx";
+            this.doSpreadSheetPath = "DocumentsDO.xlsx";
+            this.uppSpreadSheetPath = "DocumentsUPP.xlsx";
+            this.matchedDoPath = ".//output//МatchedDoDocuments.xlsx";
+            this.matchedUppPath = ".//output//МatchedUppDocuments.xlsx";
+            this.unMatchedDoPath = ".//output//UnМatchedDoDocuments.xlsx";
+            this.unMatchedUppPath = ".//output//UnМatchedUppDocuments.xlsx";
         }
 
     }

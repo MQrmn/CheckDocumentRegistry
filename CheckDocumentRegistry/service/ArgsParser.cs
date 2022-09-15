@@ -8,17 +8,9 @@ namespace CheckDocumentRegistry
 {
     public class ArgsParser : Arguments
     {
-        string doSpreadSheetPathKey = "-do";
-        string uppSpreadSheetPathKey = "-upp";
-        string matchedDoPathKey = "-mdo";
-        string matchedUppPathKey = "-mupp";
-        string unMatchedDoPathKey = "-umdo";
-        string unMatchedUppPathKey = "-umupp";
-        string tmpPath = "100";
-        
         public ArgsParser(string[] args)
         { 
-            Arguments def = DefaultsRepository.GetDefaults();
+            Arguments def = ParamsRepository.GetParams();
 
             this.doSpreadSheetPath  =   this.SetDoSpreadSheetPath(def.doSpreadSheetPath, args);
             this.uppSpreadSheetPath =   this.SetUppSpreadSheetPath(def.uppSpreadSheetPath, args);

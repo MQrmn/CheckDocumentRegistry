@@ -9,23 +9,19 @@ namespace CheckDocumentRegistry
         public static void Create(List<Document> documents, string filePath)
         {
 
-            // Create a spreadsheet document by supplying the filepath.
             SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument
                 .Create(filePath, DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook);
 
-            // Add a WorkbookPart to the document.
             WorkbookPart workbookpart = spreadsheetDocument.AddWorkbookPart();
             workbookpart.Workbook = new Workbook();
 
-            // Add a WorksheetPart to the WorkbookPart.
             WorksheetPart worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
             worksheetPart.Worksheet = new Worksheet(new SheetData());
 
-            // Add Sheets to the Workbook.
+
             Sheets sheets = spreadsheetDocument.WorkbookPart.Workbook.
                 AppendChild<Sheets>(new Sheets());
 
-            // Append a new worksheet and associate it with the workbook.
             Sheet sheet = new Sheet()
             {
                 Id = spreadsheetDocument.WorkbookPart.GetIdOfPart(worksheetPart),
@@ -37,8 +33,7 @@ namespace CheckDocumentRegistry
 
             Worksheet worksheet = worksheetPart.Worksheet;
 
-
-            // Задаем колонки и их ширину
+            // Set wifth of column
             Columns lstColumns = worksheetPart.Worksheet.GetFirstChild<Columns>();
             Boolean needToInsertColumns = false;
             if (lstColumns == null)
@@ -46,6 +41,7 @@ namespace CheckDocumentRegistry
                 lstColumns = new Columns();
                 needToInsertColumns = true;
             }
+
             lstColumns.Append(new Column() { Min = 1, Max = 8, Width = 60, CustomWidth = true }); // Title
             lstColumns.Append(new Column() { Min = 2, Max = 8, Width = 40, CustomWidth = true }); // ConterPart
             lstColumns.Append(new Column() { Min = 3, Max = 8, Width = 15, CustomWidth = true }); // Organiz
