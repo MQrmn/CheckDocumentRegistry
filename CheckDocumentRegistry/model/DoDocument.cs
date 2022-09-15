@@ -13,7 +13,7 @@ namespace CheckDocumentRegistry
             this.docTitle = docValues[1];
             this.docCompany = docValues[2];
             this.docCounterparty = this.GetDocCounterparty(docValues[3]);
-            this.docNumber = docValues[4];
+            this.docNumber = this.SetDocNumber(docValues[4]);
             this.docDate = docValues[5];
 
             if (docValues[6] != String.Empty)
@@ -47,6 +47,8 @@ namespace CheckDocumentRegistry
             string regexResult = Regex.Replace(docCounterparty, pattern, String.Empty, RegexOptions.IgnoreCase);
             return regexResult;
         }
+
+        
 
     }
 }

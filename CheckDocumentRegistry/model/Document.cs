@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
 namespace CheckDocumentRegistry
 {
@@ -30,6 +26,44 @@ namespace CheckDocumentRegistry
                                              this.docSum.ToString(),
                                              isUpd
             };
+            return result;
+        }
+        protected string SetDocNumber(string input)
+        {
+            string digitRus = "АВСЕНКМОРТХ";
+            string digitEng = "ABCEHKMOPTX";
+            string patternWord = @$"[{digitEng}]";
+            string patternAddNumber = @"\~\d";
+            string result;
+
+            result = input.ToUpper();
+
+            result = Regex.Replace(result, patternAddNumber, string.Empty);
+
+            result = Regex.Replace(result, @"\s+", string.Empty);
+
+            result = (Regex.IsMatch(result, patternWord) ? ReplaceWord(result) : result );
+
+            result = (Regex.IsMatch(result, @"\w+") ? CutZero(result) : result );
+
+            string CutZero(string input)
+            {
+                return Regex.Replace(input, @"^0+", string.Empty); ;
+            }
+
+            string ReplaceWord(string input)
+            {
+                string result = input;
+
+                for (var i = 0; i < digitEng.Length; i++)
+                {
+                    result = Regex.Replace(result, digitEng[i].ToString(), digitRus[i].ToString());
+
+                }
+
+                return result;
+            }
+
             return result;
         }
     }
