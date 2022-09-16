@@ -7,26 +7,37 @@ namespace CheckDocumentRegistry
         public List<Document>? doDocuments { get; }
         public List<Document>? uppDocuments { get; }
 
-        public DocumentsLoader(string doPath, string uppPath)
+        public DocumentsLoader(Arguments args)
         {
-            Abort(doPath);
-            Abort(uppPath);
+            TryAbort(args);
 
-            this.doDocuments = this.GetDoDocuments(doPath);
-            this.uppDocuments = this.GetUppDocuments(uppPath);
+            this.doDocuments = this.GetDoDocuments(args.doSpreadSheetPath);
+            this.uppDocuments = this.GetUppDocuments(args.uppSpreadSheetPath);
         }
 
-        void Abort(string path)
+        void TryAbort(Arguments args)
         {
-            if (!File.Exists(path))
+            bool doExist = File.Exists(args.doSpreadSheetPath);
+            bool uppExist = File.Exists(args.uppSpreadSheetPath);
+
+            if (doExist && uppExist)
             {
-                Console.WriteLine($"Abort: File \"{path}\" not found.");
+                return;
+            }
+            else
+            {
+                if (!doExist)
+                {
+                    Console.WriteLine($"Abort: File \"{args.doSpreadSheetPath}\" not found.");
+                }
+                else if (!uppExist)
+                {
+                    Console.WriteLine($"Abort: File \"{args.uppSpreadSheetPath}\" not found.");
+                }
                 Console.ReadLine();
                 Environment.Exit(0);
             }
-            
         }
-        
 
         public List<Document> GetDoDocuments(string filePath)
         {

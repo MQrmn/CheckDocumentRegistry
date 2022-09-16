@@ -7,7 +7,8 @@ namespace CheckDocumentRegistry
         {
             Arguments args = ParamsRepository.GetParams();
 
-            DocumentsLoader documents = new(args.doSpreadSheetPath, args.uppSpreadSheetPath);
+            //DocumentsLoader documents = new(args.doSpreadSheetPath, args.uppSpreadSheetPath);
+            DocumentsLoader documents = new(args);
 
             Comparator compareResult = new(documents.doDocuments, documents.uppDocuments);
 

@@ -1,5 +1,5 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Text;
+using System.Text.Json;
 
 namespace CheckDocumentRegistry
 {
@@ -9,7 +9,7 @@ namespace CheckDocumentRegistry
         {
             Arguments arguments;
 
-            string filePath = "defaults.json";
+            string filePath = "params.json";
 
             try
             {
@@ -20,11 +20,12 @@ namespace CheckDocumentRegistry
             {
                 arguments = new Arguments(isDefault: true);
                 string jsonstring = JsonSerializer.Serialize(arguments);
-                File.WriteAllText("defaults.json", jsonstring);
+                File.WriteAllText(filePath, jsonstring, Encoding.UTF8);
+                Directory.CreateDirectory("input");
+                Directory.CreateDirectory("output");
 
                 Console.WriteLine("Configuration file could not be read.");
                 Console.WriteLine("The template of the configuration file was created in the folder with the application.");
-                Console.WriteLine(@"Note: if you want to set absolute paths, you must use the format: C\:Folder\\\Folder\\...\\");
                 Console.WriteLine("The application continues to work with the default settings.\n");
             }
             return arguments;

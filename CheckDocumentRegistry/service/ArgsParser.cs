@@ -16,8 +16,8 @@ namespace CheckDocumentRegistry
             this.uppSpreadSheetPath =   this.SetUppSpreadSheetPath(def.uppSpreadSheetPath, args);
             this.matchedDoPath      =   this.SetMatchedDoPath(def.matchedDoPath, args);
             this.matchedUppPath     =   this.SetMatchedUppPath(def.matchedUppPath, args);
-            this.unMatchedDoPath    =   this.SetUnMatchedDoPath(def.unMatchedDoPath, args);
-            this.unMatchedUppPath   =   this.SetUnMatchedUppPath(def.unMatchedUppPath, args);
+            this.passedDoPath    =   this.SetUnMatchedDoPath(def.passedDoPath, args);
+            this.passedUppPath   =   this.SetUnMatchedUppPath(def.passedUppPath, args);
 
         }
 
