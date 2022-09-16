@@ -37,13 +37,9 @@ namespace CheckDocumentRegistry
             string result;
 
             result = input.ToUpper();
-
             result = Regex.Replace(result, patternAddNumber, string.Empty);
-
             result = Regex.Replace(result, @"\s+", string.Empty);
-
             result = (Regex.IsMatch(result, patternWord) ? ReplaceWord(result) : result );
-
             result = (Regex.IsMatch(result, @"\w+") ? CutZero(result) : result );
 
             string CutZero(string input)
