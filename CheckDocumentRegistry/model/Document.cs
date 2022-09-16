@@ -13,11 +13,25 @@ namespace CheckDocumentRegistry
         public float docSum { get; set; }
         public bool isUpd { get; set; }
 
+        public Document() {}
+
+        public Document(string[] docValues)
+        {
+            this.docType = Int32.Parse(docValues[0]);
+            this.docTitle = docValues[1];
+            this.docDate = docValues[4];
+            this.docCounterparty = docValues[2];
+            this.docNumber = docValues[5];
+            this.docCompany = docValues[3];
+            this.docSum = float.Parse(docValues[6]);
+        }
+
         public string[] GetArray()
         {
             string isUpd = this.isUpd ? "Да" : "Нет";
 
-            string[] result = new string[] { 
+            string[] result = new string[] {
+                                             this.docType.ToString(),
                                              this.docTitle,
                                              this.docCounterparty,
                                              this.docCompany,

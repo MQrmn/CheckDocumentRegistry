@@ -41,21 +41,21 @@ namespace CheckDocumentRegistry
                 lstColumns = new Columns();
                 needToInsertColumns = true;
             }
-
-            lstColumns.Append(new Column() { Min = 1, Max = 8, Width = 60, CustomWidth = true }); // Title
-            lstColumns.Append(new Column() { Min = 2, Max = 8, Width = 40, CustomWidth = true }); // ConterPart
-            lstColumns.Append(new Column() { Min = 3, Max = 8, Width = 15, CustomWidth = true }); // Organiz
-            lstColumns.Append(new Column() { Min = 4, Max = 8, Width = 15, CustomWidth = true }); // Date
-            lstColumns.Append(new Column() { Min = 5, Max = 8, Width = 20, CustomWidth = true }); // Number
-            lstColumns.Append(new Column() { Min = 6, Max = 8, Width = 15, CustomWidth = true }); // Summ
-            lstColumns.Append(new Column() { Min = 7, Max = 8, Width = 10, CustomWidth = true }); // isUPD
-            lstColumns.Append(new Column() { Min = 8, Max = 8, Width = 40, CustomWidth = true }); // Comment
+            lstColumns.Append(new Column() { Min = 1, Max = 9, Width = 5, CustomWidth = true });  // Type
+            lstColumns.Append(new Column() { Min = 2, Max = 9, Width = 60, CustomWidth = true }); // Title
+            lstColumns.Append(new Column() { Min = 3, Max = 9, Width = 40, CustomWidth = true }); // ConterPart
+            lstColumns.Append(new Column() { Min = 4, Max = 9, Width = 15, CustomWidth = true }); // Organiz
+            lstColumns.Append(new Column() { Min = 5, Max = 9, Width = 15, CustomWidth = true }); // Date
+            lstColumns.Append(new Column() { Min = 6, Max = 9, Width = 20, CustomWidth = true }); // Number
+            lstColumns.Append(new Column() { Min = 7, Max = 9, Width = 15, CustomWidth = true }); // Summ
+            lstColumns.Append(new Column() { Min = 8, Max = 9, Width = 10, CustomWidth = true }); // isUPD
+            lstColumns.Append(new Column() { Min = 9, Max = 9, Width = 40, CustomWidth = true }); // Comment
             if (needToInsertColumns)
                 worksheetPart.Worksheet.InsertAt(lstColumns, 0);
 
             SheetData sheetData = worksheet.GetFirstChild<SheetData>();
 
-            string[] titleOfColumn = new string[8] { "Наименование", "Контрагент", "Организация", "Дата", "Номер", "Сумма", "Является УПД", "Комментарий" };
+            string[] titleOfColumn = new string[9] {"Тип", "Наименование", "Контрагент", "Организация", "Дата", "Номер", "Сумма", "Является УПД", "Комментарий" };
 
             Row row = new Row();
             foreach (var i in titleOfColumn)

@@ -6,6 +6,7 @@ namespace CheckDocumentRegistry
         SpreadSheetRepository spreadSheetRepository = new SpreadSheetRepository();
         public List<Document>? doDocuments { get; }
         public List<Document>? uppDocuments { get; }
+        public List<Document>? ignoreDoDocuments { get; }
 
         public DocumentsLoader(Arguments args)
         {
@@ -58,6 +59,14 @@ namespace CheckDocumentRegistry
             Console.WriteLine("Converting Upp data");
             List<Document> documents = Converter.ConvertUppDocuments(uppDocumentsData);
 
+            return documents;
+        }
+
+        List<Document> GetIgnoreDo(string filePath)
+        {
+            Console.WriteLine($"Reading Table {filePath}");
+            string[][] ignore = this.spreadSheetRepository.GetDocumentsFromTable(filePath);
+            List<Document> documents = Converter.ConvertIgnoreDoc(ignore);
             return documents;
         }
     }

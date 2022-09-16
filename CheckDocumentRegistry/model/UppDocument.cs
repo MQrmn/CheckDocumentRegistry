@@ -6,6 +6,8 @@ namespace CheckDocumentRegistry
     public class UppDocument : Document
     {
 
+        public UppDocument() {}
+
         public UppDocument(string[] docValues)
         {
             this.docType = this.GetDocType(docValues[0]);
@@ -17,7 +19,6 @@ namespace CheckDocumentRegistry
             
             if (docValues[6] != String.Empty)
                 this.docSum = this.GetDocSum(docValues[6]);
-            
         }
 
         int GetDocType(string input)

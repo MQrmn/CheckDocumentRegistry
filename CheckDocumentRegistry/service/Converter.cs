@@ -36,5 +36,19 @@ namespace CheckDocumentRegistry
 
             return documents;
         }
+
+        public static List<Document> ConvertIgnoreDoc(string[][] input)
+        {
+
+            List<Document> documents = new List<Document>(input.Length);
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                documents.Add(new Document(input[i]));
+            }
+
+            return documents;
+
+        }
     }
 }
