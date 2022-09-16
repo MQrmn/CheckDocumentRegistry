@@ -12,7 +12,7 @@ namespace CheckDocumentRegistry
             this.docTitle = docValues[1];
             this.docDate = docValues[2];
             this.docCounterparty = docValues[3];
-            this.docNumber = docValues[4];
+            this.docNumber = this.SetDocNumber(docValues[4]);
             this.docCompany = docValues[5];
             
             if (docValues[6] != String.Empty)

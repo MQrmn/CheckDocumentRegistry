@@ -1,22 +1,20 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-// https://docs.microsoft.com/ru-ru/dotnet/standard/serialization/system-text-json-how-to?pivots=dotnet-6-0
-
 namespace CheckDocumentRegistry
 {
-    internal class DefaultsRepository 
+    internal class ParamsRepository 
     {
-        public static Arguments GetDefaults()
+        public static Arguments GetParams()
         {
-            Arguments arguments = new();
+            Arguments arguments;
 
             string filePath = "defaults.json";
 
             try
             {
                 string jsonString = File.ReadAllText(filePath);
-                arguments = JsonSerializer.Deserialize<Arguments>(jsonString)!;
+                arguments = JsonSerializer.Deserialize<Arguments>(jsonString);
             }
             catch
             {

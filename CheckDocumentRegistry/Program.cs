@@ -3,15 +3,15 @@ namespace CheckDocumentRegistry
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            ArgsParser arguments = new(args);
+            Arguments args = ParamsRepository.GetParams();
 
-            DocumentsLoader documents = new(arguments.doSpreadSheetPath, arguments.uppSpreadSheetPath);
+            DocumentsLoader documents = new(args.doSpreadSheetPath, args.uppSpreadSheetPath);
 
             Comparator compareResult = new(documents.doDocuments, documents.uppDocuments);
 
-            ReportCreator.CreateReports(compareResult, arguments);
+            ReportCreator.CreateReports(compareResult, args);
 
         }
     }
