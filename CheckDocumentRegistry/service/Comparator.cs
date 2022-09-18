@@ -5,20 +5,25 @@ namespace CheckDocumentRegistry
     {
         public List<Document> doDocuments;
         public List<Document> uppDocuments;
+        public List<Document> ignoreDoDocuments;
 
         public List<Document> matchedDoDocuments = new List<Document>();
         public List<Document> matchedUppDocuments = new List<Document>();
 
 
-        public Comparator(List<Document> inputDoDocs, List<Document> inputUppDocs)
+        public Comparator(List<Document> inputDoDocs, List<Document> inputUppDocs, List<Document> inputIgnoreDo)
         {
             this.doDocuments = inputDoDocs;
             this.uppDocuments = inputUppDocs;
+            this.ignoreDoDocuments = inputIgnoreDo;
             this.Compare();
         }
 
         public void Compare()
         {
+            Console.WriteLine("Preparing DO Documents list for comparing");
+            this.ClearSourseDoListByIgnore(this.doDocuments, this.ignoreDoDocuments);
+
             Console.WriteLine("Comparing documents");
             this.doDocuments.ForEach(this.CompareOneDocument);
 
@@ -95,5 +100,11 @@ namespace CheckDocumentRegistry
                 sourceDocumentList.Remove(document);
             });
         }
+
+        private void ClearSourseDoListByIgnore(List<Document> sourceDocumentList, List<Document> ignoreDocumentList)
+        {
+
+        }
+
     }
 }

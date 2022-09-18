@@ -24,6 +24,7 @@ namespace CheckDocumentRegistry
             this.docNumber = docValues[5];
             this.docCompany = docValues[3];
             this.docSum = float.Parse(docValues[6]);
+            if (docValues[7] == "Да") this.isUpd = true;
         }
 
         public string[] GetArray()

@@ -26,6 +26,4 @@ namespace CheckDocumentRegistry
             this.passedUppPath = ".\\output\\PassedUpp.xlsx";
         }
     }
-
-
 }

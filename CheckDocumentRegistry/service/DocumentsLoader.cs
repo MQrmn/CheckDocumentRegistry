@@ -14,6 +14,8 @@ namespace CheckDocumentRegistry
 
             this.doDocuments = this.GetDoDocuments(args.doSpreadSheetPath);
             this.uppDocuments = this.GetUppDocuments(args.uppSpreadSheetPath);
+            this.ignoreDoDocuments = this.GetIgnoreDo(args.doIgnoreSpreadSheetPath);
+
         }
 
         void TryAbort(Arguments args)
