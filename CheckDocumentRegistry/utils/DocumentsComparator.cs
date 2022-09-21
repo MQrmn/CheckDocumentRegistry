@@ -1,4 +1,6 @@
 ﻿
+using DocumentFormat.OpenXml.Spreadsheet;
+
 namespace CheckDocumentRegistry
 {
     public class DocumentsComparator
@@ -7,6 +9,7 @@ namespace CheckDocumentRegistry
         public List<Document> uppDocuments;
         public List<Document> ignoreDoDocuments;
 
+        public List<Document> documentsForDelete = new List<Document>();
         public List<Document> matchedDoDocuments = new List<Document>();
         public List<Document> matchedUppDocuments = new List<Document>();
 
@@ -22,7 +25,8 @@ namespace CheckDocumentRegistry
         public void Compare()
         {
             Console.WriteLine("Preparing DO Documents list for comparing");
-            this.ClearSourseDoListByIgnore(this.doDocuments, this.ignoreDoDocuments);
+            this.ignoreDoDocuments.ForEach(this.ClearSourseDoListByIgnore);
+            this.ClearSourseDoList(this.doDocuments, this.documentsForDelete);
 
             Console.WriteLine("Comparing documents");
             this.doDocuments.ForEach(this.CompareOneDocument);
@@ -101,9 +105,24 @@ namespace CheckDocumentRegistry
             });
         }
 
-        private void ClearSourseDoListByIgnore(List<Document> sourceDocumentList, List<Document> ignoreDocumentList)
+        private void ClearSourseDoListByIgnore(Document ignDocument)
         {
+            List<Document> doDocumentsForDelete = this.doDocuments.FindAll(
+                delegate(Document document)
+                {
+                    bool result = document.docType == ignDocument.docType
+                            && document.docNumber == ignDocument.docNumber
+                            && document.docSum == ignDocument.docSum
+                            && document.docDate == ignDocument.docDate;
+                            
+                    return result;
+                });
 
+            doDocumentsForDelete.ForEach(delegate (Document documentForDelete)
+            {
+                //Console.WriteLine(documentForDelete.docTitle);
+                this.documentsForDelete.Add(documentForDelete);
+            });
         }
 
     }

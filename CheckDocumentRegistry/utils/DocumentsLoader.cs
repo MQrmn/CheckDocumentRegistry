@@ -31,11 +31,11 @@ namespace CheckDocumentRegistry
             {
                 if (!doExist)
                 {
-                    Console.WriteLine($"Abort: File \"{args.doSpreadSheetPath}\" not found.");
+                    Console.WriteLine($"Error: File \"{args.doSpreadSheetPath}\" not found.");
                 }
                 else if (!uppExist)
                 {
-                    Console.WriteLine($"Abort: File \"{args.uppSpreadSheetPath}\" not found.");
+                    Console.WriteLine($"Error: File \"{args.uppSpreadSheetPath}\" not found.");
                 }
                 Console.ReadLine();
                 Environment.Exit(0);
