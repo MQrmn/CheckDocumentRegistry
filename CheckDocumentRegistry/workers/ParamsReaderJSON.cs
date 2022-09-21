@@ -3,22 +3,22 @@ using System.Text.Json;
 
 namespace CheckDocumentRegistry
 {
-    internal class ParamsRepository 
+    internal class ParamsReaderJSON 
     {
-        public static Arguments GetParams()
+        public static ProgramParameters GetParams()
         {
-            Arguments arguments;
+            ProgramParameters arguments;
 
             string filePath = "params.json";
 
             try
             {
                 string jsonString = File.ReadAllText(filePath);
-                arguments = JsonSerializer.Deserialize<Arguments>(jsonString);
+                arguments = JsonSerializer.Deserialize<ProgramParameters>(jsonString);
             }
             catch
             {
-                arguments = new Arguments(isDefault: true);
+                arguments = new ProgramParameters(isDefault: true);
                 string jsonstring = JsonSerializer.Serialize(arguments);
                 File.WriteAllText(filePath, jsonstring, Encoding.UTF8);
                 Directory.CreateDirectory("input");

@@ -3,12 +3,12 @@ namespace CheckDocumentRegistry
 {
     public class DocumentsLoader
     {
-        SpreadSheetRepository spreadSheetRepository = new SpreadSheetRepository();
+        SpreadSheetReaderXLSX spreadSheetRepository = new SpreadSheetReaderXLSX();
         public List<Document>? doDocuments { get; }
         public List<Document>? uppDocuments { get; }
         public List<Document>? ignoreDoDocuments { get; }
 
-        public DocumentsLoader(Arguments args)
+        public DocumentsLoader(ProgramParameters args)
         {
             TryAbort(args);
 
@@ -18,7 +18,7 @@ namespace CheckDocumentRegistry
 
         }
 
-        void TryAbort(Arguments args)
+        void TryAbort(ProgramParameters args)
         {
             bool doExist = File.Exists(args.doSpreadSheetPath);
             bool uppExist = File.Exists(args.uppSpreadSheetPath);
@@ -48,7 +48,7 @@ namespace CheckDocumentRegistry
             string[][] doDocumentsData = this.spreadSheetRepository.GetDocumentsFromTable(filePath);
 
             Console.WriteLine("Converting Do data");
-            List<Document> documents = Converter.ConvertDoDocuments(doDocumentsData);
+            List<Document> documents = DocumentsConverter.ConvertDoDocuments(doDocumentsData);
 
             return documents;
         }
@@ -59,7 +59,7 @@ namespace CheckDocumentRegistry
             string[][] uppDocumentsData = this.spreadSheetRepository.GetDocumentsFromTable(filePath);
 
             Console.WriteLine("Converting Upp data");
-            List<Document> documents = Converter.ConvertUppDocuments(uppDocumentsData);
+            List<Document> documents = DocumentsConverter.ConvertUppDocuments(uppDocumentsData);
 
             return documents;
         }
@@ -68,7 +68,7 @@ namespace CheckDocumentRegistry
         {
             Console.WriteLine($"Reading Table {filePath}");
             string[][] ignore = this.spreadSheetRepository.GetDocumentsFromTable(filePath);
-            List<Document> documents = Converter.ConvertIgnoreDoc(ignore);
+            List<Document> documents = DocumentsConverter.ConvertIgnoreDoc(ignore);
             return documents;
         }
     }

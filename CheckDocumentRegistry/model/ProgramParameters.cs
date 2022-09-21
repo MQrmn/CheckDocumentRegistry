@@ -3,7 +3,7 @@
 
 namespace CheckDocumentRegistry
 {
-    public class Arguments
+    public class ProgramParameters
     {
         public string doSpreadSheetPath { get; set; }
         public string uppSpreadSheetPath { get; set; }
@@ -13,9 +13,9 @@ namespace CheckDocumentRegistry
         public string passedDoPath { get; set; }
         public string passedUppPath { get; set; }
         
-        public Arguments() { }
+        public ProgramParameters() { }
 
-        public Arguments(bool isDefault)
+        public ProgramParameters(bool isDefault)
         {
             this.doSpreadSheetPath = ".\\input\\DO.xlsx";
             this.uppSpreadSheetPath = ".\\input\\UPP.xlsx";

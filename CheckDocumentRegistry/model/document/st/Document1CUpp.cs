@@ -3,12 +3,12 @@ using System.Text.RegularExpressions;
 
 namespace CheckDocumentRegistry
 {
-    public class UppDocument : Document
+    public class Document1CUpp : Document
     {
 
-        public UppDocument() {}
+        public Document1CUpp() {}
 
-        public UppDocument(string[] docValues)
+        public Document1CUpp(string[] docValues)
         {
             this.docType = this.GetDocType(docValues[0]);
             this.docTitle = docValues[1];

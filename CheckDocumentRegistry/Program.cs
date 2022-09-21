@@ -5,14 +5,14 @@ namespace CheckDocumentRegistry
     {
         static void Main()
         {
-            Arguments args = ParamsRepository.GetParams();
+            ProgramParameters args = ParamsReaderJSON.GetParams();
 
             //DocumentsLoader documents = new(args.doSpreadSheetPath, args.uppSpreadSheetPath);
             DocumentsLoader documents = new(args);
 
-            Comparator compareResult = new(documents.doDocuments, documents.uppDocuments, documents.ignoreDoDocuments);
+            DocumentsComparator compareResult = new(documents.doDocuments, documents.uppDocuments, documents.ignoreDoDocuments);
 
-            ReportCreator.CreateReports(compareResult, args);
+            SpreadSheedCreator.CreateReports(compareResult, args);
 
         }
     }

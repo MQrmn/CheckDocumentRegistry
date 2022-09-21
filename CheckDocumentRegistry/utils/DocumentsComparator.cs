@@ -1,7 +1,7 @@
 ﻿
 namespace CheckDocumentRegistry
 {
-    public class Comparator
+    public class DocumentsComparator
     {
         public List<Document> doDocuments;
         public List<Document> uppDocuments;
@@ -11,7 +11,7 @@ namespace CheckDocumentRegistry
         public List<Document> matchedUppDocuments = new List<Document>();
 
 
-        public Comparator(List<Document> inputDoDocs, List<Document> inputUppDocs, List<Document> inputIgnoreDo)
+        public DocumentsComparator(List<Document> inputDoDocs, List<Document> inputUppDocs, List<Document> inputIgnoreDo)
         {
             this.doDocuments = inputDoDocs;
             this.uppDocuments = inputUppDocs;

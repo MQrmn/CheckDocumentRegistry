@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace CheckDocumentRegistry
 {
-    internal class ReportRepository
+    internal class SpreadSheetWriterXLSX
     {
         public static void Create(List<Document> documents, string filePath)
         {

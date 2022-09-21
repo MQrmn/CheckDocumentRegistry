@@ -3,10 +3,10 @@ using System.Text.RegularExpressions;
 
 namespace CheckDocumentRegistry
 {
-    public class DoDocument : Document
+    public class Document1CDO : Document
     {
 
-        public DoDocument(string[] docValues)
+        public Document1CDO(string[] docValues)
         {
 
             this.docType = this.GetDocType(docValues[0]);

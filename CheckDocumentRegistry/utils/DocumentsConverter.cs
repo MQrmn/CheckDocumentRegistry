@@ -1,19 +1,19 @@
 ﻿
 namespace CheckDocumentRegistry
 {
-    internal class Converter
+    internal class DocumentsConverter
     {
         public static List<Document> ConvertDoDocuments(string[][] input)
         {
-            List<DoDocument> doDocuments = new List<DoDocument>(input.Length);
+            List<Document1CDO> doDocuments = new List<Document1CDO>(input.Length);
 
             for (int i = 0; i < input.Length; i++)
             {
-                doDocuments.Add(new DoDocument(input[i]));
+                doDocuments.Add(new Document1CDO(input[i]));
             }
 
             List<Document> documents = doDocuments
-                .ConvertAll(new Converter<DoDocument, Document>(delegate (DoDocument document) {
+                .ConvertAll(new Converter<Document1CDO, Document>(delegate (Document1CDO document) {
                     return (Document)document;
                 }));
 
@@ -22,15 +22,15 @@ namespace CheckDocumentRegistry
 
         public static List<Document> ConvertUppDocuments(string[][] input)
         {
-            List<UppDocument> doDocuments = new List<UppDocument>(input.Length);
+            List<Document1CUpp> doDocuments = new List<Document1CUpp>(input.Length);
 
             for (int i = 0; i < input.Length; i++)
             {
-                doDocuments.Add(new UppDocument(input[i]));
+                doDocuments.Add(new Document1CUpp(input[i]));
             }
 
             List<Document> documents = doDocuments
-                .ConvertAll(new Converter<UppDocument, Document>(delegate (UppDocument document) {
+                .ConvertAll(new Converter<Document1CUpp, Document>(delegate (Document1CUpp document) {
                     return (Document)document;
                 }));
 
