@@ -3,9 +3,9 @@ using System.Text.Json;
 
 namespace CheckDocumentRegistry
 {
-    internal class ParamsReaderJSON 
+    internal class ParametersReaderJSON 
     {
-        public static ProgramParameters GetParams()
+        public static ProgramParameters GetParameters()
         {
             ProgramParameters arguments;
 
@@ -18,7 +18,8 @@ namespace CheckDocumentRegistry
             }
             catch
             {
-                arguments = new ProgramParameters(isDefault: true);
+                arguments = new ProgramParameters();
+                //arguments.SetDefaults();
                 string jsonstring = JsonSerializer.Serialize(arguments);
                 File.WriteAllText(filePath, jsonstring, Encoding.UTF8);
                 Directory.CreateDirectory("input");

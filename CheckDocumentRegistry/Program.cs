@@ -5,14 +5,31 @@ namespace CheckDocumentRegistry
     {
         static void Main()
         {
-            ProgramParameters args = ParamsReaderJSON.GetParams();
+            // Getting program parameters
+            ProgramParameters programParameters = ParametersReaderJSON.GetParameters();
 
-            //DocumentsLoader documents = new(args.doSpreadSheetPath, args.uppSpreadSheetPath);
-            DocumentsLoader documents = new(args);
+            // Checkimg for existing files to comparingg
+            WorkAbilityChecker.CheckSourceFiles(programParameters);
 
-            DocumentsComparator compareResult = new(documents.doDocuments, documents.uppDocuments, documents.ignoreDoDocuments);
+            DocumentsLoader documentsLoader = new();
 
-            SpreadSheedCreator.CreateReports(compareResult, args);
+            // Getting documents from spreadsheets
+            List<Document> doDocuments = documentsLoader.GetDoDocuments(programParameters.doSpreadSheetPath);
+            List<Document> uppDocuments = documentsLoader.GetUppDocuments(programParameters.uppSpreadSheetPath);
+            List<Document> ignoreDoDocuments = documentsLoader.GetIgnore(programParameters.doIgnoreSpreadSheetPath);
+            List<Document> ignoreUppDocuments = documentsLoader.GetIgnore(programParameters.uppIgnoreSpreadSheetPath);
+
+            // Comparing documents
+            DocumentsComparator compareResult = new(doDocuments,
+                                                   uppDocuments, 
+                                                   ignoreDoDocuments,
+                                                   ignoreUppDocuments);
+
+            // Creating reports
+            SpreadSheetWriterXLSX.Create(compareResult.matchedUppDocuments, programParameters.matchedUppPath);
+            SpreadSheetWriterXLSX.Create(compareResult.matchedDoDocuments, programParameters.matchedDoPath);
+            SpreadSheetWriterXLSX.Create(compareResult.uppDocuments, programParameters.passedUppPath);
+            SpreadSheetWriterXLSX.Create(compareResult.doDocuments, programParameters.passedDoPath);
 
         }
     }

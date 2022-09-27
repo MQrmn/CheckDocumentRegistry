@@ -1,6 +1,4 @@
 ﻿
-using DocumentFormat.OpenXml.Spreadsheet;
-
 namespace CheckDocumentRegistry
 {
     public class DocumentsComparator
@@ -8,65 +6,74 @@ namespace CheckDocumentRegistry
         public List<Document> doDocuments;
         public List<Document> uppDocuments;
         public List<Document> ignoreDoDocuments;
+        public List<Document> ignoreUppDocuments;
+
+        private List<Document>? firstMatchedUpp;
 
         public List<Document> documentsForDelete = new List<Document>();
         public List<Document> matchedDoDocuments = new List<Document>();
         public List<Document> matchedUppDocuments = new List<Document>();
 
 
-        public DocumentsComparator(List<Document> inputDoDocs, List<Document> inputUppDocs, List<Document> inputIgnoreDo)
+        public DocumentsComparator(List<Document> inputDoDocs, List<Document> inputUppDocs, List<Document> IgnoreDo, List<Document> IgnoreUpp)
         {
             this.doDocuments = inputDoDocs;
             this.uppDocuments = inputUppDocs;
-            this.ignoreDoDocuments = inputIgnoreDo;
-            this.Compare();
-        }
+            this.ignoreDoDocuments = IgnoreDo;
+            this.ignoreUppDocuments = IgnoreUpp;
 
-        public void Compare()
-        {
-            Console.WriteLine("Preparing DO Documents list for comparing");
-            this.ignoreDoDocuments.ForEach(this.ClearSourseDoListByIgnore);
-            this.ClearSourseDoList(this.doDocuments, this.documentsForDelete);
+            Console.WriteLine("Подготовка списков документов для сравнения");
 
-            Console.WriteLine("Comparing documents");
-            this.doDocuments.ForEach(this.CompareOneDocument);
+            // Clear 1C:DO documents list by ignore list
+            this.ignoreDoDocuments.ForEach(delegate (Document document)
+            {
+                this.RemoveDocumentFromSource(this.doDocuments, document);
+            });
 
-            Console.WriteLine("Preparing list of uncatched documents in Do");
-            this.ClearSourseDoList(this.doDocuments, this.matchedDoDocuments);
+            // Clear 1C:UPP documents list by ignore list
+            this.ignoreUppDocuments.ForEach(delegate (Document document)
+            {
+                this.RemoveDocumentFromSource(this.uppDocuments, document);
+            });
 
-            Console.WriteLine("Preparing list of uncatched documents in Upp");
-            this.ClearSourseUppList(this.uppDocuments, this.matchedUppDocuments);
-        }
+            Console.WriteLine("Сравнение документов");
 
-        private void CompareOneDocument(Document doDocument)
-        {
-            List<Document> firstCatchedUpp = this.uppDocuments.FindAll(
-             delegate(Document document)
-             {
-                 return CatchDoDocumentInUpp(document, doDocument);
-             });
+            this.doDocuments.ForEach(this.Compare);
 
-            firstCatchedUpp.ForEach(delegate (Document document)
+            // Matching related Upp documents
+            this.firstMatchedUpp?.ForEach(delegate (Document document)
             {
                 this.CatchRalatedUppDocument(document);
             });
+
+
+            Console.WriteLine("Очистка списка документов в 1С:ДО");
+            this.ClearDocumentList(this.doDocuments, this.matchedDoDocuments);
+
+            Console.WriteLine("Очистка списка документов в 1С:УПП");
+            this.ClearDocumentList(this.uppDocuments, this.matchedUppDocuments);
+
+        }
+
+        private void Compare(Document doDocument)
+        {
+            this.firstMatchedUpp = this.uppDocuments.FindAll(delegate(Document document)
+             {
+                bool result = CompareDocuments(document, doDocument);
+
+                if (result)
+                {
+                    if (doDocument.isUpd) document.isUpd = doDocument.isUpd;
+
+                    this.matchedDoDocuments.Add(doDocument);
+                    this.matchedUppDocuments.Add(document);
+                }
+
+                return result;
+
+             });
         }
         
-        private bool CatchDoDocumentInUpp(Document uppDocument, Document doDocument)
-        {
-            bool result = uppDocument.docType == doDocument.docType
-                && uppDocument.docNumber == doDocument.docNumber
-                && uppDocument.docSum == doDocument.docSum;
-
-            if (result)
-            {
-                if (doDocument.isUpd) uppDocument.isUpd = doDocument.isUpd;
-
-                this.matchedDoDocuments.Add(doDocument);
-                this.matchedUppDocuments.Add(uppDocument);
-            }
-            return result;
-        }
 
         private void CatchRalatedUppDocument(Document catchedUppDocument)
         {
@@ -89,7 +96,8 @@ namespace CheckDocumentRegistry
             });
         }
 
-        private void ClearSourseDoList(List<Document> sourceDocumentList, List<Document> catchedDocumentList)
+        // Clear source document list by matched documents
+        private void ClearDocumentList(List<Document> sourceDocumentList, List<Document> catchedDocumentList)
         {
             catchedDocumentList.ForEach(delegate(Document document)
             {
@@ -97,32 +105,27 @@ namespace CheckDocumentRegistry
             });
         }
 
-        private void ClearSourseUppList(List<Document> sourceDocumentList, List<Document> catchedDocumentList)
+        // Remove one document from list
+        private void RemoveDocumentFromSource(List<Document> documents, Document ignDocument)
         {
-            catchedDocumentList.ForEach(delegate (Document document)
+            Document? documentForRemove = documents.Find(delegate (Document document)
             {
-                sourceDocumentList.Remove(document);
+                return CompareDocuments(document, ignDocument);
             });
+
+            if (documentForRemove is not null) this.doDocuments.Remove(documentForRemove);
+
         }
 
-        private void ClearSourseDoListByIgnore(Document ignDocument)
+        // Comparing two documents
+        internal bool CompareDocuments(Document firstDocument, Document secondDocument)
         {
-            List<Document> doDocumentsForDelete = this.doDocuments.FindAll(
-                delegate(Document document)
-                {
-                    bool result = document.docType == ignDocument.docType
-                            && document.docNumber == ignDocument.docNumber
-                            && document.docSum == ignDocument.docSum
-                            && document.docDate == ignDocument.docDate;
-                            
-                    return result;
-                });
+            bool result = firstDocument.docType == secondDocument.docType
+                            && firstDocument.docNumber == secondDocument.docNumber
+                            && firstDocument.docSum == secondDocument.docSum
+                            && firstDocument.docDate == secondDocument.docDate;
+            return result;
 
-            doDocumentsForDelete.ForEach(delegate (Document documentForDelete)
-            {
-                //Console.WriteLine(documentForDelete.docTitle);
-                this.documentsForDelete.Add(documentForDelete);
-            });
         }
 
     }

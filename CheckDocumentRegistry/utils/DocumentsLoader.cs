@@ -4,43 +4,6 @@ namespace CheckDocumentRegistry
     public class DocumentsLoader
     {
         SpreadSheetReaderXLSX spreadSheetRepository = new SpreadSheetReaderXLSX();
-        public List<Document>? doDocuments { get; }
-        public List<Document>? uppDocuments { get; }
-        public List<Document>? ignoreDoDocuments { get; }
-
-        public DocumentsLoader(ProgramParameters args)
-        {
-            TryAbort(args);
-
-            this.doDocuments = this.GetDoDocuments(args.doSpreadSheetPath);
-            this.uppDocuments = this.GetUppDocuments(args.uppSpreadSheetPath);
-            this.ignoreDoDocuments = this.GetIgnoreDo(args.doIgnoreSpreadSheetPath);
-
-        }
-
-        void TryAbort(ProgramParameters args)
-        {
-            bool doExist = File.Exists(args.doSpreadSheetPath);
-            bool uppExist = File.Exists(args.uppSpreadSheetPath);
-
-            if (doExist && uppExist)
-            {
-                return;
-            }
-            else
-            {
-                if (!doExist)
-                {
-                    Console.WriteLine($"Error: File \"{args.doSpreadSheetPath}\" not found.");
-                }
-                else if (!uppExist)
-                {
-                    Console.WriteLine($"Error: File \"{args.uppSpreadSheetPath}\" not found.");
-                }
-                Console.ReadLine();
-                Environment.Exit(0);
-            }
-        }
 
         public List<Document> GetDoDocuments(string filePath)
         {
@@ -64,7 +27,7 @@ namespace CheckDocumentRegistry
             return documents;
         }
 
-        List<Document> GetIgnoreDo(string filePath)
+        public List<Document> GetIgnore(string filePath)
         {
             Console.WriteLine($"Reading Table {filePath}");
             string[][] ignore = this.spreadSheetRepository.GetDocumentsFromTable(filePath);

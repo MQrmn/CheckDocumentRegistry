@@ -4,7 +4,7 @@ namespace CheckDocumentRegistry
 {
     public class SpreadSheedCreator
     {
-        public static void CreateReports(DocumentsComparator documents, ProgramParameters arguments)
+        public static void CreateSpreadSheets(DocumentsComparator documents, ProgramParameters arguments)
         {
             SpreadSheetWriterXLSX.Create(documents.matchedUppDocuments, arguments.matchedUppPath);
             SpreadSheetWriterXLSX.Create(documents.matchedDoDocuments, arguments.matchedDoPath);
