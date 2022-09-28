@@ -26,6 +26,7 @@ namespace CheckDocumentRegistry
             this.Company = docValues[3];
             this.Salary = float.Parse(docValues[6]);
             if (docValues[7] == "Да") this.IsUpd = true;
+            this.Comment = String.Empty;
         }
 
         public string[] GetArray()
@@ -40,7 +41,8 @@ namespace CheckDocumentRegistry
                                              this.Date,
                                              this.Number,
                                              this.Salary.ToString(),
-                                             isUpd
+                                             isUpd,
+                                             this.Comment
             };
             return result;
         }

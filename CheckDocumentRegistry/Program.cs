@@ -5,6 +5,8 @@ namespace CheckDocumentRegistry
     {
         static void Main()
         {
+            
+
             // Getting program parameters
             ProgramParameters programParameters = ParametersReaderJSON.GetParameters();
 
@@ -25,11 +27,18 @@ namespace CheckDocumentRegistry
                                                    ignoreDoDocuments,
                                                    ignoreUppDocuments);
 
+            PartialDocumentsComparator unmatchedDocumentsCommentator = new(compareResult.Documents1CDoUnmatched,
+                                                                                compareResult.Documents1CUppUnmatched);
+
+            unmatchedDocumentsCommentator.CommentUnmatchedDocuments();
+
+
             // Creating reports
-            SpreadSheetWriterXLSX.Create(compareResult.Documents1CUppMatched, programParameters.matchedUppPath);
             SpreadSheetWriterXLSX.Create(compareResult.Documents1CDoMatched, programParameters.matchedDoPath);
-            SpreadSheetWriterXLSX.Create(compareResult.Documents1CUppUnmatched, programParameters.passedUppPath);
+            SpreadSheetWriterXLSX.Create(compareResult.Documents1CUppMatched, programParameters.matchedUppPath);
             SpreadSheetWriterXLSX.Create(compareResult.Documents1CDoUnmatched, programParameters.passedDoPath);
+            SpreadSheetWriterXLSX.Create(compareResult.Documents1CUppUnmatched, programParameters.passedUppPath);
+            
 
         }
     }

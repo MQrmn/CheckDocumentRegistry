@@ -77,13 +77,16 @@ namespace CheckDocumentRegistry
 
                 foreach (var i in document.GetArray())
                 {
-                    Cell cell = new Cell()
+                    if (i is not null)
                     {
-                        CellValue = new CellValue(i.ToString()),
-                        DataType = CellValues.String
-                    };
+                        Cell cell = new Cell()
+                        {
+                            CellValue = new CellValue(i),
+                            DataType = CellValues.String
+                        };
 
-                    row.Append(cell);
+                        row.Append(cell);
+                    }
                 }
 
                 sheetData.Append(row);
