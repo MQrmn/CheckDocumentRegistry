@@ -10,15 +10,15 @@ namespace CheckDocumentRegistry
 
         public Document1CUpp(string[] docValues)
         {
-            this.docType = this.GetDocType(docValues[0]);
-            this.docTitle = docValues[1];
-            this.docDate = docValues[2];
-            this.docCounterparty = docValues[3];
-            this.docNumber = this.SetDocNumber(docValues[4]);
-            this.docCompany = docValues[5];
+            this.Type = this.GetDocType(docValues[0]);
+            this.Title = docValues[1];
+            this.Date = docValues[2];
+            this.Counterparty = docValues[3];
+            this.Number = this.SetDocNumber(docValues[4]);
+            this.Company = docValues[5];
             
             if (docValues[6] != String.Empty)
-                this.docSum = this.GetDocSum(docValues[6]);
+                this.Salary = this.GetDocSum(docValues[6]);
         }
 
         int GetDocType(string input)
@@ -40,13 +40,13 @@ namespace CheckDocumentRegistry
 
         public string[] GetArray()
         {
-            string[] result = new string[] { this.docType.ToString(),
-                                             this.docTitle,
-                                             this.docDate,
-                                             this.docCounterparty,
-                                             this.docNumber,
-                                             this.docCompany,
-                                             this.docSum.ToString()
+            string[] result = new string[] { this.Type.ToString(),
+                                             this.Title,
+                                             this.Date,
+                                             this.Counterparty,
+                                             this.Number,
+                                             this.Company,
+                                             this.Salary.ToString()
             };
             return result;
         }

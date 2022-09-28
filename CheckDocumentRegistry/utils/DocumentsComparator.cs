@@ -70,7 +70,7 @@ namespace CheckDocumentRegistry
 
                 if (matched)
                 {
-                    if (documentDo.isUpd) documentUpp.isUpd = documentDo.isUpd;
+                    if (documentDo.IsUpd) documentUpp.IsUpd = documentDo.IsUpd;
 
                     this.Documents1CDoMatched.Add(documentDo);
                     this.Documents1CUppMatched.Add(documentUpp);
@@ -92,7 +92,7 @@ namespace CheckDocumentRegistry
 
                 if (match)
                 {
-                    document.isUpd = true;
+                    document.IsUpd = true;
                     this.Documents1CUppMatched.Add(document);
                 }
             }
@@ -124,20 +124,20 @@ namespace CheckDocumentRegistry
                                         Document secondDocument, 
                                         CompareMode compareMode)
         {
-            bool result = firstDocument.docNumber == secondDocument.docNumber
-                            && firstDocument.docSum == secondDocument.docSum
-                            && firstDocument.docDate == secondDocument.docDate;
+            bool result = firstDocument.Number == secondDocument.Number
+                            && firstDocument.Salary == secondDocument.Salary
+                            && firstDocument.Date == secondDocument.Date;
 
             if (!result) return result;
 
             if (compareMode == CompareMode.Basic)
             {
-                return firstDocument.docType == secondDocument.docType;
+                return firstDocument.Type == secondDocument.Type;
             }
             else
             {
-                return firstDocument.docType != secondDocument.docType 
-                    && secondDocument.isUpd == true;
+                return firstDocument.Type != secondDocument.Type 
+                    && secondDocument.IsUpd == true;
             }
         }
     }

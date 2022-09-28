@@ -4,41 +4,42 @@ namespace CheckDocumentRegistry
 {
     public class Document
     {
-        public int docType { get; set; }
-        public string docTitle { get; set; }
-        public string docCompany { get; set; }
-        public string docCounterparty { get; set; }
-        public string docNumber { get; set; }
-        public string docDate { get; set; }
-        public float docSum { get; set; }
-        public bool isUpd { get; set; }
+        public int Type { get; set; }
+        public string Title { get; set; }
+        public string Company { get; set; }
+        public string Counterparty { get; set; }
+        public string Number { get; set; }
+        public string Date { get; set; }
+        public float Salary { get; set; }
+        public bool IsUpd { get; set; }
+        public string? Comment { get; set; }
 
         public Document() {}
 
         public Document(string[] docValues)
         {
-            this.docType = Int32.Parse(docValues[0]);
-            this.docTitle = docValues[1];
-            this.docDate = docValues[4];
-            this.docCounterparty = docValues[2];
-            this.docNumber = docValues[5];
-            this.docCompany = docValues[3];
-            this.docSum = float.Parse(docValues[6]);
-            if (docValues[7] == "Да") this.isUpd = true;
+            this.Type = Int32.Parse(docValues[0]);
+            this.Title = docValues[1];
+            this.Date = docValues[4];
+            this.Counterparty = docValues[2];
+            this.Number = docValues[5];
+            this.Company = docValues[3];
+            this.Salary = float.Parse(docValues[6]);
+            if (docValues[7] == "Да") this.IsUpd = true;
         }
 
         public string[] GetArray()
         {
-            string isUpd = this.isUpd ? "Да" : "Нет";
+            string isUpd = this.IsUpd ? "Да" : "Нет";
 
             string[] result = new string[] {
-                                             this.docType.ToString(),
-                                             this.docTitle,
-                                             this.docCounterparty,
-                                             this.docCompany,
-                                             this.docDate,
-                                             this.docNumber,
-                                             this.docSum.ToString(),
+                                             this.Type.ToString(),
+                                             this.Title,
+                                             this.Counterparty,
+                                             this.Company,
+                                             this.Date,
+                                             this.Number,
+                                             this.Salary.ToString(),
                                              isUpd
             };
             return result;

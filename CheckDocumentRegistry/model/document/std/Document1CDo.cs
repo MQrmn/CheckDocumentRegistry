@@ -9,17 +9,17 @@ namespace CheckDocumentRegistry
         public Document1CDO(string[] docValues)
         {
 
-            this.docType = this.GetDocType(docValues[0]);
-            this.docTitle = docValues[1];
-            this.docCompany = docValues[2];
-            this.docCounterparty = this.GetDocCounterparty(docValues[3]);
-            this.docNumber = this.SetDocNumber(docValues[4]);
-            this.docDate = docValues[5];
+            this.Type = this.GetDocType(docValues[0]);
+            this.Title = docValues[1];
+            this.Company = docValues[2];
+            this.Counterparty = this.GetDocCounterparty(docValues[3]);
+            this.Number = this.SetDocNumber(docValues[4]);
+            this.Date = docValues[5];
 
             if (docValues[6] != String.Empty)
-                this.docSum = this.GetDocSum(docValues[6]);
+                this.Salary = this.GetDocSum(docValues[6]);
 
-            if (docValues[7] == "Да") this.isUpd = true;
+            if (docValues[7] == "Да") this.IsUpd = true;
         }
 
         int GetDocType(string rawDocType)
