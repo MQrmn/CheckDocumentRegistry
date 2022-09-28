@@ -1,7 +1,7 @@
 ﻿
 namespace CheckDocumentRegistry
 {
-    public class DocumentsComparator
+    public class FullDocumentsComparator
     {
         public List<Document> Documents1CDoMatched = new List<Document>();  // Documents from 1C:Document Management that coincided with 1C:UPP documents
         public List<Document> Documents1CUppMatched = new List<Document>(); // Documents from 1C:UPP that coincided with 1C:Document Management documents
@@ -21,7 +21,7 @@ namespace CheckDocumentRegistry
             FindUpd
         }
 
-        public DocumentsComparator(List<Document> DocumentsDo, List<Document> DocumentsUpp, List<Document> DocumentsDoIgnore, List<Document> DocumentsUppIgnore)
+        public FullDocumentsComparator(List<Document> DocumentsDo, List<Document> DocumentsUpp, List<Document> DocumentsDoIgnore, List<Document> DocumentsUppIgnore)
         {
             this.documents1CDoSource = DocumentsDo;
             this.documents1CUppSource = DocumentsUpp;

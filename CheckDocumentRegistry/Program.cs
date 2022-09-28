@@ -20,7 +20,7 @@ namespace CheckDocumentRegistry
             List<Document> ignoreUppDocuments = documentsLoader.GetIgnore(programParameters.uppIgnoreSpreadSheetPath);
 
             // Comparing documents
-            DocumentsComparator compareResult = new(doDocuments,
+            FullDocumentsComparator compareResult = new(doDocuments,
                                                    uppDocuments, 
                                                    ignoreDoDocuments,
                                                    ignoreUppDocuments);

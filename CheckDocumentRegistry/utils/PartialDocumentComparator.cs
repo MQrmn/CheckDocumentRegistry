@@ -1,7 +1,7 @@
 ﻿
 namespace CheckDocumentRegistry
 {
-    internal class DocumentPartialComparator
+    internal class PartialDocumentComparator
     {
 
     }
