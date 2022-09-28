@@ -5,8 +5,6 @@ namespace CheckDocumentRegistry
     {
         static void Main()
         {
-            
-
             // Getting program parameters
             ProgramParameters programParameters = ParametersReaderJSON.GetParameters();
 
@@ -22,16 +20,12 @@ namespace CheckDocumentRegistry
             List<Document> ignoreUppDocuments = documentsLoader.GetIgnore(programParameters.uppIgnoreSpreadSheetPath);
 
             // Comparing documents
-            FullDocumentsComparator compareResult = new(doDocuments,
-                                                   uppDocuments, 
-                                                   ignoreDoDocuments,
-                                                   ignoreUppDocuments);
+            FullDocumentsComparator compareResult = new(doDocuments, uppDocuments, ignoreDoDocuments, ignoreUppDocuments);
 
+            // Setting comments in unmatched documents about mismacthes
             PartialDocumentsComparator unmatchedDocumentsCommentator = new(compareResult.Documents1CDoUnmatched,
                                                                                 compareResult.Documents1CUppUnmatched);
-
             unmatchedDocumentsCommentator.CommentUnmatchedDocuments();
-
 
             // Creating reports
             SpreadSheetWriterXLSX.Create(compareResult.Documents1CDoMatched, programParameters.matchedDoPath);
@@ -39,7 +33,6 @@ namespace CheckDocumentRegistry
             SpreadSheetWriterXLSX.Create(compareResult.Documents1CDoUnmatched, programParameters.passedDoPath);
             SpreadSheetWriterXLSX.Create(compareResult.Documents1CUppUnmatched, programParameters.passedUppPath);
             
-
         }
     }
 }
