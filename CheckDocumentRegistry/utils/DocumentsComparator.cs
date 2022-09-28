@@ -25,26 +25,28 @@ namespace CheckDocumentRegistry
             Console.WriteLine("Подготовка списков документов для сравнения");
 
             // Clear 1C:DO documents list by ignore list
-            this.ignoreDoDocuments.ForEach(delegate (Document document)
+            foreach (Document document in this.ignoreDoDocuments)
             {
                 this.RemoveDocumentFromSource(this.doDocuments, document);
-            });
+            }
 
             // Clear 1C:UPP documents list by ignore list
-            this.ignoreUppDocuments.ForEach(delegate (Document document)
+            foreach (Document document in this.ignoreUppDocuments)
             {
                 this.RemoveDocumentFromSource(this.uppDocuments, document);
-            });
+            }
 
+            
             Console.WriteLine("Сравнение документов");
 
             this.doDocuments.ForEach(this.Compare);
 
+
             // Matching related Upp documents
-            this.firstMatchedUpp?.ForEach(delegate (Document document)
+            foreach (Document document in this.firstMatchedUpp)
             {
                 this.CatchRalatedUppDocument(document);
-            });
+            }
 
 
             Console.WriteLine("Очистка списка документов в 1С:ДО");
