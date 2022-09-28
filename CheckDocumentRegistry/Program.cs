@@ -5,6 +5,7 @@ namespace CheckDocumentRegistry
     {
         static void Main()
         {
+
             // Getting program parameters
             ProgramParameters programParameters = ParametersReaderJSON.GetParameters();
 

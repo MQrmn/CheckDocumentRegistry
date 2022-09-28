@@ -5,14 +5,24 @@ namespace CheckDocumentRegistry
     {
         SpreadSheetReaderXLSX spreadSheetRepository = new SpreadSheetReaderXLSX();
 
+
         public List<Document> GetDoDocuments(string filePath)
         {
             Console.WriteLine($"Reading Table {filePath}");
             string[][] doDocumentsData = this.spreadSheetRepository.GetDocumentsFromTable(filePath);
 
             Console.WriteLine("Converting Do data");
-            List<Document> documents = DocumentsConverter.ConvertDoDocuments(doDocumentsData);
 
+            List<Document> documents;
+            try
+            {
+                documents = DocumentsConverter.Convert1CDoDocumentsStandard(doDocumentsData);
+            }
+            catch
+            {
+                documents = DocumentsConverter.Convert1CDoDocumentsClean(doDocumentsData);
+            }
+            
             return documents;
         }
 
@@ -20,9 +30,16 @@ namespace CheckDocumentRegistry
         {
             Console.WriteLine($"Reading Table {filePath}");
             string[][] uppDocumentsData = this.spreadSheetRepository.GetDocumentsFromTable(filePath);
-
+            List<Document> documents;
             Console.WriteLine("Converting Upp data");
-            List<Document> documents = DocumentsConverter.ConvertUppDocuments(uppDocumentsData);
+            try
+            {
+                documents = DocumentsConverter.Convert1CUppDocumentsStandard(uppDocumentsData);
+            }
+            catch
+            {
+                documents = DocumentsConverter.Convert1CUppDocumentsClean(uppDocumentsData);
+            }
 
             return documents;
         }

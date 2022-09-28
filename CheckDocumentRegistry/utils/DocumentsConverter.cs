@@ -3,34 +3,103 @@ namespace CheckDocumentRegistry
 {
     internal class DocumentsConverter
     {
-        public static List<Document> ConvertDoDocuments(string[][] input)
+        public static List<Document> Convert1CDoDocumentsStandard(string[][] input)
         {
-            List<Document1CDO> doDocuments = new List<Document1CDO>(input.Length);
-
+            List<Document1CDoStandard> doDocuments = new List<Document1CDoStandard>(input.Length);
+            int numberOfException = new();
             for (int i = 0; i < input.Length; i++)
             {
-                doDocuments.Add(new Document1CDO(input[i]));
+                try
+                {
+                    doDocuments.Add(new Document1CDoStandard(input[i]));
+                    numberOfException = 0;
+                }
+                catch 
+                {
+                    numberOfException++;
+                    if (numberOfException > 7) throw;
+                }
             }
 
             List<Document> documents = doDocuments
-                .ConvertAll(new Converter<Document1CDO, Document>(delegate (Document1CDO document) {
+                .ConvertAll(new Converter<Document1CDoStandard, Document>(delegate (Document1CDoStandard document) {
                     return (Document)document;
                 }));
 
             return documents;
         }
 
-        public static List<Document> ConvertUppDocuments(string[][] input)
+        public static List<Document> Convert1CDoDocumentsClean(string[][] input)
         {
-            List<Document1CUpp> doDocuments = new List<Document1CUpp>(input.Length);
+            List<Document1CDoClean> doDocuments = new List<Document1CDoClean>(input.Length);
 
+            int numberOfException = new();
             for (int i = 0; i < input.Length; i++)
             {
-                doDocuments.Add(new Document1CUpp(input[i]));
+                try
+                {
+                    doDocuments.Add(new Document1CDoClean(input[i]));
+                    numberOfException = 0;
+                }
+                catch 
+                {
+                    numberOfException++;
+                    if (numberOfException > 1) throw;
+                }
             }
 
             List<Document> documents = doDocuments
-                .ConvertAll(new Converter<Document1CUpp, Document>(delegate (Document1CUpp document) {
+                .ConvertAll(new Converter<Document1CDoClean, Document>(delegate (Document1CDoClean document) {
+                    return (Document)document;
+                }));
+
+            return documents;
+        }
+
+        public static List<Document> Convert1CUppDocumentsStandard(string[][] input)
+        {
+            List<Document1CUppStandard> doDocuments = new List<Document1CUppStandard>(input.Length);
+            int numberOfException = new();
+            for (int i = 0; i < input.Length; i++)
+            {
+                try
+                {
+                    doDocuments.Add(new Document1CUppStandard(input[i]));
+                }
+                catch
+                {
+                    numberOfException++;
+                    if (numberOfException > 1) throw;
+                }
+            }
+
+            List<Document> documents = doDocuments
+                .ConvertAll(new Converter<Document1CUppStandard, Document>(delegate (Document1CUppStandard document) {
+                    return (Document)document;
+                }));
+
+            return documents;
+        }
+
+        public static List<Document> Convert1CUppDocumentsClean(string[][] input)
+        {
+            List<Document1CUppClean> doDocuments = new List<Document1CUppClean>(input.Length);
+            int numberOfException = new();
+            for (int i = 0; i < input.Length; i++)
+            {
+                try
+                {
+                    doDocuments.Add(new Document1CUppClean(input[i]));
+                }
+                catch
+                {
+                    numberOfException++;
+                    if (numberOfException > 1) throw;
+                }
+            }
+
+            List<Document> documents = doDocuments
+                .ConvertAll(new Converter<Document1CUppClean, Document>(delegate (Document1CUppClean document) {
                     return (Document)document;
                 }));
 
@@ -44,11 +113,13 @@ namespace CheckDocumentRegistry
 
             for (int i = 0; i < input.Length; i++)
             {
-                documents.Add(new Document(input[i]));
+                try
+                {
+                    documents.Add(new Document(input[i]));
+                }
+                catch { }
             }
-
             return documents;
-
         }
     }
 }

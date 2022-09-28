@@ -17,7 +17,6 @@ namespace CheckDocumentRegistry
                 foreach (Sheet sheet in sheetCollection.OfType<Sheet>())
                 {
                     Worksheet workSheet = ((WorksheetPart)workbookPart.GetPartById(sheet.Id)).Worksheet;
-
                     SheetData sheetData = workSheet.GetFirstChild<SheetData>();
 
                     int rowNumber = sheetData.ChildElements.Count();
@@ -33,7 +32,6 @@ namespace CheckDocumentRegistry
         string[][] GetDocumentsArray(WorkbookPart workbookPart, SheetData sheetData, int rowNumber)
         {
             string[][] allDocuments = new string[rowNumber][];
-            int i = 0;
 
             for (int rowCount = 0; rowCount < rowNumber; rowCount++)
             {

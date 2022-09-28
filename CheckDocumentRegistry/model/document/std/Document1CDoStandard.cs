@@ -3,26 +3,26 @@ using System.Text.RegularExpressions;
 
 namespace CheckDocumentRegistry
 {
-    public class Document1CDO : Document
+    public class Document1CDoStandard : Document
     {
-
-        public Document1CDO(string[] docValues)
+        public Document1CDoStandard() { }
+        public Document1CDoStandard(string[] docValues)
         {
 
             this.Type = this.GetDocType(docValues[0]);
-            this.Title = docValues[1];
-            this.Company = docValues[2];
-            this.Counterparty = this.GetDocCounterparty(docValues[3]);
-            this.Number = this.SetDocNumber(docValues[4]);
-            this.Date = docValues[5];
+            this.Title = docValues[3];
+            this.Company = docValues[6];
+            this.Counterparty = this.GetDocCounterparty(docValues[7]);
+            this.Number = this.SetDocNumber(docValues[8]);
+            this.Date = docValues[9];
 
             if (docValues[6] != String.Empty)
-                this.Salary = this.GetDocSum(docValues[6]);
+                this.Salary = this.GetDocSum(docValues[10]);
 
-            if (docValues[7] == "Да") this.IsUpd = true;
+            if (docValues[11] == "Да") this.IsUpd = true;
         }
 
-        int GetDocType(string rawDocType)
+        private protected int GetDocType(string rawDocType)
         {
             return rawDocType switch
             {
@@ -33,22 +33,20 @@ namespace CheckDocumentRegistry
             };
         }
 
-        float GetDocSum(string stringSum)
+        private protected float GetDocSum(string stringSum)
         {
             string pattern = @"[A-Z\s]";
             string regexResult = Regex.Replace(stringSum, pattern, String.Empty, RegexOptions.IgnoreCase);
 
             return float.Parse(regexResult);
         }
-        
-        string GetDocCounterparty(string docCounterparty)
+
+        private protected string GetDocCounterparty(string docCounterparty)
         {
             string pattern = @"\s\([/\s\d]*\)";
             string regexResult = Regex.Replace(docCounterparty, pattern, String.Empty, RegexOptions.IgnoreCase);
             return regexResult;
         }
-
-        
 
     }
 }
