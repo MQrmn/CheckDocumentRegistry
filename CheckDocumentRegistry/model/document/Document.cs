@@ -23,7 +23,6 @@ namespace CheckDocumentRegistry
             this.docCounterparty = docValues[2];
             this.docNumber = docValues[5];
             this.docCompany = docValues[3];
-            Console.WriteLine(docValues[6]);
             this.docSum = float.Parse(docValues[6]);
             if (docValues[7] == "Да") this.isUpd = true;
         }

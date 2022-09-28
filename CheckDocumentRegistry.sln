@@ -9,6 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		CheckDocumentRegistry\bin\Debug\net6.0\params.json = CheckDocumentRegistry\bin\Debug\net6.0\params.json
 	EndProjectSection
+	ProjectSection(FolderGlobals) = preProject
+		C_5_4Users_4alex_3s_4source_4repos_4CheckDocumentRegistry_4CheckDocumentRegistry_4bin_4Debug_4net6_10_4params_1json__JsonSchema = https://appsemble.app/api.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

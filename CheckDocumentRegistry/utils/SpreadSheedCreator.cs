@@ -6,10 +6,10 @@ namespace CheckDocumentRegistry
     {
         public static void CreateSpreadSheets(DocumentsComparator documents, ProgramParameters arguments)
         {
-            SpreadSheetWriterXLSX.Create(documents.matchedUppDocuments, arguments.matchedUppPath);
-            SpreadSheetWriterXLSX.Create(documents.matchedDoDocuments, arguments.matchedDoPath);
-            SpreadSheetWriterXLSX.Create(documents.uppDocuments, arguments.passedUppPath);
-            SpreadSheetWriterXLSX.Create(documents.doDocuments, arguments.passedDoPath);
+            SpreadSheetWriterXLSX.Create(documents.Documents1CUppMatched, arguments.matchedUppPath);
+            SpreadSheetWriterXLSX.Create(documents.Documents1CDoMatched, arguments.matchedDoPath);
+            SpreadSheetWriterXLSX.Create(documents.documents1CUppSource, arguments.passedUppPath);
+            SpreadSheetWriterXLSX.Create(documents.documents1CDoSource, arguments.passedDoPath);
 
         }
 

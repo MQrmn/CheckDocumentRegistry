@@ -26,10 +26,10 @@ namespace CheckDocumentRegistry
                                                    ignoreUppDocuments);
 
             // Creating reports
-            SpreadSheetWriterXLSX.Create(compareResult.matchedUppDocuments, programParameters.matchedUppPath);
-            SpreadSheetWriterXLSX.Create(compareResult.matchedDoDocuments, programParameters.matchedDoPath);
-            SpreadSheetWriterXLSX.Create(compareResult.uppDocuments, programParameters.passedUppPath);
-            SpreadSheetWriterXLSX.Create(compareResult.doDocuments, programParameters.passedDoPath);
+            SpreadSheetWriterXLSX.Create(compareResult.Documents1CUppMatched, programParameters.matchedUppPath);
+            SpreadSheetWriterXLSX.Create(compareResult.Documents1CDoMatched, programParameters.matchedDoPath);
+            SpreadSheetWriterXLSX.Create(compareResult.Documents1CUppUnmatched, programParameters.passedUppPath);
+            SpreadSheetWriterXLSX.Create(compareResult.Documents1CDoUnmatched, programParameters.passedDoPath);
 
         }
     }

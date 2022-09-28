@@ -3,103 +3,103 @@ namespace CheckDocumentRegistry
 {
     public class DocumentsComparator
     {
-        public List<Document> doDocuments;
-        public List<Document> uppDocuments;
-        public List<Document> ignoreDoDocuments;
-        public List<Document> ignoreUppDocuments;
+        public List<Document> Documents1CDoMatched = new List<Document>();
+        public List<Document> Documents1CUppMatched = new List<Document>();
+        public List<Document> Documents1CDoUnmatched;
+        public List<Document> Documents1CUppUnmatched;
 
-        private List<Document>? firstMatchedUpp;
+        public List<Document> documents1CDoSource;
+        public List<Document> documents1CUppSource;
+        private List<Document> ignoreDoDocuments;
+        private List<Document> ignoreUppDocuments;
 
-        public List<Document> documentsForDelete = new List<Document>();
-        public List<Document> matchedDoDocuments = new List<Document>();
-        public List<Document> matchedUppDocuments = new List<Document>();
+        private List<Document>? matchedUppDocumentsBuffer;
 
+        private enum CompareMode
+        {
+            Basic,
+            FindUpd
+        }
 
         public DocumentsComparator(List<Document> inputDoDocs, List<Document> inputUppDocs, List<Document> IgnoreDo, List<Document> IgnoreUpp)
         {
-            this.doDocuments = inputDoDocs;
-            this.uppDocuments = inputUppDocs;
+            this.documents1CDoSource = inputDoDocs;
+            this.documents1CUppSource = inputUppDocs;
             this.ignoreDoDocuments = IgnoreDo;
             this.ignoreUppDocuments = IgnoreUpp;
 
             Console.WriteLine("Подготовка списков документов для сравнения");
 
-            // Clear 1C:DO documents list by ignore list
+            // Clear 1C:DO documents source list by ignore list
             foreach (Document document in this.ignoreDoDocuments)
             {
-                this.RemoveDocumentFromSource(this.doDocuments, document);
+                this.FindRemoveDocument(this.documents1CDoSource, document);
             }
 
-            // Clear 1C:UPP documents list by ignore list
+            // Clear 1C:UPP documents source list by ignore list
             foreach (Document document in this.ignoreUppDocuments)
             {
-                this.RemoveDocumentFromSource(this.uppDocuments, document);
+                this.FindRemoveDocument(this.documents1CUppSource, document);
             }
-
             
             Console.WriteLine("Сравнение документов");
-
-            this.doDocuments.ForEach(this.Compare);
-
+            this.documents1CDoSource.ForEach(this.FindDocumentAddToMatched);
 
             // Matching related Upp documents
-            foreach (Document document in this.firstMatchedUpp)
+            foreach (Document document in this.matchedUppDocumentsBuffer)
             {
-                this.CatchRalatedUppDocument(document);
+                this.FindUpdDocumentInUpp(document);
             }
 
-
             Console.WriteLine("Очистка списка документов в 1С:ДО");
-            this.ClearDocumentList(this.doDocuments, this.matchedDoDocuments);
+            this.ClearDocumentsByList(this.documents1CDoSource, this.Documents1CDoMatched);
 
             Console.WriteLine("Очистка списка документов в 1С:УПП");
-            this.ClearDocumentList(this.uppDocuments, this.matchedUppDocuments);
+            this.ClearDocumentsByList(this.documents1CUppSource, this.Documents1CUppMatched);
+
+            this.Documents1CDoUnmatched = this.documents1CDoSource;
+            this.Documents1CUppUnmatched = this.documents1CUppSource;
 
         }
 
-        private void Compare(Document doDocument)
+        private void FindDocumentAddToMatched(Document documentDo)
         {
-            this.firstMatchedUpp = this.uppDocuments.FindAll(delegate(Document document)
+            this.matchedUppDocumentsBuffer = this.documents1CUppSource.FindAll(delegate(Document documentUpp)
              {
-                bool result = CompareDocuments(document, doDocument);
+                bool matched = CompareSingleDocuments(documentUpp, documentDo, CompareMode.Basic);
 
-                if (result)
+                if (matched)
                 {
-                    if (doDocument.isUpd) document.isUpd = doDocument.isUpd;
+                    if (documentDo.isUpd) documentUpp.isUpd = documentDo.isUpd;
 
-                    this.matchedDoDocuments.Add(doDocument);
-                    this.matchedUppDocuments.Add(document);
+                    this.Documents1CDoMatched.Add(documentDo);
+                    this.Documents1CUppMatched.Add(documentUpp);
                 }
 
-                return result;
+                return matched;
 
              });
         }
-        
 
-        private void CatchRalatedUppDocument(Document catchedUppDocument)
+        // Due to peculiarities in the "1C:UPP" configuration
+        // UDP was entered as an invoice + bill of lading or an act of work performed
+        // thus I find the second document from the PPM, which is included in the UPD
+        private void FindUpdDocumentInUpp(Document catchedUppDocument)
         {
-            List<Document> result = this.uppDocuments.FindAll(
-                delegate(Document document)
-                {
-                    bool result = document.docType != catchedUppDocument.docType
-                            && document.docNumber == catchedUppDocument.docNumber
-                            && document.docSum == catchedUppDocument.docSum
-                            && catchedUppDocument.isUpd == true;
-
-                    if (result) document.isUpd = true;
-
-                    return result;
-                });
-
-            result.ForEach(delegate (Document document)
+            foreach (Document document in this.documents1CUppSource)
             {
-                this.matchedUppDocuments.Add(document);
-            });
+                bool match = this.CompareSingleDocuments(document, catchedUppDocument, CompareMode.FindUpd);
+
+                if (match)
+                {
+                    document.isUpd = true;
+                    this.Documents1CUppMatched.Add(document);
+                }
+            }
         }
 
         // Clear source document list by matched documents
-        private void ClearDocumentList(List<Document> sourceDocumentList, List<Document> catchedDocumentList)
+        private void ClearDocumentsByList(List<Document> sourceDocumentList, List<Document> catchedDocumentList)
         {
             catchedDocumentList.ForEach(delegate(Document document)
             {
@@ -108,27 +108,37 @@ namespace CheckDocumentRegistry
         }
 
         // Remove one document from list
-        private void RemoveDocumentFromSource(List<Document> documents, Document ignDocument)
+        private void FindRemoveDocument(List<Document> sourceDocuments, Document ignDocument)
         {
-            Document? documentForRemove = documents.Find(delegate (Document document)
+            List<Document> documentsForRemove = sourceDocuments.FindAll(delegate (Document document)
             {
-                return CompareDocuments(document, ignDocument);
+                return CompareSingleDocuments(document, ignDocument, CompareMode.Basic);
             });
 
-            if (documentForRemove is not null) this.doDocuments.Remove(documentForRemove);
+            this.ClearDocumentsByList(sourceDocuments, documentsForRemove);
 
         }
 
         // Comparing two documents
-        internal bool CompareDocuments(Document firstDocument, Document secondDocument)
+        private bool CompareSingleDocuments(  Document firstDocument, 
+                                        Document secondDocument, 
+                                        CompareMode compareMode)
         {
-            bool result = firstDocument.docType == secondDocument.docType
-                            && firstDocument.docNumber == secondDocument.docNumber
+            bool result = firstDocument.docNumber == secondDocument.docNumber
                             && firstDocument.docSum == secondDocument.docSum
                             && firstDocument.docDate == secondDocument.docDate;
-            return result;
 
+            if (!result) return result;
+
+            if (compareMode == CompareMode.Basic)
+            {
+                return firstDocument.docType == secondDocument.docType;
+            }
+            else
+            {
+                return firstDocument.docType != secondDocument.docType 
+                    && secondDocument.isUpd == true;
+            }
         }
-
     }
 }
