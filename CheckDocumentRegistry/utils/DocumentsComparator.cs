@@ -3,15 +3,15 @@ namespace CheckDocumentRegistry
 {
     public class DocumentsComparator
     {
-        public List<Document> Documents1CDoMatched = new List<Document>();
-        public List<Document> Documents1CUppMatched = new List<Document>();
-        public List<Document> Documents1CDoUnmatched;
-        public List<Document> Documents1CUppUnmatched;
+        public List<Document> Documents1CDoMatched = new List<Document>();  // Documents from 1C:Document Management that coincided with 1C:UPP documents
+        public List<Document> Documents1CUppMatched = new List<Document>(); // Documents from 1C:UPP that coincided with 1C:Document Management documents
+        public List<Document> Documents1CDoUnmatched;                       // Documents from 1C:Document Management that not coincided with 1C:UPP documents
+        public List<Document> Documents1CUppUnmatched;                      // Documents from 1C:UPP that not coincided with 1C:Document Management documents
 
-        public List<Document> documents1CDoSource;
-        public List<Document> documents1CUppSource;
-        private List<Document> ignoreDoDocuments;
-        private List<Document> ignoreUppDocuments;
+        public List<Document> documents1CDoSource;                          // Source documents in 1C:Document Management
+        public List<Document> documents1CUppSource;                         // Source documents in 1C:UPP
+        private List<Document> ignoreDoDocuments;                           // Ignored documents in 1C:Document Management
+        private List<Document> ignoreUppDocuments;                          // Ignored documents in 1C:UPP
 
         private List<Document>? matchedUppDocumentsBuffer;
 
@@ -21,12 +21,12 @@ namespace CheckDocumentRegistry
             FindUpd
         }
 
-        public DocumentsComparator(List<Document> inputDoDocs, List<Document> inputUppDocs, List<Document> IgnoreDo, List<Document> IgnoreUpp)
+        public DocumentsComparator(List<Document> DocumentsDo, List<Document> DocumentsUpp, List<Document> DocumentsDoIgnore, List<Document> DocumentsUppIgnore)
         {
-            this.documents1CDoSource = inputDoDocs;
-            this.documents1CUppSource = inputUppDocs;
-            this.ignoreDoDocuments = IgnoreDo;
-            this.ignoreUppDocuments = IgnoreUpp;
+            this.documents1CDoSource = DocumentsDo;
+            this.documents1CUppSource = DocumentsUpp;
+            this.ignoreDoDocuments = DocumentsDoIgnore;
+            this.ignoreUppDocuments = DocumentsUppIgnore;
 
             Console.WriteLine("Подготовка списков документов для сравнения");
 
