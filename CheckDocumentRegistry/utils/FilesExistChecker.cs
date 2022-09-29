@@ -1,35 +1,71 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace CheckDocumentRegistry
 {
     internal class WorkAbilityChecker
     {
-        public static void CheckSourceFiles(ProgramParameters programParameters)
+        public static void CheckFiles(ProgramParameters programParameters)
         {
             bool doExist = File.Exists(programParameters.doSpreadSheetPath);
             bool uppExist = File.Exists(programParameters.uppSpreadSheetPath);
 
             if (doExist && uppExist)
             {
-                return;
+                TryOpenSpreadSheet(programParameters.doSpreadSheetPath);
+                TryOpenSpreadSheet(programParameters.uppSpreadSheetPath);
             }
             else
             {
                 if (!doExist)
                 {
-                    Console.WriteLine($"Error: File \"{programParameters.doSpreadSheetPath}\" not found.");
+                    WriteMessageExit($"Error: Файл \"{programParameters.doSpreadSheetPath}\" не найден.");
                 }
-                else if (!uppExist)
+                if (!uppExist)
                 {
-                    Console.WriteLine($"Error: File \"{programParameters.uppSpreadSheetPath}\" not found.");
+                    WriteMessageExit($"Error: Файл \"{programParameters.uppSpreadSheetPath}\" не найден.");
                 }
-                Console.ReadLine();
-                Environment.Exit(0);
             }
+
+            TryCreateSpreadSheet(programParameters.passedDoPath);
+            TryCreateSpreadSheet(programParameters.passedUppPath);
+        }
+        
+        private static void TryOpenSpreadSheet(string filePath)
+        {
+            try
+            {
+                using (File.Open(filePath, FileMode.Open)) { }
+            }
+            catch
+            {
+                WriteMessageExit($"Error: Невозможно открыть файл \"{filePath}\".");
+            }
+        }
+
+        private static void TryCreateSpreadSheet(string filePath)
+        {
+            try
+            {
+                SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument
+                .Create(filePath, DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook);
+
+                WorkbookPart workbookpart = spreadsheetDocument.AddWorkbookPart();
+                workbookpart.Workbook = new Workbook();
+                workbookpart.Workbook.Save();
+                spreadsheetDocument.Close();
+            }
+            catch
+            {
+                WriteMessageExit($"Error: Невозможно создать файл \"{filePath}\".");
+            }
+        }
+
+        private static void WriteMessageExit(string message)
+        {
+            Console.WriteLine(message);
+            Console.ReadLine();
+            Environment.Exit(0);
         }
     }
 }

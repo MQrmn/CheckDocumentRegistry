@@ -10,13 +10,14 @@ namespace CheckDocumentRegistry
             ProgramParameters programParameters = ParametersReaderJSON.GetParameters();
 
             // Checkimg for existing files to comparingg
-            WorkAbilityChecker.CheckSourceFiles(programParameters);
+            WorkAbilityChecker.CheckFiles(programParameters);
 
             DocumentsLoader documentsLoader = new();
 
             // Getting documents from spreadsheets
             List<Document> doDocuments = documentsLoader.GetDoDocuments(programParameters.doSpreadSheetPath);
             List<Document> uppDocuments = documentsLoader.GetUppDocuments(programParameters.uppSpreadSheetPath);
+            
             List<Document> ignoreDoDocuments = documentsLoader.GetIgnore(programParameters.doIgnoreSpreadSheetPath);
             List<Document> ignoreUppDocuments = documentsLoader.GetIgnore(programParameters.uppIgnoreSpreadSheetPath);
 
@@ -29,11 +30,15 @@ namespace CheckDocumentRegistry
             unmatchedDocumentsCommentator.CommentUnmatchedDocuments();
 
             // Creating reports
-            SpreadSheetWriterXLSX.Create(compareResult.Documents1CDoMatched, programParameters.matchedDoPath);
-            SpreadSheetWriterXLSX.Create(compareResult.Documents1CUppMatched, programParameters.matchedUppPath);
+
             SpreadSheetWriterXLSX.Create(compareResult.Documents1CDoUnmatched, programParameters.passedDoPath);
             SpreadSheetWriterXLSX.Create(compareResult.Documents1CUppUnmatched, programParameters.passedUppPath);
-            
+
+            if (programParameters.printMatchedDocuments)
+            {
+                SpreadSheetWriterXLSX.Create(compareResult.Documents1CDoMatched, programParameters.matchedDoPath);
+                SpreadSheetWriterXLSX.Create(compareResult.Documents1CUppMatched, programParameters.matchedUppPath);
+            }
         }
     }
 }

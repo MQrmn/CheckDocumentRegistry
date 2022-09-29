@@ -1,6 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-using System.Text.RegularExpressions;
 
 namespace CheckDocumentRegistry
 {
@@ -17,7 +16,6 @@ namespace CheckDocumentRegistry
 
             WorksheetPart worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
             worksheetPart.Worksheet = new Worksheet(new SheetData());
-
 
             Sheets sheets = spreadsheetDocument.WorkbookPart.Workbook.
                 AppendChild<Sheets>(new Sheets());
@@ -74,7 +72,6 @@ namespace CheckDocumentRegistry
             documents.ForEach(delegate (Document document)
             {
                 Row row = new Row();
-
                 foreach (var i in document.GetArray())
                 {
                     if (i is not null)
@@ -88,18 +85,13 @@ namespace CheckDocumentRegistry
                         row.Append(cell);
                     }
                 }
-
                 sheetData.Append(row);
-
             });
 
             Columns columns1 = worksheet.GetFirstChild<Columns>();
 
             workbookpart.Workbook.Save();
-
-            // Close the document.
             spreadsheetDocument.Close();
-
         }
     }
 }
