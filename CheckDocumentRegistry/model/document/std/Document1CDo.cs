@@ -3,23 +3,22 @@ using System.Text.RegularExpressions;
 
 namespace CheckDocumentRegistry
 {
-    public class Document1CDoStandard : Document
+    public class Document1CDo : Document
     {
-        public Document1CDoStandard() { }
-        public Document1CDoStandard(string[] docValues)
+        private protected Document1CDo() { }
+
+        public Document1CDo(string[] document, int[] docFieldIndex)
         {
+            this.Type = this.GetDocType(document[docFieldIndex[0]]);
+            this.Title = document[docFieldIndex[1]];
+            this.Company = document[docFieldIndex[2]];
+            this.Counterparty = document[docFieldIndex[3]];
+            this.Number = this.SetDocNumber(document[docFieldIndex[4]]);
+            this.Date = document[docFieldIndex[5]];
 
-            this.Type = this.GetDocType(docValues[0]);
-            this.Title = docValues[3];
-            this.Company = docValues[6];
-            this.Counterparty = this.GetDocCounterparty(docValues[7]);
-            this.Number = this.SetDocNumber(docValues[8]);
-            this.Date = docValues[9];
-
-            if (docValues[6] != String.Empty)
-                this.Salary = this.GetDocSum(docValues[10]);
-
-            if (docValues[11] == "Да") this.IsUpd = true;
+            if (document[docFieldIndex[6]] != String.Empty)
+                this.Salary = this.GetDocSum(document[docFieldIndex[6]]);
+            if (document[7] == "Да") this.IsUpd = true;
         }
 
         private protected int GetDocType(string rawDocType)
@@ -47,6 +46,5 @@ namespace CheckDocumentRegistry
             string regexResult = Regex.Replace(docCounterparty, pattern, String.Empty, RegexOptions.IgnoreCase);
             return regexResult;
         }
-
     }
 }

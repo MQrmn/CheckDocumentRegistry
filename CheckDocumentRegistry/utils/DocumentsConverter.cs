@@ -3,103 +3,61 @@ namespace CheckDocumentRegistry
 {
     internal class DocumentsConverter
     {
-        public static List<Document> Convert1CDoDocumentsStandard(string[][] input)
+        private static int[] docFieldIndex1CDo = new int[] { 0, 3, 6, 7, 8, 9, 10, 11 };        // Standard 1C:DO document format
+        private static int[] customDocFieldIndex1CDo = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 };    // Simplified 1C:DO document format
+        private static int[] docFieldIndex1CUpp = new int[] { 0, 1, 3, 4, 5, 6, 7 };            // Standard 1C:UPP document format
+        private static int[] customDocFieldIndex1CUpp = new int[] { 0, 1, 2, 3, 4, 5, 6 };      // Simplified 1C:UPP document format
+
+        public static List<Document> Convert1CDoDocuments(string[][] input)
         {
-            List<Document1CDoStandard> doDocuments = new List<Document1CDoStandard>(input.Length);
+            int[] fieldIndex = docFieldIndex1CDo;
+            List<Document1CDo> doDocuments = new List<Document1CDo>(input.Length);
+
             int numberOfException = new();
             for (int i = 0; i < input.Length; i++)
             {
                 try
                 {
-                    doDocuments.Add(new Document1CDoStandard(input[i]));
+                    doDocuments.Add(new Document1CDo(input[i], fieldIndex));
                     numberOfException = 0;
                 }
                 catch 
                 {
                     numberOfException++;
-                    if (numberOfException > 7) throw;
+                    if (numberOfException > 8) throw;
+                    if (numberOfException > 7) fieldIndex = customDocFieldIndex1CDo;
                 }
             }
 
             List<Document> documents = doDocuments
-                .ConvertAll(new Converter<Document1CDoStandard, Document>(delegate (Document1CDoStandard document) {
+                .ConvertAll(new Converter<Document1CDo, Document>(delegate (Document1CDo document) {
                     return (Document)document;
                 }));
 
             return documents;
         }
 
-        public static List<Document> Convert1CDoDocumentsClean(string[][] input)
+        public static List<Document> Convert1CUppDocuments(string[][] input)
         {
-            List<Document1CDoClean> doDocuments = new List<Document1CDoClean>(input.Length);
-
+            int[] fieldIndex = docFieldIndex1CUpp;
+            List<Document1CUpp> doDocuments = new List<Document1CUpp>(input.Length);
             int numberOfException = new();
             for (int i = 0; i < input.Length; i++)
             {
                 try
                 {
-                    doDocuments.Add(new Document1CDoClean(input[i]));
-                    numberOfException = 0;
-                }
-                catch 
-                {
-                    numberOfException++;
-                    if (numberOfException > 1) throw;
-                }
-            }
-
-            List<Document> documents = doDocuments
-                .ConvertAll(new Converter<Document1CDoClean, Document>(delegate (Document1CDoClean document) {
-                    return (Document)document;
-                }));
-
-            return documents;
-        }
-
-        public static List<Document> Convert1CUppDocumentsStandard(string[][] input)
-        {
-            List<Document1CUppStandard> doDocuments = new List<Document1CUppStandard>(input.Length);
-            int numberOfException = new();
-            for (int i = 0; i < input.Length; i++)
-            {
-                try
-                {
-                    doDocuments.Add(new Document1CUppStandard(input[i]));
+                    doDocuments.Add(new Document1CUpp(input[i], fieldIndex));
                 }
                 catch
                 {
                     numberOfException++;
-                    if (numberOfException > 1) throw;
+                    if (numberOfException > 2) throw;
+                    if (numberOfException > 1) fieldIndex = customDocFieldIndex1CUpp;
                 }
             }
 
             List<Document> documents = doDocuments
-                .ConvertAll(new Converter<Document1CUppStandard, Document>(delegate (Document1CUppStandard document) {
-                    return (Document)document;
-                }));
-
-            return documents;
-        }
-
-        public static List<Document> Convert1CUppDocumentsClean(string[][] input)
-        {
-            List<Document1CUppClean> doDocuments = new List<Document1CUppClean>(input.Length);
-            int numberOfException = new();
-            for (int i = 0; i < input.Length; i++)
-            {
-                try
-                {
-                    doDocuments.Add(new Document1CUppClean(input[i]));
-                }
-                catch
-                {
-                    numberOfException++;
-                    if (numberOfException > 1) throw;
-                }
-            }
-
-            List<Document> documents = doDocuments
-                .ConvertAll(new Converter<Document1CUppClean, Document>(delegate (Document1CUppClean document) {
+                .ConvertAll(new Converter<Document1CUpp, Document>(delegate (Document1CUpp document) {
                     return (Document)document;
                 }));
 

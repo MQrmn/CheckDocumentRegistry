@@ -3,22 +3,20 @@ using System.Text.RegularExpressions;
 
 namespace CheckDocumentRegistry
 {
-    public class Document1CUppStandard : Document
+    public class Document1CUpp : Document
     {
 
-        public Document1CUppStandard() {}
-
-        public Document1CUppStandard(string[] docValues)
+        public Document1CUpp(string[] document, int[] docFieldIndex)
         {
-            this.Type = this.GetDocType(docValues[0]);
-            this.Title = docValues[1];
-            this.Date = docValues[3];
-            this.Counterparty = docValues[4];
-            this.Number = this.SetDocNumber(docValues[5]);
-            this.Company = docValues[6];
-            
-            if (docValues[6] != String.Empty)
-                this.Salary = this.GetDocSum(docValues[7]);
+            this.Type = this.GetDocType(document[docFieldIndex[0]]);
+            this.Title = document[docFieldIndex[1]];
+            this.Date = document[docFieldIndex[2]];
+            this.Counterparty = document[docFieldIndex[3]];
+            this.Number = this.SetDocNumber(document[docFieldIndex[4]]);
+            this.Company = document[docFieldIndex[5]];
+
+            if (document[docFieldIndex[6]] != String.Empty)
+                this.Salary = this.GetDocSum(document[docFieldIndex[6]]);
         }
 
         private protected int GetDocType(string input)
