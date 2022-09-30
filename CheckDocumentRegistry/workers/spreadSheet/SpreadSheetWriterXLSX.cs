@@ -2,6 +2,8 @@
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 
+// http://www.dispatchertimer.com/tutorial/how-to-create-an-excel-file-in-net-using-openxml-part-3-add-stylesheet-to-the-spreadsheet/
+
 namespace CheckDocumentRegistry
 {
     internal class SpreadSheetWriterXLSX
@@ -15,17 +17,23 @@ namespace CheckDocumentRegistry
             WorkbookPart workbookpart = spreadsheetDocument.AddWorkbookPart();
             WorksheetPart worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
 
-            Stylesheet stylesheet = workbookpart.WorkbookStylesPart.Stylesheet;
-            List<UInt32> IndexRef = AddHeaderStyle(ref stylesheet);
-            stylesheet.Save();
-
-            workbookpart.Workbook = new Workbook();
+            
 
             
+            workbookpart.Workbook = new Workbook();
             worksheetPart.Worksheet = new Worksheet(new SheetData());
+
+  
 
             Sheets sheets = spreadsheetDocument.WorkbookPart.Workbook.
                 AppendChild<Sheets>(new Sheets());
+
+
+            WorkbookStylesPart stylePart = workbookpart.AddNewPart<WorkbookStylesPart>();
+            stylePart.Stylesheet = GenerateStylesheet();
+            stylePart.Stylesheet.Save();
+
+
 
             Sheet sheet = new Sheet()
             {
@@ -74,7 +82,7 @@ namespace CheckDocumentRegistry
                 {
                     CellValue = new CellValue(i.ToString()),
                     DataType = CellValues.String,
-                    StyleIndex = IndexRef[2]
+                    StyleIndex = 2
 
                 };
                 row.Append(cell);
@@ -106,6 +114,54 @@ namespace CheckDocumentRegistry
             workbookpart.Workbook.Save();
             spreadsheetDocument.Close();
         }
+
+
+
+        private static Stylesheet GenerateStylesheet()
+        {
+            Stylesheet styleSheet = null;
+
+            Fonts fonts = new Fonts(
+                new Font( // Index 0 - default
+                    new FontSize() { Val = 10 }
+
+                ),
+                new Font( // Index 1 - header
+                    new FontSize() { Val = 10 },
+                    new Bold(),
+                    new Color() { Rgb = "FFFFFF" }
+
+                ));
+
+            Fills fills = new Fills(
+                    new Fill(new PatternFill() { PatternType = PatternValues.None }), // Index 0 - default
+                    new Fill(new PatternFill() { PatternType = PatternValues.Gray125 }), // Index 1 - default
+                    new Fill(new PatternFill(new ForegroundColor { Rgb = new HexBinaryValue() { Value = "66666666" } })
+                    { PatternType = PatternValues.Solid }) // Index 2 - header
+                );
+
+            Borders borders = new Borders(
+                    new Border(), // index 0 default
+                    new Border( // index 1 black border
+                        new LeftBorder(new Color() { Auto = true }) { Style = BorderStyleValues.Thin },
+                        new RightBorder(new Color() { Auto = true }) { Style = BorderStyleValues.Thin },
+                        new TopBorder(new Color() { Auto = true }) { Style = BorderStyleValues.Thin },
+                        new BottomBorder(new Color() { Auto = true }) { Style = BorderStyleValues.Thin },
+                        new DiagonalBorder())
+                );
+
+            CellFormats cellFormats = new CellFormats(
+                    new CellFormat(), // default
+                    new CellFormat { FontId = 0, FillId = 0, BorderId = 1, ApplyBorder = true }, // body
+                    new CellFormat { FontId = 1, FillId = 2, BorderId = 1, ApplyFill = true } // header
+                );
+
+            styleSheet = new Stylesheet(fonts, fills, borders, cellFormats);
+
+            return styleSheet;
+        }
+
+
 
         private static List<UInt32> AddHeaderStyle(ref Stylesheet stylesheet)
         {
