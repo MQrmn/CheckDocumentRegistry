@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Packaging;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace CheckDocumentRegistry
@@ -12,9 +13,15 @@ namespace CheckDocumentRegistry
                 .Create(filePath, DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook);
 
             WorkbookPart workbookpart = spreadsheetDocument.AddWorkbookPart();
+            WorksheetPart worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
+
+            Stylesheet stylesheet = workbookpart.WorkbookStylesPart.Stylesheet;
+            List<UInt32> IndexRef = AddHeaderStyle(ref stylesheet);
+            stylesheet.Save();
+
             workbookpart.Workbook = new Workbook();
 
-            WorksheetPart worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
+            
             worksheetPart.Worksheet = new Worksheet(new SheetData());
 
             Sheets sheets = spreadsheetDocument.WorkbookPart.Workbook.
@@ -55,6 +62,11 @@ namespace CheckDocumentRegistry
 
             string[] titleOfColumn = new string[9] {"Тип", "Наименование", "Контрагент", "Организация", "Дата", "Номер", "Сумма", "Является УПД", "Комментарий" };
 
+
+
+
+
+
             Row row = new Row();
             foreach (var i in titleOfColumn)
             {
@@ -62,6 +74,7 @@ namespace CheckDocumentRegistry
                 {
                     CellValue = new CellValue(i.ToString()),
                     DataType = CellValues.String,
+                    StyleIndex = IndexRef[2]
 
                 };
                 row.Append(cell);
@@ -92,6 +105,28 @@ namespace CheckDocumentRegistry
 
             workbookpart.Workbook.Save();
             spreadsheetDocument.Close();
+        }
+
+        private static List<UInt32> AddHeaderStyle(ref Stylesheet stylesheet)
+        {
+            UInt32 Fillid = 0, CellFormatid = 0;
+
+            PatternFill pfill = new PatternFill() { PatternType = PatternValues.Solid };
+            pfill.BackgroundColor = new BackgroundColor() { Rgb = HexBinaryValue.FromString("70AD47") };
+
+            stylesheet.Fills.Append(new Fill() { PatternFill = pfill });
+            Fillid = stylesheet.Fills.Count++;
+            CellFormat cellFormat = new CellFormat() 
+            { 
+                FillId = Fillid,
+                ApplyFill = true 
+            };
+
+            stylesheet.CellFormats.AppendChild(cellFormat);
+            CellFormatid = stylesheet.CellFormats.Count++;
+
+            return new List<uint>() { Fillid, CellFormatid };
+
         }
     }
 }
