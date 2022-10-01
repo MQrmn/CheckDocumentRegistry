@@ -12,7 +12,7 @@ namespace CheckDocumentRegistry
             this.Type = this.GetDocType(document[docFieldIndex[0]]);
             this.Title = document[docFieldIndex[1]];
             this.Company = document[docFieldIndex[2]];
-            this.Counterparty = document[docFieldIndex[3]];
+            this.Counterparty = this.GetDocCounterparty(document[docFieldIndex[3]]);
             this.Number = this.SetDocNumber(document[docFieldIndex[4]]);
             this.Date = document[docFieldIndex[5]];
 
@@ -21,7 +21,7 @@ namespace CheckDocumentRegistry
             if (document[7] == "Да") this.IsUpd = true;
         }
 
-        private protected int GetDocType(string rawDocType)
+        private int GetDocType(string rawDocType)
         {
             return rawDocType switch
             {
@@ -32,7 +32,7 @@ namespace CheckDocumentRegistry
             };
         }
 
-        private protected float GetDocSum(string stringSum)
+        private float GetDocSum(string stringSum)
         {
             string pattern = @"[A-Z\s]";
             string regexResult = Regex.Replace(stringSum, pattern, String.Empty, RegexOptions.IgnoreCase);

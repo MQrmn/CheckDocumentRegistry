@@ -13,6 +13,7 @@ namespace CheckDocumentRegistry
         public float Salary { get; set; }
         public bool IsUpd { get; set; }
         public string? Comment { get; set; }
+        public int StylePosition { get; set; }
 
         public Document() {}
 
@@ -46,6 +47,8 @@ namespace CheckDocumentRegistry
             };
             return result;
         }
+
+
         protected string SetDocNumber(string input)
         {
             string digitRus = "АВСЕНКМОРТХ";
@@ -68,7 +71,6 @@ namespace CheckDocumentRegistry
             string ReplaceWord(string input)
             {
                 string result = input;
-
                 for (var i = 0; i < digitEng.Length; i++)
                 {
                     result = Regex.Replace(result, digitEng[i].ToString(), digitRus[i].ToString());

@@ -8,10 +8,10 @@ namespace CheckDocumentRegistry
 
         enum UnmatchedField
         {
-            Date,
-            Number,
-            Salary,
-            None
+            Date = 0,
+            Number = 1,
+            Salary = 2,
+            None = 3
         }
 
         public PartialDocumentsComparator(List<Document> documentsDo, List<Document> documentsUpp)
@@ -42,6 +42,7 @@ namespace CheckDocumentRegistry
             bool isSalaryMatch = documentDo.Salary == documentUpp.Salary;
             bool isTypeMatch = documentDo.Type == documentUpp.Type;
             bool isDocumentMatched = false;
+            int stylePosition = 0;
 
             int numberOfMatch = new();
 
@@ -55,14 +56,35 @@ namespace CheckDocumentRegistry
             if (numberOfMatch == 3) 
             {
                 isDocumentMatched = true;
-                if (!isDateMatch) unmatchedField = UnmatchedField.Date;
-                if (!isNumberMatch) unmatchedField = UnmatchedField.Number;
-                if (!isSalaryMatch) unmatchedField = UnmatchedField.Salary;
+                if (!isDateMatch) 
+                {
+                    unmatchedField = UnmatchedField.Date;
+                    stylePosition = 4;
+                } 
+                if (!isNumberMatch)
+                {
+                    unmatchedField = UnmatchedField.Number;
+                    stylePosition = 5;
+
+                }
+                if (!isSalaryMatch)
+                {
+                    unmatchedField = UnmatchedField.Salary;
+                    stylePosition = 6;
+                }
+                    
+                    
             }
 
             this.SetComment(documentDo, documentUpp, unmatchedField);
+            this.SetStylePosition(documentDo, stylePosition);
 
             return isDocumentMatched;
+        }
+
+        private void SetStylePosition(Document documentDo, int stylePosition)
+        {
+            documentDo.StylePosition = stylePosition;
         }
 
         private void SetComment(Document documentDo, Document documentUpp, UnmatchedField unmatchedField)
