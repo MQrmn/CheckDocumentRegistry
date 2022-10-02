@@ -12,6 +12,8 @@ namespace CheckDocumentRegistry
         public string passedDoPath { get; set; }
         public string passedUppPath { get; set; }
         public bool printMatchedDocuments { get; set; }
+        public bool askAboutCloseProgram { get; set; }
+        
         public void SetDefaults()
         {
             this.doSpreadSheetPath = ".\\input\\DO.xlsx";
@@ -23,6 +25,7 @@ namespace CheckDocumentRegistry
             this.passedDoPath = ".\\output\\PassedDO.xlsx";
             this.passedUppPath = ".\\output\\PassedUpp.xlsx";
             this.printMatchedDocuments = false;
+            this.askAboutCloseProgram = true;
         }
     }
 }

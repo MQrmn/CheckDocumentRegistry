@@ -17,7 +17,8 @@ namespace CheckDocumentRegistry
             // Getting documents from spreadsheets
             List<Document> doDocuments = documentsLoader.GetDoDocuments(programParameters.doSpreadSheetPath);
             List<Document> uppDocuments = documentsLoader.GetUppDocuments(programParameters.uppSpreadSheetPath);
-            
+
+            // Getting ignored documents from spreadsheets
             List<Document> ignoreDoDocuments = documentsLoader.GetIgnore(programParameters.doIgnoreSpreadSheetPath);
             List<Document> ignoreUppDocuments = documentsLoader.GetIgnore(programParameters.uppIgnoreSpreadSheetPath);
 
@@ -30,7 +31,6 @@ namespace CheckDocumentRegistry
             unmatchedDocumentsCommentator.CommentUnmatchedDocuments();
 
             // Creating reports
-
             SpreadSheetWriterXLSX.Create(compareResult.Documents1CDoUnmatched, programParameters.passedDoPath);
             SpreadSheetWriterXLSX.Create(compareResult.Documents1CUppUnmatched, programParameters.passedUppPath);
 
@@ -39,6 +39,13 @@ namespace CheckDocumentRegistry
                 SpreadSheetWriterXLSX.Create(compareResult.Documents1CDoMatched, programParameters.matchedDoPath);
                 SpreadSheetWriterXLSX.Create(compareResult.Documents1CUppMatched, programParameters.matchedUppPath);
             }
+
+            if (programParameters.askAboutCloseProgram)
+            {
+                Console.WriteLine("Для завершения программы нажмите любую клавишу.");
+                Console.ReadKey();
+            }
+            
         }
     }
 }

@@ -37,18 +37,18 @@ namespace CheckDocumentRegistry
             Worksheet worksheet = worksheetPart.Worksheet;
 
             // Set wifth of column
-            Columns lstColumns = worksheetPart.Worksheet.GetFirstChild<Columns>();
-            lstColumns = new Columns();
-            lstColumns.Append(new Column() { Min = 1, Max = 9, Width = 5, CustomWidth = true, Hidden = true });  // Type
-            lstColumns.Append(new Column() { Min = 2, Max = 9, Width = 60, CustomWidth = true }); // Title
-            lstColumns.Append(new Column() { Min = 3, Max = 9, Width = 40, CustomWidth = true }); // ConterPart
-            lstColumns.Append(new Column() { Min = 4, Max = 9, Width = 15, CustomWidth = true }); // Organiz
-            lstColumns.Append(new Column() { Min = 5, Max = 9, Width = 15, CustomWidth = true }); // Date
-            lstColumns.Append(new Column() { Min = 6, Max = 9, Width = 20, CustomWidth = true }); // Number
-            lstColumns.Append(new Column() { Min = 7, Max = 9, Width = 15, CustomWidth = true }); // Summ
-            lstColumns.Append(new Column() { Min = 8, Max = 9, Width = 10, CustomWidth = true }); // isUPD
-            lstColumns.Append(new Column() { Min = 9, Max = 9, Width = 40, CustomWidth = true }); // Comment
-            worksheetPart.Worksheet.InsertAt(lstColumns, 0);
+            Columns columns = worksheetPart.Worksheet.GetFirstChild<Columns>();
+            columns = new Columns();
+            columns.Append(new Column() { Min = 1, Max = 9, Width = 5, CustomWidth = true, Hidden = true });  // Type
+            columns.Append(new Column() { Min = 2, Max = 9, Width = 60, CustomWidth = true }); // Title
+            columns.Append(new Column() { Min = 3, Max = 9, Width = 40, CustomWidth = true }); // ConterPart
+            columns.Append(new Column() { Min = 4, Max = 9, Width = 15, CustomWidth = true }); // Organiz
+            columns.Append(new Column() { Min = 5, Max = 9, Width = 15, CustomWidth = true }); // Date
+            columns.Append(new Column() { Min = 6, Max = 9, Width = 20, CustomWidth = true }); // Number
+            columns.Append(new Column() { Min = 7, Max = 9, Width = 15, CustomWidth = true }); // Summ
+            columns.Append(new Column() { Min = 8, Max = 9, Width = 10, CustomWidth = true }); // isUPD
+            columns.Append(new Column() { Min = 9, Max = 9, Width = 40, CustomWidth = true }); // Comment
+            worksheetPart.Worksheet.InsertAt(columns, 0);
 
             SheetData sheetData = worksheet.GetFirstChild<SheetData>();
 
