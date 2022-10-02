@@ -5,22 +5,24 @@ using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace CheckDocumentRegistry
 {
-    internal class SpreadSheetWriterXLSX
+    public class SpreadSheetWriterXLSX
     {
-        public static void Create(List<Document> documents, string filePath)
+        private SpreadsheetDocument spreadsheetDocument;
+        private WorkbookPart workbookpart;
+        private WorksheetPart worksheetPart;
+        private Worksheet worksheet;
+
+        public SpreadSheetWriterXLSX(string filePath)
         {
-
-            SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument
+            this.spreadsheetDocument = SpreadsheetDocument
                 .Create(filePath, DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook);
-
-            WorkbookPart workbookpart = spreadsheetDocument.AddWorkbookPart();
-            WorksheetPart worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
+            this.workbookpart = spreadsheetDocument.AddWorkbookPart();
+            this.worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
             workbookpart.Workbook = new Workbook();
-            worksheetPart.Worksheet = new Worksheet(new SheetData());
+            this.worksheetPart.Worksheet = new Worksheet(new SheetData());
+
             Sheets sheets = spreadsheetDocument.WorkbookPart.Workbook.
                 AppendChild<Sheets>(new Sheets());
-
-
             WorkbookStylesPart stylePart = workbookpart.AddNewPart<WorkbookStylesPart>();
             stylePart.Stylesheet = GenerateStylesheet();
             stylePart.Stylesheet.Save();
@@ -33,28 +35,78 @@ namespace CheckDocumentRegistry
             };
 
             sheets.Append(sheet);
+            this.worksheet = worksheetPart.Worksheet;
+        }
 
-            Worksheet worksheet = worksheetPart.Worksheet;
+        public void CreateSpreadsheet(List<Document> documents)
+        {
+            // Setting columns
+            SetColumns(ref this.worksheetPart);
+            SheetData sheetData = this.worksheet.GetFirstChild<SheetData>();
 
-            // Set wifth of column
-            Columns columns = worksheetPart.Worksheet.GetFirstChild<Columns>();
-            columns = new Columns();
-            columns.Append(new Column() { Min = 1, Max = 9, Width = 5, CustomWidth = true, Hidden = true });  // Type
-            columns.Append(new Column() { Min = 2, Max = 9, Width = 60, CustomWidth = true }); // Title
-            columns.Append(new Column() { Min = 3, Max = 9, Width = 40, CustomWidth = true }); // ConterPart
-            columns.Append(new Column() { Min = 4, Max = 9, Width = 15, CustomWidth = true }); // Organiz
-            columns.Append(new Column() { Min = 5, Max = 9, Width = 15, CustomWidth = true }); // Date
-            columns.Append(new Column() { Min = 6, Max = 9, Width = 20, CustomWidth = true }); // Number
-            columns.Append(new Column() { Min = 7, Max = 9, Width = 15, CustomWidth = true }); // Summ
-            columns.Append(new Column() { Min = 8, Max = 9, Width = 10, CustomWidth = true }); // isUPD
-            columns.Append(new Column() { Min = 9, Max = 9, Width = 40, CustomWidth = true }); // Comment
-            worksheetPart.Worksheet.InsertAt(columns, 0);
+            // Filling header row
+            string[] titlesOfColumns = new string[9] {"Тип", "Наименование", "Контрагент", 
+                                                    "Организация", "Дата", "Номер", 
+                                                    "Сумма", "Является УПД", "Комментарий" };
 
-            SheetData sheetData = worksheet.GetFirstChild<SheetData>();
-
-            string[] titleOfColumn = new string[9] {"Тип", "Наименование", "Контрагент", "Организация", "Дата", "Номер", "Сумма", "Является УПД", "Комментарий" };
+            Row headerRow = GetRow(titlesOfColumns);
+            sheetData.Append(headerRow);
 
 
+            // Filling body
+            documents.ForEach(delegate (Document document)
+            {
+                Row row = GetRow(document);
+                sheetData.Append(row);
+            });
+
+            this.workbookpart.Workbook.Save();
+            this.spreadsheetDocument.Close();
+        }
+
+        // Getting slyle index by document data
+        private uint GetStyleIndex(Document document, int currentPosition)
+        {
+            uint styleIndex = 0;
+            int stylePosition = document.StylePosition;
+
+            if (stylePosition == 0)
+                styleIndex = 3;
+
+            if (stylePosition != 0 && stylePosition == currentPosition )
+                styleIndex = 2;
+
+            return styleIndex;
+        }
+
+        // Filling body
+        private Row GetRow( Document document )
+        {
+            Row row = new Row();
+
+            string[] documentInArray = document.GetArray();
+
+            for (var i = 0; i < documentInArray.Length; i++)
+            {
+                if (documentInArray[i] is not null)
+                {
+                    Cell cell = new Cell()
+                    {
+                        CellValue = new CellValue(documentInArray[i]),
+                        DataType = CellValues.String,
+                        StyleIndex = GetStyleIndex(document, i)
+                    };
+
+                    row.Append(cell);
+                }
+            }
+
+            return row;
+        }
+
+        // Filling header
+        private Row GetRow(string[] titleOfColumn)
+        {
             Row row = new Row();
             foreach (var i in titleOfColumn)
             {
@@ -67,60 +119,33 @@ namespace CheckDocumentRegistry
                 row.Append(cell);
             }
 
-            sheetData.Append(row);
-
-
-           
-
-
-            documents.ForEach(delegate (Document document)
-            {
-                string[] documentInArray = document.GetArray();
-                Row row = new Row();
-
-                for (var i = 0; i < documentInArray.Length; i++ )
-                {
-                    if (documentInArray[i] is not null)
-                    {
-                        Cell cell = new Cell()
-                        {
-                            CellValue = new CellValue(documentInArray[i]),
-                            DataType = CellValues.String,
-                            StyleIndex = GetStyleIndex(document, i)
-                        };
-
-                        row.Append(cell);
-                    }
-                }
-
-                sheetData.Append(row);
-            });
-
-            Columns columns1 = worksheet.GetFirstChild<Columns>();
-
-            workbookpart.Workbook.Save();
-            spreadsheetDocument.Close();
+            return row;
         }
 
-        private static uint GetStyleIndex(Document document, int position)
+        // Setting columns
+        private void SetColumns(ref WorksheetPart worksheetPart)
         {
-            uint styleIndex = 0;
-            int stylePosition = document.StylePosition;
+            Columns columns = worksheetPart.Worksheet.GetFirstChild<Columns>();
+            columns = new Columns();
 
-            if (stylePosition == 0)
-                styleIndex = 3;
+            columns.Append(new Column() { Min = 1, Max = 9, Width = 5, CustomWidth = true, Hidden = true });  // Type
+            columns.Append(new Column() { Min = 2, Max = 9, Width = 60, CustomWidth = true });  // Title
+            columns.Append(new Column() { Min = 3, Max = 9, Width = 40, CustomWidth = true }); // ConterPart
+            columns.Append(new Column() { Min = 4, Max = 9, Width = 15, CustomWidth = true }); // Organiz
+            columns.Append(new Column() { Min = 5, Max = 9, Width = 15, CustomWidth = true }); // Date
+            columns.Append(new Column() { Min = 6, Max = 9, Width = 20, CustomWidth = true }); // Number
+            columns.Append(new Column() { Min = 7, Max = 9, Width = 15, CustomWidth = true }); // Summ
+            columns.Append(new Column() { Min = 8, Max = 9, Width = 10, CustomWidth = true }); // isUPD
+            columns.Append(new Column() { Min = 9, Max = 9, Width = 40, CustomWidth = true }); // Comment
 
-            if (stylePosition != 0 && stylePosition == position )
-                styleIndex = 2;
-
-            return styleIndex;
+            worksheetPart.Worksheet.InsertAt(columns, 0);
+            //return columns;
         }
 
-        private static Stylesheet GenerateStylesheet()
+        // Setting styles
+        private Stylesheet GenerateStylesheet()
         {
             Stylesheet styleSheet = null;
-
-
 
             Fonts fonts =   new Fonts(
                 new Font(new FontSize() { Val = 10 }),
@@ -130,11 +155,11 @@ namespace CheckDocumentRegistry
                     new Fill(new PatternFill() { PatternType = PatternValues.None }), // Index 0 - default
                                 new Fill(new PatternFill() { PatternType = PatternValues.Gray125 }), // Index 1 - default
                                 new Fill(new PatternFill(new ForegroundColor { Rgb = new HexBinaryValue() { Value = "66666666" } }) // Index 2 - Header
-                                { PatternType = PatternValues.Solid }),
+                                { PatternType = PatternValues.Solid }), // index 2 - Header
                                 new Fill(new PatternFill(new ForegroundColor { Rgb = new HexBinaryValue() { Value = "fcf803" } }) // Index 3 - Body hilight
-                                { PatternType = PatternValues.Solid }),
+                                { PatternType = PatternValues.Solid }), // index 3 - Unmatched cell in document
                                 new Fill(new PatternFill(new ForegroundColor { Rgb = new HexBinaryValue() { Value = "a9acb0" } }) // Index 3 - Body hilight
-                                { PatternType = PatternValues.Solid })
+                                { PatternType = PatternValues.Solid }) // index 4 - Hilight no document in UPP 
                 );
 
             Borders borders = new Borders(
@@ -154,14 +179,13 @@ namespace CheckDocumentRegistry
                         {
                             Horizontal = HorizontalAlignmentValues.Center
                         }}, // header
-                    new CellFormat { FontId = 0, FillId = 3, BorderId = 0, ApplyFill = true }, // body 
-                    new CellFormat { FontId = 0, FillId = 4, BorderId = 0, ApplyFill = true }  // body 
+                    new CellFormat { FontId = 0, FillId = 3, BorderId = 0, ApplyFill = true }, // Unmatched cell in document
+                    new CellFormat { FontId = 0, FillId = 4, BorderId = 0, ApplyFill = true }  // Hilight no document in UPP 
                 );
 
             styleSheet = new Stylesheet(fonts, fills, borders, cellFormats);
 
             return styleSheet;
         }
-
     }
 }

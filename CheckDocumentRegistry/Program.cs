@@ -31,13 +31,19 @@ namespace CheckDocumentRegistry
             unmatchedDocumentsCommentator.CommentUnmatchedDocuments();
 
             // Creating reports
-            SpreadSheetWriterXLSX.Create(compareResult.Documents1CDoUnmatched, programParameters.passedDoPath);
-            SpreadSheetWriterXLSX.Create(compareResult.Documents1CUppUnmatched, programParameters.passedUppPath);
+            SpreadSheetWriterXLSX spreadSheetWriterPassedDo = new(programParameters.passedDoPath);
+            spreadSheetWriterPassedDo.CreateSpreadsheet(compareResult.Documents1CDoUnmatched);
+
+            SpreadSheetWriterXLSX spreadSheetWriterPassedUpp = new(programParameters.passedUppPath);
+            spreadSheetWriterPassedUpp.CreateSpreadsheet(compareResult.Documents1CUppUnmatched);
 
             if (programParameters.printMatchedDocuments)
             {
-                SpreadSheetWriterXLSX.Create(compareResult.Documents1CDoMatched, programParameters.matchedDoPath);
-                SpreadSheetWriterXLSX.Create(compareResult.Documents1CUppMatched, programParameters.matchedUppPath);
+                SpreadSheetWriterXLSX spreadSheetWriterMatchedDo = new(programParameters.matchedDoPath);
+                spreadSheetWriterMatchedDo.CreateSpreadsheet(compareResult.Documents1CDoMatched);
+
+                SpreadSheetWriterXLSX spreadSheetWriterMatcheUpp = new(programParameters.matchedUppPath);
+                spreadSheetWriterMatcheUpp.CreateSpreadsheet(compareResult.Documents1CUppMatched);
             }
 
             if (programParameters.askAboutCloseProgram)
@@ -45,7 +51,6 @@ namespace CheckDocumentRegistry
                 Console.WriteLine("Для завершения программы нажмите любую клавишу.");
                 Console.ReadKey();
             }
-            
         }
     }
 }
