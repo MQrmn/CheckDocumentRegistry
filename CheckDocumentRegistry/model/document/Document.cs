@@ -25,7 +25,7 @@ namespace CheckDocumentRegistry
             this.Counterparty = docValues[2];
             this.Number = docValues[5];
             this.Company = docValues[3];
-            this.Salary = float.Parse(docValues[6]);
+            this.Salary = this.GetSalary(docValues[6]);
             if (docValues[7] == "Да") this.IsUpd = true;
             this.Comment = String.Empty;
         }
@@ -49,7 +49,13 @@ namespace CheckDocumentRegistry
         }
 
 
-        protected string SetDocNumber(string input)
+        private float GetSalary(string salaryString)
+        {
+            string regexResult = Regex.Replace(salaryString, @"\.", @",");
+            return float.Parse(regexResult);
+        }
+
+        private protected string SetDocNumber(string input)
         {
             string digitRus = "АВСЕНКМОРТХ";
             string digitEng = "ABCEHKMOPTX";

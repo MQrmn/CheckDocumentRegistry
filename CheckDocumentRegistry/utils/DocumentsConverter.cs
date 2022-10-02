@@ -24,8 +24,14 @@ namespace CheckDocumentRegistry
                 catch 
                 {
                     numberOfException++;
-                    if (numberOfException > 8) throw;
-                    if (numberOfException > 7) fieldIndex = customDocFieldIndex1CDo;
+                    //if (numberOfException > 8) throw;
+                    if (numberOfException > 7)
+                    {
+                        numberOfException = 0;
+                        i = -1;
+                        fieldIndex = customDocFieldIndex1CDo;
+                    }
+                        
                 }
             }
 
@@ -51,8 +57,13 @@ namespace CheckDocumentRegistry
                 catch
                 {
                     numberOfException++;
-                    if (numberOfException > 2) throw;
-                    if (numberOfException > 1) fieldIndex = customDocFieldIndex1CUpp;
+                    //if (numberOfException > 2) throw;
+                    if (numberOfException > 1)
+                    {
+                        numberOfException = 0;
+                        i = -1;
+                        fieldIndex = customDocFieldIndex1CUpp;
+                    }
                 }
             }
 
