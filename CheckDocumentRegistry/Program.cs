@@ -7,7 +7,7 @@ namespace CheckDocumentRegistry
         {
 
             // Getting program parameters
-            ProgramParameters programParameters = ParametersReaderJSON.GetParameters();
+            ProgramParameters programParameters = ParamsReadWriteJSON.GetParameters();
 
             // Checkimg for existing files to comparingg
             WorkAbilityChecker.CheckFiles(programParameters);

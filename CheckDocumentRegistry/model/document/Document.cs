@@ -17,6 +17,7 @@ namespace CheckDocumentRegistry
 
         public Document() {}
 
+
         public Document(string[] docValues)
         {
             this.Type = Int32.Parse(docValues[0]);
@@ -29,6 +30,7 @@ namespace CheckDocumentRegistry
             if (docValues[7] == "Да") this.IsUpd = true;
             this.Comment = String.Empty;
         }
+
 
         public string[] GetArray()
         {
@@ -55,38 +57,41 @@ namespace CheckDocumentRegistry
             return float.Parse(regexResult);
         }
 
-        private protected string SetDocNumber(string input)
+
+        private protected string SetDocNumber(string docNumber)
         {
             string digitRus = "АВСЕНКМОРТХ";
             string digitEng = "ABCEHKMOPTX";
             string patternWord = @$"[{digitEng}]";
             string patternAddNumber = @"\~\d";
-            string result;
+            string docNumberConverted;
 
-            result = input.ToUpper();
-            result = Regex.Replace(result, patternAddNumber, string.Empty);
-            result = Regex.Replace(result, @"\s+", string.Empty);
-            result = (Regex.IsMatch(result, patternWord) ? ReplaceWord(result) : result );
-            result = (Regex.IsMatch(result, @"\w+") ? CutZero(result) : result );
+            docNumberConverted = docNumber.ToUpper();
+            docNumberConverted = Regex.Replace(docNumberConverted, patternAddNumber, string.Empty);
+            docNumberConverted = Regex.Replace(docNumberConverted, @"\s+", string.Empty);
+            docNumberConverted = (Regex.IsMatch(docNumberConverted, patternWord) ? ReplaceWord(docNumberConverted) : docNumberConverted );
+            docNumberConverted = (Regex.IsMatch(docNumberConverted, @"\w+") ? CutZero(docNumberConverted) : docNumberConverted );
 
-            string CutZero(string input)
+
+            string CutZero(string docNumber)
             {
-                return Regex.Replace(input, @"^0+", string.Empty); ;
+                return Regex.Replace(docNumber, @"^0+", string.Empty); ;
             }
 
-            string ReplaceWord(string input)
+
+            string ReplaceWord(string docNumber)
             {
-                string result = input;
+                string docNumberConverted = docNumber;
                 for (var i = 0; i < digitEng.Length; i++)
                 {
-                    result = Regex.Replace(result, digitEng[i].ToString(), digitRus[i].ToString());
+                    docNumberConverted = Regex.Replace(docNumberConverted, digitEng[i].ToString(), digitRus[i].ToString());
 
                 }
 
-                return result;
+                return docNumberConverted;
             }
 
-            return result;
+            return docNumberConverted;
         }
     }
 

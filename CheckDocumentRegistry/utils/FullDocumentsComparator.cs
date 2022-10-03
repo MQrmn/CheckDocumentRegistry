@@ -1,6 +1,7 @@
 ﻿
 namespace CheckDocumentRegistry
 {
+
     public class FullDocumentsComparator
     {
         public List<Document> Documents1CDoMatched = new List<Document>();  // Documents from 1C:Document Management that coincided with 1C:UPP documents
@@ -20,6 +21,7 @@ namespace CheckDocumentRegistry
             Basic,
             FindUpd
         }
+
 
         public FullDocumentsComparator(List<Document> DocumentsDo, List<Document> DocumentsUpp, List<Document> DocumentsDoIgnore, List<Document> DocumentsUppIgnore)
         {
@@ -59,8 +61,8 @@ namespace CheckDocumentRegistry
 
             this.Documents1CDoUnmatched = this.documents1CDoSource;
             this.Documents1CUppUnmatched = this.documents1CUppSource;
-
         }
+
 
         private void FindDocumentAddToMatched(Document documentDo)
         {
@@ -81,6 +83,7 @@ namespace CheckDocumentRegistry
              });
         }
 
+
         // Due to peculiarities in the "1C:UPP" configuration
         // UDP was entered as an invoice + bill of lading or an act of work performed
         // thus I find the second document from the PPM, which is included in the UPD
@@ -98,6 +101,7 @@ namespace CheckDocumentRegistry
             }
         }
 
+
         // Clear source document list by matched documents
         private void ClearDocumentsByList(List<Document> sourceDocumentList, List<Document> catchedDocumentList)
         {
@@ -106,6 +110,7 @@ namespace CheckDocumentRegistry
                 sourceDocumentList.Remove(document);
             });
         }
+
 
         // Remove one document from list
         private void FindRemoveDocument(List<Document> sourceDocuments, Document ignDocument)
@@ -118,6 +123,7 @@ namespace CheckDocumentRegistry
             this.ClearDocumentsByList(sourceDocuments, documentsForRemove);
 
         }
+
 
         // Comparing two documents
         private bool CompareSingleDocuments(  Document firstDocument, 
