@@ -33,14 +33,8 @@ namespace CheckDocumentRegistry
         {
             string pattern = @"[\.]";
             string regexResult = Regex.Replace(stringSum, pattern, ",", RegexOptions.IgnoreCase);
-            try
-            {
-                return float.Parse(regexResult);
-            }
-            catch
-            {
-                return 0;
-            }
+            return float.Parse(regexResult);
+            
         }
 
 

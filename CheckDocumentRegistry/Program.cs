@@ -15,8 +15,8 @@ namespace CheckDocumentRegistry
             DocumentsLoader documentsLoader = new();
 
             // Getting documents from spreadsheets
-            List<Document> doDocuments = documentsLoader.GetDoDocuments(programParameters.doSpreadSheetPath);
-            List<Document> uppDocuments = documentsLoader.GetUppDocuments(programParameters.uppSpreadSheetPath);
+            List<Document> doDocuments = documentsLoader.GetDoDocuments(programParameters);
+            List<Document> uppDocuments = documentsLoader.GetUppDocuments(programParameters);
 
             // Getting ignored documents from spreadsheets
             List<Document> ignoreDoDocuments = documentsLoader.GetIgnore(programParameters.doIgnoreSpreadSheetPath);
@@ -35,15 +35,15 @@ namespace CheckDocumentRegistry
             spreadSheetWriterPassedDo.CreateSpreadsheet(compareResult.Documents1CDoUnmatched);
 
             SpreadSheetWriterXLSX spreadSheetWriterPassedUpp = new(programParameters.passedUppPath);
-            spreadSheetWriterPassedUpp.CreateSpreadsheet(compareResult.Documents1CUppUnmatched);
+            spreadSheetWriterPassedUpp.CreateSpreadsheet(compareResult.Documents1CUppUnmatched, false);
 
             if (programParameters.printMatchedDocuments)
             {
                 SpreadSheetWriterXLSX spreadSheetWriterMatchedDo = new(programParameters.matchedDoPath);
-                spreadSheetWriterMatchedDo.CreateSpreadsheet(compareResult.Documents1CDoMatched);
+                spreadSheetWriterMatchedDo.CreateSpreadsheet(compareResult.Documents1CDoMatched, false);
 
                 SpreadSheetWriterXLSX spreadSheetWriterMatcheUpp = new(programParameters.matchedUppPath);
-                spreadSheetWriterMatcheUpp.CreateSpreadsheet(compareResult.Documents1CUppMatched);
+                spreadSheetWriterMatcheUpp.CreateSpreadsheet(compareResult.Documents1CUppMatched, false);
             }
 
             if (programParameters.askAboutCloseProgram)

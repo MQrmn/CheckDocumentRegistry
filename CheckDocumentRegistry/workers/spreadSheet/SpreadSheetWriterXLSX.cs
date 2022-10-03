@@ -38,7 +38,7 @@ namespace CheckDocumentRegistry
             this.worksheet = worksheetPart.Worksheet;
         }
 
-        public void CreateSpreadsheet(List<Document> documents)
+        public void CreateSpreadsheet(List<Document> documents, bool isDoDocument = true)
         {
             // Setting columns
             SetColumns(ref this.worksheetPart);
@@ -49,12 +49,29 @@ namespace CheckDocumentRegistry
                                                     "Организация", "Дата", "Номер", 
                                                     "Сумма", "Является УПД", "Комментарий" };
 
-            Row headerRow = GetRow(titlesOfColumns);
+            Row headerRow = GetHeaderRow(titlesOfColumns);
             sheetData.Append(headerRow);
 
 
             // Filling body
             documents.ForEach(delegate (Document document)
+            {
+                Row row = GetRow(document, isDoDocument);
+                sheetData.Append(row);
+            });
+
+            this.workbookpart.Workbook.Save();
+            this.spreadsheetDocument.Close();
+        }
+
+
+        public void CreateSpreadsheet(List<string[]> documents)
+        {
+            // Setting columns
+            SheetData sheetData = this.worksheet.GetFirstChild<SheetData>();
+
+            // Filling body
+            documents.ForEach(delegate (string[] document)
             {
                 Row row = GetRow(document);
                 sheetData.Append(row);
@@ -64,9 +81,12 @@ namespace CheckDocumentRegistry
             this.spreadsheetDocument.Close();
         }
 
+
         // Getting slyle index by document data
-        private uint GetStyleIndex(Document document, int currentPosition)
+        private uint GetStyleIndex(Document document, int currentPosition, bool isDoDocument)
         {
+            if (!isDoDocument) return 0;
+
             uint styleIndex = 0;
             int stylePosition = document.StylePosition;
 
@@ -80,7 +100,7 @@ namespace CheckDocumentRegistry
         }
 
         // Filling body
-        private Row GetRow( Document document )
+        private Row GetRow( Document document, bool isDoDocument)
         {
             Row row = new Row();
 
@@ -94,7 +114,7 @@ namespace CheckDocumentRegistry
                     {
                         CellValue = new CellValue(documentInArray[i]),
                         DataType = CellValues.String,
-                        StyleIndex = GetStyleIndex(document, i)
+                        StyleIndex = GetStyleIndex(document, i, isDoDocument)
                     };
 
                     row.Append(cell);
@@ -104,8 +124,30 @@ namespace CheckDocumentRegistry
             return row;
         }
 
+        private Row GetRow(string[] document)
+        {
+            Row row = new Row();
+
+            for (var i = 0; i < document.Length; i++)
+            {
+                if (document[i] is not null)
+                {
+                    Cell cell = new Cell()
+                    {
+                        CellValue = new CellValue(document[i]),
+                        DataType = CellValues.String,
+                    };
+
+                    row.Append(cell);
+                }
+            }
+
+            return row;
+        }
+    
+
         // Filling header
-        private Row GetRow(string[] titleOfColumn)
+        private Row GetHeaderRow(string[] titleOfColumn)
         {
             Row row = new Row();
             foreach (var i in titleOfColumn)
@@ -187,5 +229,6 @@ namespace CheckDocumentRegistry
 
             return styleSheet;
         }
+
     }
 }
