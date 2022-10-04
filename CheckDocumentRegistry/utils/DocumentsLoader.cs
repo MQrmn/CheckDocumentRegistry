@@ -4,32 +4,33 @@ namespace CheckDocumentRegistry
     public class DocumentsLoader
     {
 
-        public List<Document> GetDoDocuments(ChangeableParameters programParameters)
-        {
-            SpreadSheetReaderXLSX spreadSheetReaderXLSX = new SpreadSheetReaderXLSX();
-            Console.WriteLine($"Чтение элетронной таблицы: {programParameters.doSpreadSheetPath}");
-            string[][] doDocumentsData = spreadSheetReaderXLSX.GetDocumentsFromTable(programParameters.doSpreadSheetPath);
 
-            DocumentsConverter? documentsConverter = new DocumentsConverter();
+        public List<Document> GetDoDocuments(string doSpreadSheetPath, string exceptedDoPath)
+        {
+            string[][] doDocumentsData = GetDocumentsFromReader(doSpreadSheetPath);
             Console.WriteLine("Конвертация документов 1С:ДО");
-            List<Document> documents = documentsConverter.Convert1CDoDocuments(doDocumentsData, programParameters.exceptedDoPath);
-
-            return documents;
-        }
-
-        public List<Document> GetUppDocuments(ChangeableParameters programParameters)
-        {
-            SpreadSheetReaderXLSX spreadSheetReaderXLSX = new SpreadSheetReaderXLSX();
-            
-            Console.WriteLine($"Чтение элетронной таблицы: {programParameters.uppSpreadSheetPath}");
-            string[][] uppDocumentsData = spreadSheetReaderXLSX.GetDocumentsFromTable(programParameters.uppSpreadSheetPath);
-
             DocumentsConverter? documentsConverter = new DocumentsConverter();
-            Console.WriteLine("Конвертация документов 1С:УПП");
-            List<Document> documents = documentsConverter.Convert1CUppDocuments(uppDocumentsData, programParameters.exceptedUppPath);
+            List<Document> documents = documentsConverter.Convert1CDoDocuments(doDocumentsData, exceptedDoPath);
 
             return documents;
         }
+
+        
+
+
+        public List<Document> GetUppDocuments(string uppSpreadSheetPath, string exceptedDoPath)
+        {
+            
+            string[][] uppDocumentsData = GetDocumentsFromReader(uppSpreadSheetPath);
+            Console.WriteLine("Конвертация документов 1С:УПП");
+            DocumentsConverter? documentsConverter = new DocumentsConverter();
+            List<Document> documents = documentsConverter.Convert1CUppDocuments(
+                                                                    uppDocumentsData,
+                                                                    exceptedDoPath);
+
+            return documents;
+        }
+
 
         public List<Document> GetIgnore(string filePath)
         {
@@ -57,6 +58,14 @@ namespace CheckDocumentRegistry
             }
 
             return documents;
+        }
+
+        private string[][] GetDocumentsFromReader(string doSpreadSheetPath)
+        {
+            Console.WriteLine($"Чтение элетронной таблицы: {doSpreadSheetPath}");
+            SpreadSheetReaderXLSX spreadSheetReaderXLSX = new SpreadSheetReaderXLSX();
+            return spreadSheetReaderXLSX.GetDocumentsFromTable(doSpreadSheetPath);
+
         }
     }
 }

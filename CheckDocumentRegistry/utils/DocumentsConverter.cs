@@ -9,58 +9,57 @@ namespace CheckDocumentRegistry
         private int[] customDocFieldIndex1CDo;      // Simplified 1C:DO document format
         private int[] docFieldIndex1CUpp;           // Standard 1C:UPP document format
         private int[] customDocFieldIndex1CUpp;     // Simplified 1C:UPP document format
-        List<string[]> exceptedDocuments;
+        internal List<string[]> ExceptedDocuments;
 
         internal DocumentsConverter()
         {
             this.docFieldIndex1CDo = new int[] { 0, 3, 6, 7, 8, 9, 10, 11 };
             this.customDocFieldIndex1CDo = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 };
+
             this.docFieldIndex1CUpp = new int[] { 0, 1, 3, 4, 5, 6, 7 };
             this.customDocFieldIndex1CUpp = new int[] { 0, 1, 2, 3, 4, 5, 6 };
-            this.exceptedDocuments = new List<string[]>();
+
+            this.ExceptedDocuments = new List<string[]>();
         }
 
 
-        public List<Document> Convert1CDoDocuments(string[][] input, string exceptedDoPath)
+        public List<Document> Convert1CDoDocuments(string[][] documentsArrDo, string exceptedDoPath)
         {
-            int[] fieldIndexes = docFieldIndex1CDo;
-            List<Document1CDo> doDocuments = new List<Document1CDo>(input.Length);
+            
+            List<Document1CDo> doDocuments = new List<Document1CDo>(documentsArrDo.Length);
 
-            int numberOfException = new();
-            bool isSwithedByException = false; 
-            for (int i = 0; i < input.Length; i++)
+            int numberOfExceptions = 0;
+            bool isSwithedByException = false;
+            int[] fieldIndexes = docFieldIndex1CDo;
+
+            for (int i = 0; i < documentsArrDo.Length; i++)
             {
                 try
                 {
-                    doDocuments.Add(new Document1CDo(input[i], fieldIndexes));
-                    numberOfException = 0;
+                    doDocuments.Add(new Document1CDo(documentsArrDo[i], fieldIndexes));
+                    numberOfExceptions = 0;
                 }
                 catch 
                 {
-                    numberOfException++;
+                    numberOfExceptions++;
 
-                    if ((numberOfException > 7 && isSwithedByException == false) || isSwithedByException == true)
+                    if ((numberOfExceptions > 7 && isSwithedByException == false) || isSwithedByException == true)
                     {
-                        this.exceptedDocuments.Add(input[i]);
+                        this.ExceptedDocuments.Add(documentsArrDo[i]);
                     }
 
-                    if (numberOfException >= 7 && isSwithedByException == false && input[i].Length < 12)
+                    if (numberOfExceptions >= 7 && isSwithedByException == false && documentsArrDo[i].Length < 12)
                     {
                         isSwithedByException = true;
-                        numberOfException = 0;
+                        numberOfExceptions = 0;
                         i = -1;
                         fieldIndexes = customDocFieldIndex1CDo;
                     }
                 }
             }
 
-            if (exceptedDocuments.Count > 0)
-            {
-                this.PrintExceptedDocuments(this.exceptedDocuments);
-                SpreadSheetWriterXLSX spreadSheetWriterXLSX = new SpreadSheetWriterXLSX(exceptedDoPath);
-                spreadSheetWriterXLSX.CreateSpreadsheet(exceptedDocuments);
-            }
-            
+            if (ExceptedDocuments.Count > 0)
+                CreateExceptedDocumentReport(exceptedDoPath);
 
             List<Document> documents = doDocuments
                 .ConvertAll(new Converter<Document1CDo, Document>(delegate (Document1CDo document) {
@@ -70,46 +69,43 @@ namespace CheckDocumentRegistry
             return documents;
         }
 
-        public List<Document> Convert1CUppDocuments(string[][] input, string exceptedUppPath)
+        public List<Document> Convert1CUppDocuments(string[][] documentsArrUpp, string exceptedUppPath)
         {
-            int[] fieldIndex = docFieldIndex1CUpp;
-            List<Document1CUpp> doDocuments = new List<Document1CUpp>(input.Length);
+            List<Document1CUpp> uppDocuments = new List<Document1CUpp>(documentsArrUpp.Length);
 
-            int numberOfException = new();
+            int numberOfExceptions = 0;
             bool isSwithedByException = false;
-            for (int i = 0; i < input.Length; i++)
+            int[] fieldIndex = docFieldIndex1CUpp;
+
+            for (int i = 0; i < documentsArrUpp.Length; i++)
             {
                 try
                 {
-                    doDocuments.Add(new Document1CUpp(input[i], fieldIndex));
+                    uppDocuments.Add(new Document1CUpp(documentsArrUpp[i], fieldIndex));
                 }
                 catch
                 {
-                    numberOfException++;
+                    numberOfExceptions++;
 
-                    if ((numberOfException > 1 && isSwithedByException == false) || isSwithedByException == true)
+                    if ((numberOfExceptions > 1 && isSwithedByException == false) || isSwithedByException == true)
                     {
-                        this.exceptedDocuments.Add(input[i]);
+                        this.ExceptedDocuments.Add(documentsArrUpp[i]);
                     }
 
-                    if (numberOfException >= 1 && isSwithedByException == false && input[i].Length < 8)
+                    if (numberOfExceptions >= 1 && isSwithedByException == false && documentsArrUpp[i].Length < 8)
                     {
                         isSwithedByException = true;
-                        numberOfException = 0;
+                        numberOfExceptions = 0;
                         i = -1;
                         fieldIndex = customDocFieldIndex1CUpp;
                     }
                 }
             }
 
-            if(exceptedDocuments.Count > 0)
-            {
-                this.PrintExceptedDocuments(this.exceptedDocuments);
-                SpreadSheetWriterXLSX spreadSheetWriterXLSX = new SpreadSheetWriterXLSX(exceptedUppPath);
-                spreadSheetWriterXLSX.CreateSpreadsheet(exceptedDocuments);
-            }
+            if(ExceptedDocuments.Count > 0)
+                CreateExceptedDocumentReport(exceptedUppPath);
 
-            List<Document> documents = doDocuments
+            List<Document> documents = uppDocuments
                 .ConvertAll(new Converter<Document1CUpp, Document>(delegate (Document1CUpp document) {
                     return (Document)document;
                 }));
@@ -118,19 +114,23 @@ namespace CheckDocumentRegistry
         }
 
 
-        public List<Document> ConvertIgnoreDoc(string[][] input)
+        public List<Document> ConvertIgnoreDoc(string[][] ignoreArrDoDocuments)
         {
-            List<Document> documents = new List<Document>(input.Length);
+            List<Document> documents = new List<Document>(ignoreArrDoDocuments.Length);
 
-            for (int i = 0; i < input.Length; i++)
+            for (int i = 0; i < ignoreArrDoDocuments.Length; i++)
             {
-                try
-                {
-                    documents.Add(new Document(input[i]));
-                }
-                catch { }
+                documents.Add(new Document(ignoreArrDoDocuments[i]));
+                
             }
             return documents;
+        }
+
+        private void CreateExceptedDocumentReport(string exceptedUppPath)
+        {
+            this.PrintExceptedDocuments(this.ExceptedDocuments);
+            SpreadSheetWriterXLSX spreadSheetWriterXLSX = new SpreadSheetWriterXLSX(exceptedUppPath);
+            spreadSheetWriterXLSX.CreateSpreadsheet(ExceptedDocuments);
         }
 
 

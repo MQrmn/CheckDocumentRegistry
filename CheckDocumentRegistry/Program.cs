@@ -56,8 +56,10 @@ namespace CheckDocumentRegistry
             void GetSourseDocoments()
             {
                 documentsLoader = new();
-                doDocuments = documentsLoader.GetDoDocuments(programParameters);
-                uppDocuments = documentsLoader.GetUppDocuments(programParameters);
+                doDocuments = documentsLoader.GetDoDocuments(programParameters.doSpreadSheetPath, 
+                                                               programParameters.exceptedDoPath);
+                uppDocuments = documentsLoader.GetUppDocuments(programParameters.uppSpreadSheetPath,
+                                                               programParameters.exceptedUppPath);
             }
 
             void GetIgnoreListsAndCounts()
