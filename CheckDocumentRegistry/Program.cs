@@ -1,25 +1,20 @@
 ﻿
+using System.Security.Principal;
+
 namespace CheckDocumentRegistry
 {
     internal class Program
     {
         static void Main()
         {
-
             int doDocumentsCount;
             int uppDocumentsCount;
-
             int ignoreDoDocumentsCount;
             int ignoreUppDocumentsCount;
-
             int Documents1CDoUnmatchedCount;
             int Documents1CUppUnmatchedCount;
-
             int Documents1CDoMatchedCount;
             int Documents1CUppMatchedCount;
-
-
-
 
             // Getting program parameters
             ProgramParameters programParameters = ParamsReadWriteJSON.GetParameters();
@@ -30,7 +25,6 @@ namespace CheckDocumentRegistry
             // Getting documents from spreadsheets
             DocumentsLoader documentsLoader = new();
 
-            
             List<Document> doDocuments = documentsLoader.GetDoDocuments(programParameters);
             doDocumentsCount = doDocuments.Count;
 
@@ -59,16 +53,17 @@ namespace CheckDocumentRegistry
             Documents1CUppMatchedCount = compareResult.Documents1CUppMatched.Count;
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("\n" + "Документов 1С:ДО загружено: " + doDocumentsCount);
-            Console.WriteLine("Документов 1С:УПП загружено: " + uppDocumentsCount);
+            Console.WriteLine("\nРезультат сравнения документов, внесеннных в 1С:ДО с реестром 1С:УПП");
+            Console.WriteLine("От " + DateTime.Now.ToLongDateString() + ":");
+            Console.WriteLine("Документов 1С:ДО всего: " + doDocumentsCount);
+            Console.WriteLine("Документов 1С:УПП всего: " + uppDocumentsCount);
             Console.WriteLine("Документов 1С:ДО в игнор-листе: " + ignoreDoDocumentsCount);
             Console.WriteLine("Документов 1С:УПП в игнор-листе: " + ignoreUppDocumentsCount);
-            Console.WriteLine("Документов 1С:ДО не совпавших: " + Documents1CDoUnmatchedCount);
-            Console.WriteLine("Документов 1С:УПП не совпавших: " + Documents1CUppUnmatchedCount);
-            Console.WriteLine("Документов 1С:ДО совпавших:  " + Documents1CDoMatchedCount);
-            Console.WriteLine("Документов 1С:УПП совпавших: " + Documents1CUppMatchedCount + "\n");
+            Console.WriteLine("Документов 1С:ДО совпавпало:  " + Documents1CDoMatchedCount);
+            Console.WriteLine("Документов 1С:УПП совпавпало: " + Documents1CUppMatchedCount);
+            Console.WriteLine("Документов 1С:ДО не совпало c 1С:УПП: " + Documents1CDoUnmatchedCount);
+            Console.WriteLine("Документов 1С:УПП не совпало 1С:ДО: " + Documents1CUppUnmatchedCount);
             Console.ResetColor();
-
 
             // Creating reports
             SpreadSheetWriterXLSX spreadSheetWriterPassedDo = new(programParameters.passedDoPath);
@@ -91,6 +86,7 @@ namespace CheckDocumentRegistry
                 Console.WriteLine("Для завершения программы нажмите любую клавишу.");
                 Console.ReadKey();
             }
+
         }
     }
 }
