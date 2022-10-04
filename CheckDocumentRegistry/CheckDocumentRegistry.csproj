@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,12 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Open-XML-SDK" Version="2.9.1" />
-    <PackageReference Include="System.IO.Packaging" Version="6.0.0" />
+    <Compile Remove="workers\log\**" />
+    <EmbeddedResource Remove="workers\log\**" />
+    <None Remove="workers\log\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="workers\log\" />
+    <PackageReference Include="Open-XML-SDK" Version="2.9.1" />
+    <PackageReference Include="System.IO.Packaging" Version="6.0.0" />
   </ItemGroup>
 
 </Project>

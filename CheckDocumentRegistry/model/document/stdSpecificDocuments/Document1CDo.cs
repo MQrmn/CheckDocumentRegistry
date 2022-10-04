@@ -18,7 +18,7 @@ namespace CheckDocumentRegistry
 
             if (document[docFieldIndex[6]] != String.Empty)
                 this.Salary = this.GetDocSum(document[docFieldIndex[6]]);
-            if (document[7] == "Да") this.IsUpd = true;
+            if (document[docFieldIndex[7]] == "Да") this.IsUpd = true;
         }
 
         private int GetDocType(string rawDocType)
