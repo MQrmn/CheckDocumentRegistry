@@ -4,7 +4,7 @@ namespace CheckDocumentRegistry
     public class DocumentsLoader
     {
 
-        public List<Document> GetDoDocuments(ProgramParameters programParameters)
+        public List<Document> GetDoDocuments(ChangeableParameters programParameters)
         {
             SpreadSheetReaderXLSX spreadSheetReaderXLSX = new SpreadSheetReaderXLSX();
             Console.WriteLine($"Чтение элетронной таблицы: {programParameters.doSpreadSheetPath}");
@@ -17,7 +17,7 @@ namespace CheckDocumentRegistry
             return documents;
         }
 
-        public List<Document> GetUppDocuments(ProgramParameters programParameters)
+        public List<Document> GetUppDocuments(ChangeableParameters programParameters)
         {
             SpreadSheetReaderXLSX spreadSheetReaderXLSX = new SpreadSheetReaderXLSX();
             

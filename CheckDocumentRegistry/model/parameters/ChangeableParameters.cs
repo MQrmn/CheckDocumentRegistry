@@ -1,7 +1,7 @@
 ﻿
 namespace CheckDocumentRegistry
 {
-    public class ProgramParameters
+    public class ChangeableParameters
     {
         public string doSpreadSheetPath { get; set; }
         public string uppSpreadSheetPath { get; set; }

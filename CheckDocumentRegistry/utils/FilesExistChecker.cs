@@ -5,7 +5,7 @@ namespace CheckDocumentRegistry
 {
     internal class WorkAbilityChecker
     {
-        public static void CheckFiles(ProgramParameters programParameters)
+        public static void CheckFiles(ChangeableParameters programParameters)
         {
             bool doExist = File.Exists(programParameters.doSpreadSheetPath);
             bool uppExist = File.Exists(programParameters.uppSpreadSheetPath);
