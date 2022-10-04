@@ -3,14 +3,14 @@ namespace CheckDocumentRegistry
 {
     public class DocumentsLoader
     {
-        SpreadSheetReaderXLSX spreadSheetRepository = new SpreadSheetReaderXLSX();
-        DocumentsConverter documentsConverter = new DocumentsConverter();
 
         public List<Document> GetDoDocuments(ProgramParameters programParameters)
         {
+            SpreadSheetReaderXLSX spreadSheetReaderXLSX = new SpreadSheetReaderXLSX();
             Console.WriteLine($"Чтение элетронной таблицы: {programParameters.doSpreadSheetPath}");
-            string[][] doDocumentsData = this.spreadSheetRepository.GetDocumentsFromTable(programParameters.doSpreadSheetPath);
+            string[][] doDocumentsData = spreadSheetReaderXLSX.GetDocumentsFromTable(programParameters.doSpreadSheetPath);
 
+            DocumentsConverter? documentsConverter = new DocumentsConverter();
             Console.WriteLine("Конвертация документов 1С:ДО");
             List<Document> documents = documentsConverter.Convert1CDoDocuments(doDocumentsData, programParameters.exceptedDoPath);
 
@@ -19,9 +19,12 @@ namespace CheckDocumentRegistry
 
         public List<Document> GetUppDocuments(ProgramParameters programParameters)
         {
+            SpreadSheetReaderXLSX spreadSheetReaderXLSX = new SpreadSheetReaderXLSX();
+            
             Console.WriteLine($"Чтение элетронной таблицы: {programParameters.uppSpreadSheetPath}");
-            string[][] uppDocumentsData = this.spreadSheetRepository.GetDocumentsFromTable(programParameters.uppSpreadSheetPath);
+            string[][] uppDocumentsData = spreadSheetReaderXLSX.GetDocumentsFromTable(programParameters.uppSpreadSheetPath);
 
+            DocumentsConverter? documentsConverter = new DocumentsConverter();
             Console.WriteLine("Конвертация документов 1С:УПП");
             List<Document> documents = documentsConverter.Convert1CUppDocuments(uppDocumentsData, programParameters.exceptedUppPath);
 
@@ -30,7 +33,7 @@ namespace CheckDocumentRegistry
 
         public List<Document> GetIgnore(string filePath)
         {
-            
+            SpreadSheetReaderXLSX spreadSheetReaderXLSX = new SpreadSheetReaderXLSX();
             List<Document> documents = new List<Document>();
 
             try
@@ -38,7 +41,8 @@ namespace CheckDocumentRegistry
                 if (File.Exists(filePath))
                 {
                     Console.WriteLine($"Чтение элетронной таблицы: {filePath}");
-                    string[][] ignore = this.spreadSheetRepository.GetDocumentsFromTable(filePath);
+                    string[][] ignore = spreadSheetReaderXLSX.GetDocumentsFromTable(filePath);
+                    DocumentsConverter? documentsConverter = new DocumentsConverter();
                     documents = documentsConverter.ConvertIgnoreDoc(ignore);
                 }
                 else

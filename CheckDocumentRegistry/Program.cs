@@ -12,9 +12,10 @@ namespace CheckDocumentRegistry
             // Checkimg for existing files to comparingg
             WorkAbilityChecker.CheckFiles(programParameters);
 
+            // Getting documents from spreadsheets
             DocumentsLoader documentsLoader = new();
 
-            // Getting documents from spreadsheets
+            
             List<Document> doDocuments = documentsLoader.GetDoDocuments(programParameters);
             List<Document> uppDocuments = documentsLoader.GetUppDocuments(programParameters);
 

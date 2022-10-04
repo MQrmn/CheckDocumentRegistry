@@ -14,7 +14,6 @@ namespace CheckDocumentRegistry
         public bool IsUpd { get; set; }
         public string? Comment { get; set; }
         public int StylePosition { get; set; }
-
         public Document() {}
 
 
