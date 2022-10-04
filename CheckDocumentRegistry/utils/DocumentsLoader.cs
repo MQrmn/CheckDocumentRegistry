@@ -8,21 +8,17 @@ namespace CheckDocumentRegistry
         public List<Document> GetDoDocuments(string doSpreadSheetPath, string exceptedDoPath)
         {
             string[][] doDocumentsData = GetDocumentsFromReader(doSpreadSheetPath);
-            Console.WriteLine("Конвертация документов 1С:ДО");
             DocumentsConverter? documentsConverter = new DocumentsConverter();
             List<Document> documents = documentsConverter.Convert1CDoDocuments(doDocumentsData, exceptedDoPath);
 
             return documents;
         }
 
-        
-
 
         public List<Document> GetUppDocuments(string uppSpreadSheetPath, string exceptedDoPath)
         {
             
             string[][] uppDocumentsData = GetDocumentsFromReader(uppSpreadSheetPath);
-            Console.WriteLine("Конвертация документов 1С:УПП");
             DocumentsConverter? documentsConverter = new DocumentsConverter();
             List<Document> documents = documentsConverter.Convert1CUppDocuments(
                                                                     uppDocumentsData,
@@ -34,15 +30,14 @@ namespace CheckDocumentRegistry
 
         public List<Document> GetIgnore(string filePath)
         {
-            SpreadSheetReaderXLSX spreadSheetReaderXLSX = new SpreadSheetReaderXLSX();
+            
             List<Document> documents = new List<Document>();
 
             try
             {
                 if (File.Exists(filePath))
                 {
-                    Console.WriteLine($"Чтение элетронной таблицы: {filePath}");
-                    string[][] ignore = spreadSheetReaderXLSX.GetDocumentsFromTable(filePath);
+                    string[][] ignore = GetDocumentsFromReader(filePath);
                     DocumentsConverter? documentsConverter = new DocumentsConverter();
                     documents = documentsConverter.ConvertIgnoreDoc(ignore);
                 }
@@ -60,12 +55,12 @@ namespace CheckDocumentRegistry
             return documents;
         }
 
+
         private string[][] GetDocumentsFromReader(string doSpreadSheetPath)
         {
-            Console.WriteLine($"Чтение элетронной таблицы: {doSpreadSheetPath}");
+            Console.WriteLine($"Чтение электронной таблицы: {doSpreadSheetPath}");
             SpreadSheetReaderXLSX spreadSheetReaderXLSX = new SpreadSheetReaderXLSX();
             return spreadSheetReaderXLSX.GetDocumentsFromTable(doSpreadSheetPath);
-
         }
     }
 }
