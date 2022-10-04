@@ -53,7 +53,7 @@ namespace CheckDocumentRegistry
             Documents1CUppMatchedCount = compareResult.Documents1CUppMatched.Count;
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("\nРезультат сравнения документов, внесеннных в 1С:ДО с реестром 1С:УПП");
+            Console.WriteLine("\nРезультат сравнения документов, внесеннных в 1С:ДО, с реестром 1С:УПП");
             Console.WriteLine("От " + DateTime.Now.ToLongDateString() + ":");
             Console.WriteLine("Документов 1С:ДО всего: " + doDocumentsCount);
             Console.WriteLine("Документов 1С:УПП всего: " + uppDocumentsCount);
