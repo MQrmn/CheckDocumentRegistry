@@ -125,7 +125,7 @@ namespace CheckDocumentRegistry
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("\nРезультат сравнения документов, внесеннных в 1С:ДО, с реестром 1С:УПП");
-                Console.WriteLine("От " + DateTime.Now.ToLongDateString() + ":");
+                Console.WriteLine("От " + DateTime.Now.ToLongDateString() + ":\n");
                 Console.WriteLine("Документов 1С:ДО всего: " + doDocumentsCount);
                 Console.WriteLine("Документов 1С:УПП всего: " + uppDocumentsCount);
                 Console.WriteLine("Документов 1С:ДО в игнор-листе: " + ignoreDoDocumentsCount);
