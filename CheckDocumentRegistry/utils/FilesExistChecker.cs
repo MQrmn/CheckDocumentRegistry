@@ -3,8 +3,10 @@ using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace CheckDocumentRegistry
 {
+    
     internal class WorkAbilityChecker
     {
+        
         public static void CheckFiles(ChangeableParameters programParameters)
         {
             bool doExist = File.Exists(programParameters.doSpreadSheetPath);
@@ -63,7 +65,10 @@ namespace CheckDocumentRegistry
 
         private static void WriteMessageExit(string message)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(message);
+            Console.ResetColor();
+            Console.WriteLine("Для завершения программы нажмите любую клавишу.");
             Console.ReadLine();
             Environment.Exit(0);
         }
