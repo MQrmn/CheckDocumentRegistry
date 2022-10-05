@@ -11,6 +11,9 @@ namespace CheckDocumentRegistry
         private int[] customDocFieldIndex1CUpp;     // Simplified 1C:UPP document format
         internal List<string[]> ExceptedDocuments;
 
+        private int[] docFileIndexStandard;
+        private int[] docFileIndexCustom;
+
         internal DocumentsConverter()
         {
             this.docFieldIndex1CDo = new int[] { 0, 3, 6, 7, 8, 9, 10, 11 };
@@ -20,6 +23,20 @@ namespace CheckDocumentRegistry
             this.customDocFieldIndex1CUpp = new int[] { 0, 1, 2, 3, 4, 5, 6 };
 
             this.ExceptedDocuments = new List<string[]>();
+        }
+
+
+        internal DocumentsConverter(int[] inputDocFileIndexStandard, int[] inputDocFileIndexCustom)
+        {
+            this.docFileIndexStandard = inputDocFileIndexStandard;
+            this.docFileIndexCustom = inputDocFileIndexCustom;
+        }
+
+
+        private List<Document> ConvertDocuments(string[][] documentsArr)
+        {
+            List<Document> documents = new();
+            return documents;
         }
 
 
