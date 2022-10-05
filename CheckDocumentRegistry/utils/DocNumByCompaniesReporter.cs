@@ -15,7 +15,7 @@ namespace CheckDocumentRegistry
             List<string> companies = this.GetCompanies(documents);
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("\nКоличество не внесенных документов по контрагентам согласно 1С:УПП :");
+            Console.WriteLine("\nКоличество не внесенных документов по организациям согласно 1С:УПП :");
 
             foreach (var company in companies)
             {

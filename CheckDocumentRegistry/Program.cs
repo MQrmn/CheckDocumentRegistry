@@ -128,12 +128,12 @@ namespace CheckDocumentRegistry
                 Console.WriteLine("От " + DateTime.Now.ToLongDateString() + ":\n");
                 Console.WriteLine("Документов 1С:ДО всего: " + doDocumentsCount);
                 Console.WriteLine("Документов 1С:УПП всего: " + uppDocumentsCount);
-                Console.WriteLine("Документов 1С:ДО в игнор-листе: " + ignoreDoDocumentsCount);
-                Console.WriteLine("Документов 1С:УПП в игнор-листе: " + ignoreUppDocumentsCount);
-                Console.WriteLine("Документов 1С:ДО совпавпало:  " + Documents1CDoMatchedCount);
-                Console.WriteLine("Документов 1С:УПП совпавпало: " + Documents1CUppMatchedCount);
-                Console.WriteLine("Документов 1С:ДО не совпало c 1С:УПП: " + Documents1CDoUnmatchedCount);
-                Console.WriteLine("Документов 1С:УПП не совпало 1С:ДО: " + Documents1CUppUnmatchedCount);
+                Console.WriteLine("Документов 1С:ДО в списке исключения: " + ignoreDoDocumentsCount);
+                Console.WriteLine("Документов 1С:УПП в списке исключения: " + ignoreUppDocumentsCount);
+                Console.WriteLine("Документов 1С:ДО прошло проверку:  " + Documents1CDoMatchedCount);
+                Console.WriteLine("Документов 1С:УПП прошло проверку: " + Documents1CUppMatchedCount);
+                Console.WriteLine("Документов 1С:ДО внесенных с ошибкой: " + Documents1CDoUnmatchedCount);
+                Console.WriteLine("Документов 1С:УПП осталось внести: " + Documents1CUppUnmatchedCount);
                 Console.ResetColor();
             }
 
