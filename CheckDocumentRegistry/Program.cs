@@ -26,8 +26,8 @@ namespace CheckDocumentRegistry
             SpreadSheetWriterXLSX spreadSheetWriterMatcheUpp;   // Spreadsheet creator
             FixedParameters fixedParameters;                    // Static parameters
             ChangeableParameters programParameters;             // Loaded from config file parameters
-            DocumentsLoader documentsLoader;                    
-
+            DocumentsLoader documentsLoader;
+            DocNumByCompaniesReporter reporterByCompany;
 
             GetParametersOrSetDefaults();                       // Getting program parameters
             WorkAbilityChecker.CheckFiles(programParameters);   // Checkimg for existing files to comparingg
@@ -37,7 +37,8 @@ namespace CheckDocumentRegistry
             CompareDocuments();
             GetProcessedDocumentsCounts();
             GenerateOutputSpreadsheets();                       // Creating reports
-            PrintReportOnConsole();
+            PrintCommonReportOnConsole();
+            PrintReportByCompanies();
             CloseProgram();
 
 
@@ -79,6 +80,8 @@ namespace CheckDocumentRegistry
                 unmatchedDocumentsCommentator.CommentUnmatchedDocuments();
             }
 
+
+
             void GenerateOutputSpreadsheets()
             {
                 spreadSheetWriterPassedDo = new(programParameters.passedDoPath);
@@ -112,7 +115,13 @@ namespace CheckDocumentRegistry
                 Documents1CUppMatchedCount = compareResult.Documents1CUppMatched.Count;
             }
 
-            void PrintReportOnConsole()
+            void PrintReportByCompanies()
+            {
+                reporterByCompany = new();
+                reporterByCompany.PrintReport(uppDocuments);
+            }
+
+            void PrintCommonReportOnConsole()
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("\nРезультат сравнения документов, внесеннных в 1С:ДО, с реестром 1С:УПП");
