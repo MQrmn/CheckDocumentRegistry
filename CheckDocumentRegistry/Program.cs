@@ -5,15 +5,7 @@ namespace CheckDocumentRegistry
     {
         static void Main()
         {
-            int doDocumentsCount;
-            int uppDocumentsCount;
-            int ignoreDoDocumentsCount;
-            int ignoreUppDocumentsCount;
-            int Documents1CDoUnmatchedCount;
-            int Documents1CUppUnmatchedCount;
-            int Documents1CDoMatchedCount;
-            int Documents1CUppMatchedCount;
-
+            
             List<Document> doDocuments;                         // Source 1C:DO documents for compare
             List<Document> uppDocuments;                        // Source 1C:UPP documents for compare
             List<Document> ignoreDoDocuments;                   // Ignore list of 1C:DO documents 
@@ -27,18 +19,20 @@ namespace CheckDocumentRegistry
             FixedParameters fixedParameters;                    // Static parameters
             ChangeableParameters programParameters;             // Loaded from config file parameters
             DocumentsLoader documentsLoader;
-            DocNumByCompaniesReporter reporterByCompany;
+            DocumentsAmount documentsAmount = new();
 
             GetParametersOrSetDefaults();                       // Getting program parameters
             WorkAbilityChecker.CheckFiles(programParameters);   // Checkimg for existing files to comparingg
+
+            DocumentAmountReporter documentsAmountReporter = new(programParameters.reportFilePath);
+
             GetSourseDocoments();                               // Getting documents from spreadsheets
             GetIgnoreListsAndCounts();                          // Getting ignored documents from spreadsheets
             GetSourceDocumentsCounts();
             CompareDocuments();
             GetProcessedDocumentsCounts();
             GenerateOutputSpreadsheets();                       // Creating reports
-            PrintCommonReportOnConsole();
-            PrintReportByCompanies();
+            documentsAmountReporter.CreateAllReports(uppDocuments, documentsAmount);
             CloseProgram();
 
 
@@ -73,8 +67,6 @@ namespace CheckDocumentRegistry
             void CompareDocuments()
             {
                 compareResult = new(doDocuments, uppDocuments, ignoreDoDocuments, ignoreUppDocuments);
-                
-                // Setting comments in unmatched documents about mismacthes
                 unmatchedDocumentsCommentator = new(compareResult.Documents1CDoUnmatched,
                                                                                     compareResult.Documents1CUppUnmatched);
                 unmatchedDocumentsCommentator.CommentUnmatchedDocuments();
@@ -101,41 +93,21 @@ namespace CheckDocumentRegistry
 
             void GetSourceDocumentsCounts()
             {
-                doDocumentsCount = doDocuments.Count;
-                uppDocumentsCount = uppDocuments.Count;
-                ignoreDoDocumentsCount = ignoreDoDocuments.Count;
-                ignoreUppDocumentsCount = ignoreUppDocuments.Count;
+                
+                documentsAmount.doDocumentsCount = doDocuments.Count;
+                documentsAmount.uppDocumentsCount = uppDocuments.Count;
+                documentsAmount.ignoreDoDocumentsCount = ignoreDoDocuments.Count;
+                documentsAmount.ignoreUppDocumentsCount = ignoreUppDocuments.Count;
             }
 
             void GetProcessedDocumentsCounts()
             {
-                Documents1CDoUnmatchedCount = compareResult.Documents1CDoUnmatched.Count;
-                Documents1CUppUnmatchedCount = compareResult.Documents1CUppUnmatched.Count;
-                Documents1CDoMatchedCount = compareResult.Documents1CDoMatched.Count;
-                Documents1CUppMatchedCount = compareResult.Documents1CUppMatched.Count;
+                documentsAmount.Documents1CDoUnmatchedCount = compareResult.Documents1CDoUnmatched.Count;
+                documentsAmount.Documents1CUppUnmatchedCount = compareResult.Documents1CUppUnmatched.Count;
+                documentsAmount.Documents1CDoMatchedCount = compareResult.Documents1CDoMatched.Count;
+                documentsAmount.Documents1CUppMatchedCount = compareResult.Documents1CUppMatched.Count;
             }
 
-            void PrintReportByCompanies()
-            {
-                reporterByCompany = new();
-                reporterByCompany.PrintReport(uppDocuments);
-            }
-
-            void PrintCommonReportOnConsole()
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("\nРезультат сравнения документов, внесеннных в 1С:ДО, с реестром 1С:УПП");
-                Console.WriteLine("От " + DateTime.Now.ToLongDateString() + ":\n");
-                Console.WriteLine("Документов в 1С:ДО всего: " + doDocumentsCount);
-                Console.WriteLine("Документов в реестре всего: " + uppDocumentsCount);
-                Console.WriteLine("Документов 1С:ДО не внесенных в реестр: " + ignoreDoDocumentsCount);
-                Console.WriteLine("Документов реестра исключено из проверки: " + ignoreUppDocumentsCount);
-                Console.WriteLine("Документов 1С:ДО совпали с реестром:  " + Documents1CDoMatchedCount);
-                Console.WriteLine("Документов реестра совпали с 1С:ДО: " + Documents1CUppMatchedCount);
-                Console.WriteLine("Документов 1С:ДО внесенных с ошибкой: " + Documents1CDoUnmatchedCount);
-                Console.WriteLine("Документов осталось внести: " + Documents1CUppUnmatchedCount);
-                Console.ResetColor();
-            }
 
             void CloseProgram()
             {

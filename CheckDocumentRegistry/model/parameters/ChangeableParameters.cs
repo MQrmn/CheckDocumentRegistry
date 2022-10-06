@@ -13,8 +13,10 @@ namespace CheckDocumentRegistry
         public string passedUppPath { get; set; }
         public string exceptedDoPath { get; set; }
         public string exceptedUppPath { get; set; }
+        public string reportFilePath { get; set; }
         public bool printMatchedDocuments { get; set; }
         public bool askAboutCloseProgram { get; set; }
+        
         
 
         public void SetDefaults()
@@ -29,6 +31,7 @@ namespace CheckDocumentRegistry
             this.passedUppPath = ".\\output\\PassedUpp.xlsx";
             this.exceptedDoPath = ".\\output\\exceptedDo.xlsx";
             this.exceptedUppPath = ".\\output\\exceptedUpp.xlsx";
+            this.reportFilePath = ".\\output\\report.txt";
             this.printMatchedDocuments = false;
             this.askAboutCloseProgram = true;
 
