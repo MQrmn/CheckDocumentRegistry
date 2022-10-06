@@ -143,7 +143,7 @@ namespace CheckDocumentRegistry
             if (!compareResult) return compareResult;
             else return firstDocument.Type == secondDocument.Type; ;
         }
-
+          
 
         private bool CompareSingleDocumentsMainFields(Document firstDocument,
                                         Document secondDocument)
