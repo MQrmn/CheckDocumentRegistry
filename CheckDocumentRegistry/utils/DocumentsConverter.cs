@@ -60,12 +60,12 @@ namespace CheckDocumentRegistry
                 {
                     numberOfExceptions++;
 
-                    if ((numberOfExceptions > 7 && isSwithedByException == false) || isSwithedByException == true)
+                    if ((numberOfExceptions > 8 && isSwithedByException == false) || isSwithedByException == true)
                     {
                         this.ExceptedDocuments.Add(documentsArrDo[i]);
                     }
 
-                    if (numberOfExceptions >= 7 && isSwithedByException == false && documentsArrDo[i].Length < 12)
+                    if (numberOfExceptions >= 8 && isSwithedByException == false && documentsArrDo[i].Length < 12)
                     {
                         isSwithedByException = true;
                         numberOfExceptions = 0;
