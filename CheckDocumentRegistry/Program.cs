@@ -117,14 +117,14 @@ namespace CheckDocumentRegistry
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("\nРезультат сравнения документов, внесеннных в 1С:ДО, с реестром 1С:УПП");
                 Console.WriteLine("От " + DateTime.Now.ToLongDateString() + ":\n");
-                Console.WriteLine("Документов 1С:ДО всего: " + doDocumentsCount);
-                Console.WriteLine("Документов 1С:УПП всего: " + uppDocumentsCount);
-                Console.WriteLine("Документов 1С:ДО в списке исключения: " + ignoreDoDocumentsCount);
-                Console.WriteLine("Документов 1С:УПП в списке исключения: " + ignoreUppDocumentsCount);
-                Console.WriteLine("Документов 1С:ДО прошло проверку:  " + Documents1CDoMatchedCount);
-                Console.WriteLine("Документов 1С:УПП прошло проверку: " + Documents1CUppMatchedCount);
+                Console.WriteLine("Документов в 1С:ДО всего: " + doDocumentsCount);
+                Console.WriteLine("Документов в реестре всего: " + uppDocumentsCount);
+                Console.WriteLine("Документов 1С:ДО не внесенных в реестр: " + ignoreDoDocumentsCount);
+                Console.WriteLine("Документов реестра исключено из проверки: " + ignoreUppDocumentsCount);
+                Console.WriteLine("Документов 1С:ДО совпали с реестром:  " + Documents1CDoMatchedCount);
+                Console.WriteLine("Документов реестра совпали с 1С:ДО: " + Documents1CUppMatchedCount);
                 Console.WriteLine("Документов 1С:ДО внесенных с ошибкой: " + Documents1CDoUnmatchedCount);
-                Console.WriteLine("Документов 1С:УПП осталось внести: " + Documents1CUppUnmatchedCount);
+                Console.WriteLine("Документов осталось внести: " + Documents1CUppUnmatchedCount);
                 Console.ResetColor();
             }
 
