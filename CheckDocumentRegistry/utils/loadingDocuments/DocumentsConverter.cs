@@ -3,74 +3,61 @@ using System.Runtime.CompilerServices;
 
 namespace CheckDocumentRegistry
 {
-    internal class DocumentsConverter
+    internal class DocumentsConverter<T> where T : Document
     {
-        private int[] docFieldIndex1CDo;            // Standard 1C:DO document format
-        private int[] customDocFieldIndex1CDo;      // Simplified 1C:DO document format
-        private int[] docFieldIndex1CUpp;           // Standard 1C:UPP document format
-        private int[] customDocFieldIndex1CUpp;     // Simplified 1C:UPP document format
-        internal List<string[]> ExceptedDocuments;
+        internal List<string[]>? ExceptedDocuments;
 
         private int[] docFileIndexStandard;
         private int[] docFileIndexCustom;
-
-        internal DocumentsConverter()
-        {
-            this.docFieldIndex1CDo = new int[] { 0, 3, 6, 7, 8, 9, 10, 11 };
-            this.customDocFieldIndex1CDo = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 };
-
-            this.docFieldIndex1CUpp = new int[] { 0, 1, 3, 4, 5, 6, 7 };
-            this.customDocFieldIndex1CUpp = new int[] { 0, 1, 2, 3, 4, 5, 6 };
-
-            this.ExceptedDocuments = new List<string[]>();
-        }
+        private int maxPassedRowForSwitchIndex;
+        private int rowLength;
 
 
-        internal DocumentsConverter(int[] inputDocFileIndexStandard, int[] inputDocFileIndexCustom)
+        internal DocumentsConverter( int[] inputDocFileIndexStandard, 
+                                        int[] inputDocFileIndexCustom,
+                                        int inputMaxPassedRowForSwitchIndex,
+                                        int inputRowLength
+                                        )
         {
             this.docFileIndexStandard = inputDocFileIndexStandard;
             this.docFileIndexCustom = inputDocFileIndexCustom;
+            this.ExceptedDocuments = new List<string[]>();
+            this.maxPassedRowForSwitchIndex = inputMaxPassedRowForSwitchIndex;
+            this.rowLength = inputRowLength;
         }
 
+        internal DocumentsConverter() { }
 
-        private List<Document> ConvertDocuments(string[][] documentsArr)
+        internal List<Document> ConvertDocuments(string[][] documentsArr, string exceptedDoPath)
         {
-            List<Document> documents = new();
-            return documents;
-        }
-
-
-        public List<Document> Convert1CDoDocuments(string[][] documentsArrDo, string exceptedDoPath)
-        {
-            
-            List<Document1CDo> doDocuments = new List<Document1CDo>(documentsArrDo.Length);
+            List<T> preDocuments = new List<T>(documentsArr.Length);
 
             int numberOfExceptions = 0;
             bool isSwithedByException = false;
-            int[] fieldIndexes = docFieldIndex1CDo;
+            int[] fieldIndexes = this.docFileIndexStandard;
 
-            for (int i = 0; i < documentsArrDo.Length; i++)
+            for (int i = 0; i < documentsArr.Length; i++)
             {
                 try
                 {
-                    doDocuments.Add(new Document1CDo(documentsArrDo[i], fieldIndexes));
+                    preDocuments.Add((T)Activator.CreateInstance(typeof(T), documentsArr[i], fieldIndexes));
                     numberOfExceptions = 0;
                 }
-                catch 
+                catch
                 {
                     numberOfExceptions++;
 
-                    if ((numberOfExceptions > 8 && isSwithedByException == false) || isSwithedByException == true)
+                    if ((numberOfExceptions > this.maxPassedRowForSwitchIndex && isSwithedByException == false) || isSwithedByException == true)
                     {
-                        this.ExceptedDocuments.Add(documentsArrDo[i]);
+                        this.ExceptedDocuments.Add(documentsArr[i]);
                     }
 
-                    if (numberOfExceptions >= 8 && isSwithedByException == false && documentsArrDo[i].Length < 12)
+                    if (numberOfExceptions >= this.maxPassedRowForSwitchIndex && isSwithedByException == false && documentsArr[i].Length < this.rowLength)
                     {
                         isSwithedByException = true;
                         numberOfExceptions = 0;
                         i = -1;
-                        fieldIndexes = customDocFieldIndex1CDo;
+                        fieldIndexes = this.docFileIndexCustom;
                     }
                 }
             }
@@ -78,56 +65,14 @@ namespace CheckDocumentRegistry
             if (ExceptedDocuments.Count > 0)
                 CreateExceptedDocumentReport(exceptedDoPath);
 
-            List<Document> documents = doDocuments
-                .ConvertAll(new Converter<Document1CDo, Document>(delegate (Document1CDo document) {
+            List<Document> documents = preDocuments
+                .ConvertAll(new Converter<T, Document>(delegate (T document) {
                     return (Document)document;
                 }));
 
             return documents;
-        }
 
-        public List<Document> Convert1CUppDocuments(string[][] documentsArrUpp, string exceptedUppPath)
-        {
-            List<Document1CUpp> uppDocuments = new List<Document1CUpp>(documentsArrUpp.Length);
 
-            int numberOfExceptions = 0;
-            bool isSwithedByException = false;
-            int[] fieldIndex = docFieldIndex1CUpp;
-
-            for (int i = 0; i < documentsArrUpp.Length; i++)
-            {
-                try
-                {
-                    uppDocuments.Add(new Document1CUpp(documentsArrUpp[i], fieldIndex));
-                }
-                catch
-                {
-                    numberOfExceptions++;
-
-                    if ((numberOfExceptions > 1 && isSwithedByException == false) || isSwithedByException == true)
-                    {
-                        this.ExceptedDocuments.Add(documentsArrUpp[i]);
-                    }
-
-                    if (numberOfExceptions >= 1 && isSwithedByException == false && documentsArrUpp[i].Length < 8)
-                    {
-                        isSwithedByException = true;
-                        numberOfExceptions = 0;
-                        i = -1;
-                        fieldIndex = customDocFieldIndex1CUpp;
-                    }
-                }
-            }
-
-            if(ExceptedDocuments.Count > 0)
-                CreateExceptedDocumentReport(exceptedUppPath);
-
-            List<Document> documents = uppDocuments
-                .ConvertAll(new Converter<Document1CUpp, Document>(delegate (Document1CUpp document) {
-                    return (Document)document;
-                }));
-
-            return documents;
         }
 
 
@@ -142,6 +87,7 @@ namespace CheckDocumentRegistry
             }
             return documents;
         }
+
 
         private void CreateExceptedDocumentReport(string exceptedUppPath)
         {
