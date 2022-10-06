@@ -20,19 +20,24 @@ namespace CheckDocumentRegistry
             ChangeableParameters programParameters;             // Loaded from config file parameters
             DocumentsLoader documentsLoader;
             DocumentsAmount documentsAmount = new();
+            //DocumentsAmount lastCompareDocumentsAmounts; 
 
             GetParametersOrSetDefaults();                       // Getting program parameters
             WorkAbilityChecker.CheckFiles(programParameters);   // Checkimg for existing files to comparingg
-
-            DocumentAmountReporter documentsAmountReporter = new(programParameters.reportFilePath);
 
             GetSourseDocoments();                               // Getting documents from spreadsheets
             GetIgnoreListsAndCounts();                          // Getting ignored documents from spreadsheets
             GetSourceDocumentsCounts();
             CompareDocuments();
-            GetProcessedDocumentsCounts();
-            GenerateOutputSpreadsheets();                       // Creating reports
+            GetDocumentsAmounts();
+
+            //lastCompareDocumentsAmounts = new();
+
+
+            DocumentAmountReporter documentsAmountReporter = new(programParameters.reportFilePath);
             documentsAmountReporter.CreateAllReports(uppDocuments, documentsAmount);
+
+            GenerateOutputSpreadsheets();                       // Creating reports
             CloseProgram();
 
 
@@ -100,7 +105,7 @@ namespace CheckDocumentRegistry
                 documentsAmount.ignoreUppDocumentsCount = ignoreUppDocuments.Count;
             }
 
-            void GetProcessedDocumentsCounts()
+            void GetDocumentsAmounts()
             {
                 documentsAmount.Documents1CDoUnmatchedCount = compareResult.Documents1CDoUnmatched.Count;
                 documentsAmount.Documents1CUppUnmatchedCount = compareResult.Documents1CUppUnmatched.Count;

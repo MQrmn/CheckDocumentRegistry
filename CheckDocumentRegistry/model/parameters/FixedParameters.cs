@@ -9,5 +9,6 @@ namespace CheckDocumentRegistry
     internal class FixedParameters
     {
         readonly internal string ProgramParametersFilePath = "params.json";
+        readonly internal string LastCompareDocumentsAnountsFilePath = "lastCompareAmounts.json";
     }
 }
