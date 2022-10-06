@@ -20,38 +20,29 @@ namespace CheckDocumentRegistry
             ChangeableParameters programParameters;             // Loaded from config file parameters
             DocumentsLoader documentsLoader;
             DocumentsAmount documentsAmount = new();
-            //DocumentsAmount lastCompareDocumentsAmounts; 
 
-            GetParametersOrSetDefaults();                       // Getting program parameters
+            GetProgramParameters();                             // Getting program parameters
             WorkAbilityChecker.CheckFiles(programParameters);   // Checkimg for existing files to comparingg
-
             GetSourseDocoments();                               // Getting documents from spreadsheets
             GetIgnoreListsAndCounts();                          // Getting ignored documents from spreadsheets
             GetSourceDocumentsCounts();
             CompareDocuments();
             GetDocumentsAmounts();
 
-            //lastCompareDocumentsAmounts = new();
-
-
+            // Creating reports
             DocumentAmountReporter documentsAmountReporter = new(programParameters.reportFilePath);
             documentsAmountReporter.CreateAllReports(uppDocuments, documentsAmount);
-
-            GenerateOutputSpreadsheets();                       // Creating reports
+            GenerateOutputSpreadsheets();                       
             CloseProgram();
 
 
-            void GetParametersOrSetDefaults()
+            void GetProgramParameters()
             {
                 fixedParameters = new();
-                programParameters = ParamsReadJSON.GetProgramParameters(fixedParameters.ProgramParametersFilePath);
-                if (programParameters is null)
-                {
-                    programParameters.SetDefaults();
-                    ParamsWriteJSON.WriteDefaultParams(programParameters, fixedParameters.ProgramParametersFilePath);
-                    AdditionalInfoWriteTXT.WriteAdditionalInfo();
-                }
+                ProgramParametersReadWrite programParameters1 = new(fixedParameters.ProgramParametersFilePath);
+                programParameters = programParameters1.GetProgramParameters();
             }
+
 
             void GetSourseDocoments()
             {
@@ -62,12 +53,14 @@ namespace CheckDocumentRegistry
                                                                programParameters.exceptedUppPath);
             }
 
+
             void GetIgnoreListsAndCounts()
             {
                 ignoreDoDocuments = documentsLoader.GetIgnore(programParameters.doIgnoreSpreadSheetPath);
                 ignoreUppDocuments = documentsLoader.GetIgnore(programParameters.uppIgnoreSpreadSheetPath);
                 
             }
+
 
             void CompareDocuments()
             {
@@ -76,7 +69,6 @@ namespace CheckDocumentRegistry
                                                                                     compareResult.Documents1CUppUnmatched);
                 unmatchedDocumentsCommentator.CommentUnmatchedDocuments();
             }
-
 
 
             void GenerateOutputSpreadsheets()
@@ -90,20 +82,20 @@ namespace CheckDocumentRegistry
                 {
                     spreadSheetWriterMatchedDo = new(programParameters.matchedDoPath);
                     spreadSheetWriterMatchedDo.CreateSpreadsheet(compareResult.Documents1CDoMatched, false);
-
                     spreadSheetWriterMatcheUpp = new(programParameters.matchedUppPath);
                     spreadSheetWriterMatcheUpp.CreateSpreadsheet(compareResult.Documents1CUppMatched, false);
                 }
             }
 
+
             void GetSourceDocumentsCounts()
             {
-                
                 documentsAmount.doDocumentsCount = doDocuments.Count;
                 documentsAmount.uppDocumentsCount = uppDocuments.Count;
                 documentsAmount.ignoreDoDocumentsCount = ignoreDoDocuments.Count;
                 documentsAmount.ignoreUppDocumentsCount = ignoreUppDocuments.Count;
             }
+
 
             void GetDocumentsAmounts()
             {

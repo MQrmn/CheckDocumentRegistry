@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CheckDocumentRegistry
 {
-    internal class readerJSON<T>
+    internal class ReaderJSON<T>
     {
         public T? GetJSON(string filePathParams)
         {
@@ -23,7 +23,7 @@ namespace CheckDocumentRegistry
                 deserialisedJsonData = default(T);
 
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Файл " + filePathParams + " не удалось считать.");
+                Console.WriteLine("Не удалось прочитать файл " + filePathParams );
                 Console.ResetColor();
 
             }
