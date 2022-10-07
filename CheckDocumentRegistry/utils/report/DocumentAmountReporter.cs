@@ -52,7 +52,7 @@ namespace CheckDocumentRegistry
 
             string[] commonReportData = new string[10];
 
-            commonReportData[0] = "Результат сравнения документов, внесеннных в 1С:ДО, с реестром 1С:УПП\n";
+            commonReportData[0] = "Результат сравнения документов, внесенных в 1С:ДО, с реестром 1С:УПП\n";
             commonReportData[1] = "От " + DateTime.Now.ToLongDateString() + ":\n\n";
             commonReportData[2] = "Документов в 1С:ДО всего: " + documentsAmount.doDocumentsCount + "\n";
             commonReportData[3] = "Документов в реестре всего: " + documentsAmount.uppDocumentsCount + "\n";

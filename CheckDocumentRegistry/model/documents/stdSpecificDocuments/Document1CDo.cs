@@ -5,7 +5,7 @@ namespace CheckDocumentRegistry
     public class Document1CDO : Document
     {
 
-        public Document1CDO(string[] document, int[] docFieldIndex)
+        public Document1CDO(string[] document, int[] docFieldIndex) 
         {
             this.Type = this.GetDocType(document[docFieldIndex[0]]);
             this.Title = document[docFieldIndex[1]];
@@ -13,11 +13,9 @@ namespace CheckDocumentRegistry
             this.Company = document[docFieldIndex[2]];
             this.Date = document[docFieldIndex[5]];
             this.Number = this.GetDocNumber(document[docFieldIndex[4]]);
+            this.Salary = this.GetDocSalary(document[docFieldIndex[6]]);
 
-            if (document[docFieldIndex[6]] != String.Empty)
-                this.Salary = this.GetDocSalary(document[docFieldIndex[6]]);
-
-            if (document[docFieldIndex[7]] == "Да") this.IsUpd = true;
+            if (document[docFieldIndex[docFieldIndex.Length - 1]] == "Да") this.IsUpd = true;
         }
 
 
@@ -43,10 +41,17 @@ namespace CheckDocumentRegistry
 
         private protected override float GetDocSalary(string stringSum)
         {
-            string pattern = @"[A-Z\s]";
-            string regexResult = Regex.Replace(stringSum, pattern, String.Empty, RegexOptions.IgnoreCase);
+            float floatSum;
+            if (stringSum != String.Empty)
+            {
+                string pattern = @"[A-Z\s]";
+                string regexResult = Regex.Replace(stringSum, pattern, String.Empty, RegexOptions.IgnoreCase);
+                floatSum = float.Parse(regexResult); 
+            }
+            else
+                floatSum = 0;
 
-            return float.Parse(regexResult);
+            return floatSum;
         }
 
 

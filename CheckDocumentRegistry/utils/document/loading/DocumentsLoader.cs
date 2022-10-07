@@ -45,7 +45,7 @@ namespace CheckDocumentRegistry
                 {
                     string[][] ignore = GetDocumentsFromWorker(spreadsheetPath);
                     DocumentsConverter<Document> documentsConverter = new();
-                    documentsObjs = documentsConverter.ConvertIgnoreDoc(ignore);
+                    documentsObjs = documentsConverter.ConvertIgnoreDoc(ignore, this.documentFieldsIndex.docFieldsIndexCommon);
                 }
                 else
                 {

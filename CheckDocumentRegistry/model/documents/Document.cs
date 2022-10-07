@@ -15,23 +15,33 @@ namespace CheckDocumentRegistry
         internal bool IsUpd { get; set; }
         internal string? Comment { get; set; }
         internal int StylePosition { get; set; }
+        
 
 
-        public Document() {}
+        public Document() 
+        {
+            
+        }
+
+
+        internal Document(string[] docFields, int[] docFieldsIndex)
+        {
+            this.Type = this.GetDocType(docFields[docFieldsIndex[0]]);
+            this.Title = docFields[docFieldsIndex[1]];
+            this.Counterparty = this.GetCounterParty(docFields[docFieldsIndex[2]]);
+            this.Company = docFields[docFieldsIndex[3]];
+            this.Date = docFields[docFieldsIndex[4]];
+            this.Number = this.GetDocNumber(docFields[docFieldsIndex[5]]);
+            this.Salary = this.GetDocSalary(docFields[docFieldsIndex[6]]);
+
+            if (docFields[docFields.Length - 1] == "Да") this.IsUpd = true;
+            this.Comment = String.Empty;
+        }
 
 
         internal Document(string[] docFields)
         {
-            this.Type = this.GetDocType(docFields[0]);
-            this.Title = docFields[1];
-            this.Counterparty = this.GetCounterParty(docFields[2]);
-            this.Company = docFields[3];
-            this.Date = docFields[4];
-            this.Number = this.GetDocNumber(docFields[5]);
-            this.Salary = this.GetDocSalary(docFields[6]);
-
-            if (docFields[7] == "Да") this.IsUpd = true;
-            this.Comment = String.Empty;
+            
         }
 
 

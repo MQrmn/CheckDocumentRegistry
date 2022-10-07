@@ -76,13 +76,13 @@ namespace CheckDocumentRegistry
         }
 
 
-        public List<Document> ConvertIgnoreDoc(string[][] ignoreArrDoDocuments)
+        public List<Document> ConvertIgnoreDoc(string[][] ignoreArrDoDocuments, int[] docFileIndexStandard)
         {
             List<Document> documents = new List<Document>(ignoreArrDoDocuments.Length);
 
             for (int i = 0; i < ignoreArrDoDocuments.Length; i++)
             {
-                documents.Add(new Document(ignoreArrDoDocuments[i]));
+                documents.Add(new Document(ignoreArrDoDocuments[i], docFileIndexStandard));
                 
             }
             return documents;

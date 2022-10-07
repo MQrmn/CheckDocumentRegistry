@@ -15,9 +15,7 @@ namespace CheckDocumentRegistry
             this.Company = document[docFieldIndex[5]];
             this.Date = document[docFieldIndex[2]];
             this.Number = this.GetDocNumber(document[docFieldIndex[4]]);
-
-            if (document[docFieldIndex[6]] != String.Empty)
-                this.Salary = this.GetDocSalary(document[docFieldIndex[6]]);
+            this.Salary = this.GetDocSalary(document[docFieldIndex[6]]);
         }
 
         private protected override int GetDocType(string input)
@@ -32,10 +30,17 @@ namespace CheckDocumentRegistry
 
         private protected override float GetDocSalary(string stringSum)
         {
-            string pattern = @"[\.]";
-            string regexResult = Regex.Replace(stringSum, pattern, ",", RegexOptions.IgnoreCase);
-            return float.Parse(regexResult);
-            
+            float floatSum;
+            if (stringSum != String.Empty)
+            {
+                string pattern = @"[\.]";
+                string regexResult = Regex.Replace(stringSum, pattern, ",", RegexOptions.IgnoreCase);
+                floatSum = float.Parse(regexResult);
+            }
+            else
+                floatSum = 0;
+
+            return floatSum;
         }
 
     }
