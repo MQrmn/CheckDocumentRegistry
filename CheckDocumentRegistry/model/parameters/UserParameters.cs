@@ -1,7 +1,7 @@
 ﻿
 namespace CheckDocumentRegistry
 {
-    public class ChangeableParameters
+    public class UserParameters
     {
         public string doSpreadSheetPath { get; set; }
         public string uppSpreadSheetPath { get; set; }
@@ -16,7 +16,6 @@ namespace CheckDocumentRegistry
         public string reportFilePath { get; set; }
         public bool printMatchedDocuments { get; set; }
         public bool askAboutCloseProgram { get; set; }
-        
         
 
         public void SetDefaults()

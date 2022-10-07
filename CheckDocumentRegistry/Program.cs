@@ -16,8 +16,8 @@ namespace CheckDocumentRegistry
             SpreadSheetWriterXLSX spreadSheetWriterPassedUpp;   // Spreadsheet creator
             SpreadSheetWriterXLSX spreadSheetWriterMatchedDo;   // Spreadsheet creator
             SpreadSheetWriterXLSX spreadSheetWriterMatcheUpp;   // Spreadsheet creator
-            FixedParameters fixedParameters;                    // Static parameters
-            ChangeableParameters programParameters;             // Loaded from config file parameters
+            InternalParameters fixedParameters;                    // Static parameters
+            UserParameters programParameters;             // Loaded from config file parameters
             DocumentsLoader documentsLoader;
             DocumentsAmount documentsAmount = new();
 
@@ -47,17 +47,17 @@ namespace CheckDocumentRegistry
             void GetSourseDocoments()
             {
                 documentsLoader = new();
-                doDocuments = documentsLoader.GetDoDocuments(programParameters.doSpreadSheetPath, 
+                doDocuments = documentsLoader.GetDocuments1CDO(programParameters.doSpreadSheetPath, 
                                                                programParameters.exceptedDoPath);
-                uppDocuments = documentsLoader.GetUppDocuments(programParameters.uppSpreadSheetPath,
+                uppDocuments = documentsLoader.GetDocuments1CUPP(programParameters.uppSpreadSheetPath,
                                                                programParameters.exceptedUppPath);
             }
 
 
             void GetIgnoreListsAndCounts()
             {
-                ignoreDoDocuments = documentsLoader.GetIgnore(programParameters.doIgnoreSpreadSheetPath);
-                ignoreUppDocuments = documentsLoader.GetIgnore(programParameters.uppIgnoreSpreadSheetPath);
+                ignoreDoDocuments = documentsLoader.GetIgnoreDocs(programParameters.doIgnoreSpreadSheetPath);
+                ignoreUppDocuments = documentsLoader.GetIgnoreDocs(programParameters.uppIgnoreSpreadSheetPath);
                 
             }
 

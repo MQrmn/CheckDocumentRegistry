@@ -12,9 +12,9 @@ namespace CheckDocumentRegistry
         }
 
 
-        internal ChangeableParameters GetProgramParameters()
+        internal UserParameters GetProgramParameters()
         {
-            ChangeableParameters parameters = ReadProgramParameters();
+            UserParameters parameters = ReadProgramParameters();
             if (parameters is null)
             {
                 parameters.SetDefaults();
@@ -24,18 +24,18 @@ namespace CheckDocumentRegistry
         }
 
 
-        private ChangeableParameters ReadProgramParameters()
+        private UserParameters ReadProgramParameters()
         {
-            ChangeableParameters? programParameters;
-            ReaderJSON<ChangeableParameters> readerJSON = new();
+            UserParameters? programParameters;
+            ReaderJSON<UserParameters> readerJSON = new();
             programParameters = readerJSON.GetJSON(this.parmetersFilePath);
 
             return programParameters;
         }
 
-        private void WriteDefaultParameters(ChangeableParameters programParameters)
+        private void WriteDefaultParameters(UserParameters programParameters)
         {
-            WriterJSON<ChangeableParameters> writerJSON = new();
+            WriterJSON<UserParameters> writerJSON = new();
             writerJSON.WriteFileJSON(programParameters, parmetersFilePath);
 
             Console.WriteLine($"Файл конфигурации по умолчанию создан в папке приложения: {this.parmetersFilePath}");

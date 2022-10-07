@@ -3,74 +3,68 @@ namespace CheckDocumentRegistry
 {
     public class DocumentsLoader
     {
-        
-        public List<Document> GetDoDocuments(string doSpreadSheetPath, string exceptedDoPath)
+
+        DocumentFieldsIndex documentFieldsIndex = new();
+
+        public List<Document> GetDocuments1CDO(string spreadsheetPath, string exceptedDocsPath)
         {
-            int[] docFieldIndex1CDo = new int[] { 0, 3, 6, 7, 8, 9, 10, 11 };
-            int[] customDocFieldIndex1CDo = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 };
+            string[][] doDocumentsArrs = GetDocumentsFromWorker(spreadsheetPath);
 
-            string[][] doDocumentsData = GetDocumentsFromReader(doSpreadSheetPath);
-
-            DocumentsConverter<Document1CDo> newDocumentsConverter = new( docFieldIndex1CDo,
-                                                                               customDocFieldIndex1CDo, 
-                                                                         8, 12);
-            List<Document> documents = newDocumentsConverter.ConvertDocuments(doDocumentsData, exceptedDoPath);
-
-
-            return documents;
+            DocumentsConverter<Document1CDo> documentsConverter = new(this.documentFieldsIndex.DocFieldIndex1CDo,
+                                                                           this.documentFieldsIndex.DustomDocFieldIndex1CDo,
+                                                                     this.documentFieldsIndex.maxPassedRowForSwitchDo,
+                                                                                  this.documentFieldsIndex.rowLenghtDo);
+            List<Document> documentsObjs = documentsConverter.ConvertDocuments(doDocumentsArrs, exceptedDocsPath);
+            return documentsObjs;
         }
 
 
-        public List<Document> GetUppDocuments(string uppSpreadSheetPath, string exceptedDoPath)
+        public List<Document> GetDocuments1CUPP(string spreadsheetPath, string exceptedDocsPath)
         {
+            string[][] documentsArrs = GetDocumentsFromWorker(spreadsheetPath);
 
-            int[] docFieldIndex1CUpp = new int[] { 0, 1, 3, 4, 5, 6, 7 };
-            int[] customDocFieldIndex1CUpp = new int[] { 0, 1, 2, 3, 4, 5, 6 };
+            DocumentsConverter<Document1CUpp> documentsConverter = new(this.documentFieldsIndex.DocFieldIndex1CUpp,
+                                                                            this.documentFieldsIndex.DustomDocFieldIndex1CUpp,
+                                                                      this.documentFieldsIndex.maxPassedRowForSwitchUpp,
+                                                                                   this.documentFieldsIndex.rowLenghtUpp);
+            List<Document> documentsObjs = documentsConverter.ConvertDocuments(documentsArrs, exceptedDocsPath);
 
-            string[][] uppDocumentsData = GetDocumentsFromReader(uppSpreadSheetPath);
-
-            DocumentsConverter<Document1CUpp> newDocumentsConverter = new(  docFieldIndex1CUpp,
-                                                                                 customDocFieldIndex1CUpp,
-                                                                           1, 8);
-            List<Document> documents = newDocumentsConverter.ConvertDocuments(uppDocumentsData, exceptedDoPath);
-
-            return documents;
+            return documentsObjs;
         }
 
 
-        public List<Document> GetIgnore(string filePath)
+
+
+        public List<Document> GetIgnoreDocs(string spreadsheetPath)
         {
-            List<Document> documents = new List<Document>();
+            List<Document> documentsObjs = new List<Document>();
 
             try
             {
-                if (File.Exists(filePath))
+                if (File.Exists(spreadsheetPath))
                 {
-                    string[][] ignore = GetDocumentsFromReader(filePath);
+                    string[][] ignore = GetDocumentsFromWorker(spreadsheetPath);
                     DocumentsConverter<Document> documentsConverter = new();
-
-                    //DocumentsConverter? documentsConverter = new DocumentsConverter();
-                    documents = documentsConverter.ConvertIgnoreDoc(ignore);
+                    documentsObjs = documentsConverter.ConvertIgnoreDoc(ignore);
                 }
                 else
                 {
-                    Console.WriteLine($"Файл не найден: {filePath}. Список игнорируемых документов не будет заполнен.");
+                    Console.WriteLine($"Файл не найден: {spreadsheetPath}. Список игнорируемых документов не будет заполнен.");
                 }
             }
-
             catch
             {
-                Console.WriteLine($"Не удалось прочитать файл: {filePath}. Список игнорируемых документов не будет заполнен.");
+                Console.WriteLine($"Не удалось прочитать файл: {spreadsheetPath}. Список игнорируемых документов не будет заполнен.");
             }
-
-            return documents;
+            return documentsObjs;
         }
 
-        private string[][] GetDocumentsFromReader(string doSpreadSheetPath)
+
+        private string[][] GetDocumentsFromWorker(string spreadsheetPath)
         {
-            Console.WriteLine($"Чтение электронной таблицы: {doSpreadSheetPath}");
+            Console.WriteLine($"Чтение электронной таблицы: {spreadsheetPath}");
             SpreadSheetReaderXLSX spreadSheetReaderXLSX = new SpreadSheetReaderXLSX();
-            return spreadSheetReaderXLSX.GetDocumentsFromTable(doSpreadSheetPath);
+            return spreadSheetReaderXLSX.GetDocumentsFromTable(spreadsheetPath);
         }
     }
 }
