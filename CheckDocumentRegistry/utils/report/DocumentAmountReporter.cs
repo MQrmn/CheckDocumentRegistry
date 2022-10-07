@@ -3,7 +3,7 @@ namespace CheckDocumentRegistry
 {
     internal class DocumentAmountReporter
     {
-        string reportFilePath;
+        private string reportFilePath;
 
         internal DocumentAmountReporter(string filePath)
         {
@@ -23,7 +23,7 @@ namespace CheckDocumentRegistry
         }
 
 
-        internal void PutReportConsole(string reportData)
+        private void PutReportConsole(string reportData)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine();
@@ -32,7 +32,7 @@ namespace CheckDocumentRegistry
         }
 
 
-        internal void PutReportTXT(string reportFilePath, string reportData)
+        private void PutReportTXT(string reportFilePath, string reportData)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace CheckDocumentRegistry
         }
 
 
-        internal string[] GetReportDataCommon(DocumentsAmount documentsAmount)
+        private string[] GetReportDataCommon(DocumentsAmount documentsAmount)
         {
 
             string[] commonReportData = new string[10];
@@ -67,7 +67,7 @@ namespace CheckDocumentRegistry
         }
 
 
-        internal string[] GetReportDataByCompanies(List<Document> documents, List<string> companies)
+        private string[] GetReportDataByCompanies(List<Document> documents, List<string> companies)
         {
             string[] byCompaniesreportData = new string[companies.Count + 1];
             int listPosition = 0;
@@ -87,7 +87,7 @@ namespace CheckDocumentRegistry
         }
 
 
-        internal List<string> GetCompanies(List<Document> documents)
+        private List<string> GetCompanies(List<Document> documents)
         {
             List<string> companies = new();
             foreach (var document in documents)

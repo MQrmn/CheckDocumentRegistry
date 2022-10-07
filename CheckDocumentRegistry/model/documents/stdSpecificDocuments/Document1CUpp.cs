@@ -3,10 +3,10 @@ using System.Text.RegularExpressions;
 
 namespace CheckDocumentRegistry
 {
-    public class Document1CUpp : Document
+    public class Document1CUPP : Document
     {
 
-        public Document1CUpp(string[] document, int[] docFieldIndex)
+        public Document1CUPP(string[] document, int[] docFieldIndex)
         {
             this.Type = this.GetDocType(document[docFieldIndex[0]]);
             this.Title = document[docFieldIndex[1]];
@@ -19,7 +19,7 @@ namespace CheckDocumentRegistry
                 this.Salary = this.GetDocSum(document[docFieldIndex[6]]);
         }
 
-        private protected int GetDocType(string input)
+        private int GetDocType(string input)
         {
             return input switch
             {
@@ -29,7 +29,7 @@ namespace CheckDocumentRegistry
             };
         }
 
-        private protected float GetDocSum(string stringSum)
+        private float GetDocSum(string stringSum)
         {
             string pattern = @"[\.]";
             string regexResult = Regex.Replace(stringSum, pattern, ",", RegexOptions.IgnoreCase);

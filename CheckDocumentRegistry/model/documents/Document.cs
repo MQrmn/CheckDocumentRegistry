@@ -4,34 +4,37 @@ namespace CheckDocumentRegistry
 {
     public class Document
     {
-        public int Type { get; set; }
-        public string Title { get; set; }
-        public string Company { get; set; }
-        public string Counterparty { get; set; }
-        public string Number { get; set; }
-        public string Date { get; set; }
-        public float Salary { get; set; }
-        public bool IsUpd { get; set; }
-        public string? Comment { get; set; }
-        public int StylePosition { get; set; }
+        internal int Type { get; set; }
+        internal string Title { get; set; }
+        internal string Company { get; set; }
+        internal string Counterparty { get; set; }
+        internal string Number { get; set; }
+        internal string Date { get; set; }
+        internal float Salary { get; set; }
+        internal bool IsUpd { get; set; }
+        internal string? Comment { get; set; }
+        internal int StylePosition { get; set; }
+
+
         public Document() {}
 
 
-        public Document(string[] docValues)
+        internal Document(string[] docFields)
         {
-            this.Type = Int32.Parse(docValues[0]);
-            this.Title = docValues[1];
-            this.Date = docValues[4];
-            this.Counterparty = docValues[2];
-            this.Number = docValues[5];
-            this.Company = docValues[3];
-            this.Salary = this.GetSalary(docValues[6]);
-            if (docValues[7] == "Да") this.IsUpd = true;
+            this.Type = Int32.Parse(docFields[0]);
+            this.Title = docFields[1];
+            this.Date = docFields[4];
+            this.Counterparty = docFields[2];
+            this.Number = docFields[5];
+            this.Company = docFields[3];
+            this.Salary = this.GetDocSalary(docFields[6]);
+
+            if (docFields[7] == "Да") this.IsUpd = true;
             this.Comment = String.Empty;
         }
 
 
-        public string[] GetArray()
+        internal string[] GetArray()
         {
             string isUpd = this.IsUpd ? "Да" : "Нет";
 
@@ -50,9 +53,9 @@ namespace CheckDocumentRegistry
         }
 
 
-        private float GetSalary(string salaryString)
+        private float GetDocSalary(string docSalary)
         {
-            string regexResult = Regex.Replace(salaryString, @"\.", @",");
+            string regexResult = Regex.Replace(docSalary, @"\.", @",");
             return float.Parse(regexResult);
         }
 
@@ -68,23 +71,22 @@ namespace CheckDocumentRegistry
             docNumberConverted = docNumber.ToUpper();
             docNumberConverted = Regex.Replace(docNumberConverted, patternAddNumber, string.Empty);
             docNumberConverted = Regex.Replace(docNumberConverted, @"\s+", string.Empty);
-            docNumberConverted = (Regex.IsMatch(docNumberConverted, patternWord) ? ReplaceWord(docNumberConverted) : docNumberConverted );
-            docNumberConverted = (Regex.IsMatch(docNumberConverted, @"\w+") ? CutZero(docNumberConverted) : docNumberConverted );
+            docNumberConverted = (Regex.IsMatch(docNumberConverted, patternWord) ? ReplaceDigitsFromEngToRus(docNumberConverted) : docNumberConverted );
+            docNumberConverted = (Regex.IsMatch(docNumberConverted, @"\w+") ? RemoveZeroInStartOfString(docNumberConverted) : docNumberConverted );
 
 
-            string CutZero(string docNumber)
+            string RemoveZeroInStartOfString(string docNumber)
             {
                 return Regex.Replace(docNumber, @"^0+", string.Empty); ;
             }
 
 
-            string ReplaceWord(string docNumber)
+            string ReplaceDigitsFromEngToRus(string docNumber)
             {
                 string docNumberConverted = docNumber;
                 for (var i = 0; i < digitEng.Length; i++)
                 {
                     docNumberConverted = Regex.Replace(docNumberConverted, digitEng[i].ToString(), digitRus[i].ToString());
-
                 }
 
                 return docNumberConverted;
@@ -93,6 +95,4 @@ namespace CheckDocumentRegistry
             return docNumberConverted;
         }
     }
-
-
 }

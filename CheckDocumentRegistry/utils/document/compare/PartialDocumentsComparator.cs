@@ -1,10 +1,10 @@
 ﻿
 namespace CheckDocumentRegistry
 {
-    public class PartialDocumentsComparator
+    internal class PartialDocumentsComparator
     {
-        public List<Document> DocumentsDo;
-        public List<Document> DocumentsUpp;
+        internal List<Document> DocumentsDo;
+        internal List<Document> DocumentsUpp;
 
         enum UnmatchedField
         {
@@ -14,13 +14,13 @@ namespace CheckDocumentRegistry
             None = 3
         }
 
-        public PartialDocumentsComparator(List<Document> documentsDo, List<Document> documentsUpp)
+        internal PartialDocumentsComparator(List<Document> documentsDo, List<Document> documentsUpp)
         {
             DocumentsDo = documentsDo;
             DocumentsUpp = documentsUpp;
         }
 
-        public void CommentUnmatchedDocuments()
+        internal void CommentUnmatchedDocuments()
         {
             this.DocumentsDo.ForEach(FindDocumentSetComment);
         }

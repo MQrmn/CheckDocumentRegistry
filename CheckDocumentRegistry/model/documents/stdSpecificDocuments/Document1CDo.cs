@@ -1,23 +1,23 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace CheckDocumentRegistry
 {
-    public class Document1CDo : Document
+    public class Document1CDO : Document
     {
-        private protected Document1CDo() { }
 
-        public Document1CDo(string[] document, int[] docFieldIndex)
+        public Document1CDO(string[] document, int[] docFieldIndex)
         {
             this.Type = this.GetDocType(document[docFieldIndex[0]]);
             this.Title = document[docFieldIndex[1]];
-            this.Company = document[docFieldIndex[2]];
+            this.Date = document[docFieldIndex[5]];
             this.Counterparty = this.GetDocCounterparty(document[docFieldIndex[3]]);
             this.Number = this.SetDocNumber(document[docFieldIndex[4]]);
-            this.Date = document[docFieldIndex[5]];
+            this.Company = document[docFieldIndex[2]];
 
             if (document[docFieldIndex[6]] != String.Empty)
-                this.Salary = this.GetDocSum(document[docFieldIndex[6]]);
+                this.Salary = this.GetDocSalary(document[docFieldIndex[6]]);
+
+
             if (document[docFieldIndex[7]] == "Да") this.IsUpd = true;
         }
 
@@ -32,7 +32,7 @@ namespace CheckDocumentRegistry
             };
         }
 
-        private float GetDocSum(string stringSum)
+        private float GetDocSalary(string stringSum)
         {
             string pattern = @"[A-Z\s]";
             string regexResult = Regex.Replace(stringSum, pattern, String.Empty, RegexOptions.IgnoreCase);

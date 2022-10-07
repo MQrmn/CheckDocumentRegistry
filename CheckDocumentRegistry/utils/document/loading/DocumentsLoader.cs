@@ -1,16 +1,16 @@
 ﻿
 namespace CheckDocumentRegistry
 {
-    public class DocumentsLoader
+    internal class DocumentsLoader
     {
 
         DocumentFieldsIndex documentFieldsIndex = new();
 
-        public List<Document> GetDocuments1CDO(string spreadsheetPath, string exceptedDocsPath)
+        internal List<Document> GetDocuments1CDO(string spreadsheetPath, string exceptedDocsPath)
         {
             string[][] doDocumentsArrs = GetDocumentsFromWorker(spreadsheetPath);
 
-            DocumentsConverter<Document1CDo> documentsConverter = new(this.documentFieldsIndex.DocFieldIndex1CDo,
+            DocumentsConverter<Document1CDO> documentsConverter = new(this.documentFieldsIndex.DocFieldIndex1CDo,
                                                                            this.documentFieldsIndex.DustomDocFieldIndex1CDo,
                                                                      this.documentFieldsIndex.maxPassedRowForSwitchDo,
                                                                                   this.documentFieldsIndex.rowLenghtDo);
@@ -19,11 +19,11 @@ namespace CheckDocumentRegistry
         }
 
 
-        public List<Document> GetDocuments1CUPP(string spreadsheetPath, string exceptedDocsPath)
+        internal List<Document> GetDocuments1CUPP(string spreadsheetPath, string exceptedDocsPath)
         {
             string[][] documentsArrs = GetDocumentsFromWorker(spreadsheetPath);
 
-            DocumentsConverter<Document1CUpp> documentsConverter = new(this.documentFieldsIndex.DocFieldIndex1CUpp,
+            DocumentsConverter<Document1CUPP> documentsConverter = new(this.documentFieldsIndex.DocFieldIndex1CUpp,
                                                                             this.documentFieldsIndex.DustomDocFieldIndex1CUpp,
                                                                       this.documentFieldsIndex.maxPassedRowForSwitchUpp,
                                                                                    this.documentFieldsIndex.rowLenghtUpp);
@@ -35,7 +35,7 @@ namespace CheckDocumentRegistry
 
 
 
-        public List<Document> GetIgnoreDocs(string spreadsheetPath)
+        internal List<Document> GetIgnoreDocs(string spreadsheetPath)
         {
             List<Document> documentsObjs = new List<Document>();
 

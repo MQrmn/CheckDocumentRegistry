@@ -5,14 +5,14 @@ using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace CheckDocumentRegistry
 {
-    public class SpreadSheetWriterXLSX
+    internal class SpreadSheetWriterXLSX
     {
         private SpreadsheetDocument spreadsheetDocument;
         private WorkbookPart workbookpart;
         private WorksheetPart worksheetPart;
         private Worksheet worksheet;
 
-        public SpreadSheetWriterXLSX(string filePath)
+        internal SpreadSheetWriterXLSX(string filePath)
         {
             this.spreadsheetDocument = SpreadsheetDocument
                 .Create(filePath, DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook);
@@ -38,7 +38,7 @@ namespace CheckDocumentRegistry
             this.worksheet = worksheetPart.Worksheet;
         }
 
-        public void CreateSpreadsheet(List<Document> documents, bool isDoDocument = true)
+        internal void CreateSpreadsheet(List<Document> documents, bool isDoDocument = true)
         {
             // Setting columns
             SetColumns(ref this.worksheetPart);
@@ -65,7 +65,7 @@ namespace CheckDocumentRegistry
         }
 
 
-        public void CreateSpreadsheet(List<string[]> documents)
+        internal void CreateSpreadsheet(List<string[]> documents)
         {
             // Setting columns
             SheetData sheetData = this.worksheet.GetFirstChild<SheetData>();

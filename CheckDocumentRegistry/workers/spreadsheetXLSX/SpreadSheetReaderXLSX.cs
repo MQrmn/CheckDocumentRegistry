@@ -4,10 +4,10 @@ using System.Text.RegularExpressions;
 
 namespace CheckDocumentRegistry
 {
-    public class SpreadSheetReaderXLSX
+    internal class SpreadSheetReaderXLSX
     {
-        
-        public string[][] GetDocumentsFromTable(string filePath)
+
+        internal string[][] GetDocumentsFromTable(string filePath)
         {
             using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(filePath, false))
             {
