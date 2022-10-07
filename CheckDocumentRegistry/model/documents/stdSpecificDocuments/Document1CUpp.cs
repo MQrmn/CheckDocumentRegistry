@@ -10,7 +10,7 @@ namespace CheckDocumentRegistry
         {
             this.Type = this.GetDocType(document[docFieldIndex[0]]);
             this.Title = document[docFieldIndex[1]];
-            this.Counterparty = document[docFieldIndex[3]];
+            this.Counterparty = this.GetDocCounterparty(document[docFieldIndex[3]]);
             this.Company = document[docFieldIndex[5]];
             this.Date = document[docFieldIndex[2]];
             this.Number = this.GetDocNumber(document[docFieldIndex[4]]);
@@ -36,6 +36,8 @@ namespace CheckDocumentRegistry
             return float.Parse(regexResult);
             
         }
+
+        private string GetDocCounterparty(string counterparty) => counterparty;
 
 
     }
