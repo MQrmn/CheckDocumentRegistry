@@ -12,7 +12,7 @@ namespace CheckDocumentRegistry
             this.Counterparty = this.GetDocCounterparty(document[docFieldIndex[3]]);
             this.Company = document[docFieldIndex[2]];
             this.Date = document[docFieldIndex[5]];
-            this.Number = this.SetDocNumber(document[docFieldIndex[4]]);
+            this.Number = this.GetDocNumber(document[docFieldIndex[4]]);
 
             if (document[docFieldIndex[6]] != String.Empty)
                 this.Salary = this.GetDocSalary(document[docFieldIndex[6]]);

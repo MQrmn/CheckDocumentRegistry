@@ -10,10 +10,10 @@ namespace CheckDocumentRegistry
         {
             this.Type = this.GetDocType(document[docFieldIndex[0]]);
             this.Title = document[docFieldIndex[1]];
-            this.Date = document[docFieldIndex[2]];
             this.Counterparty = document[docFieldIndex[3]];
-            this.Number = this.SetDocNumber(document[docFieldIndex[4]]);
             this.Company = document[docFieldIndex[5]];
+            this.Date = document[docFieldIndex[2]];
+            this.Number = this.GetDocNumber(document[docFieldIndex[4]]);
 
             if (document[docFieldIndex[6]] != String.Empty)
                 this.Salary = this.GetDocSum(document[docFieldIndex[6]]);

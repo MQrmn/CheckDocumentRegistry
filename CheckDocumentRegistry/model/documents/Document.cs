@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using DocumentFormat.OpenXml.Spreadsheet;
+using System.Text.RegularExpressions;
 
 namespace CheckDocumentRegistry
 {
@@ -21,12 +22,12 @@ namespace CheckDocumentRegistry
 
         internal Document(string[] docFields)
         {
-            this.Type = Int32.Parse(docFields[0]);
+            this.Type = this.GetDocType(docFields[0]);
             this.Title = docFields[1];
-            this.Counterparty = docFields[2];
+            this.Counterparty = this.GetCounterParty(docFields[2]);
             this.Company = docFields[3];
             this.Date = docFields[4];
-            this.Number = docFields[5];
+            this.Number = this.GetDocNumber(docFields[5]);
             this.Salary = this.GetDocSalary(docFields[6]);
 
             if (docFields[7] == "Да") this.IsUpd = true;
@@ -52,6 +53,14 @@ namespace CheckDocumentRegistry
             return result;
         }
 
+        private int GetDocType(string docTypeString)
+        {
+            return Int32.Parse(docTypeString);
+        }
+
+        private string GetCounterParty(string counterparty) => counterparty;
+
+
 
         private float GetDocSalary(string docSalary)
         {
@@ -60,8 +69,10 @@ namespace CheckDocumentRegistry
         }
 
 
-        private protected string SetDocNumber(string docNumber)
+
+        private protected string GetDocNumber(string docNumber)
         {
+
             string digitRus = "АВСЕНКМОРТХ";
             string digitEng = "ABCEHKMOPTX";
             string patternWord = @$"[{digitEng}]";
