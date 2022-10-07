@@ -8,18 +8,19 @@ namespace CheckDocumentRegistry
 
         public Document1CUPP(string[] document, int[] docFieldIndex)
         {
+
             this.Type = this.GetDocType(document[docFieldIndex[0]]);
             this.Title = document[docFieldIndex[1]];
-            this.Counterparty = this.GetDocCounterparty(document[docFieldIndex[3]]);
+            this.Counterparty = this.GetCounterParty(document[docFieldIndex[3]]);
             this.Company = document[docFieldIndex[5]];
             this.Date = document[docFieldIndex[2]];
             this.Number = this.GetDocNumber(document[docFieldIndex[4]]);
 
             if (document[docFieldIndex[6]] != String.Empty)
-                this.Salary = this.GetDocSum(document[docFieldIndex[6]]);
+                this.Salary = this.GetDocSalary(document[docFieldIndex[6]]);
         }
 
-        private int GetDocType(string input)
+        private protected override int GetDocType(string input)
         {
             return input switch
             {
@@ -29,16 +30,13 @@ namespace CheckDocumentRegistry
             };
         }
 
-        private float GetDocSum(string stringSum)
+        private protected override float GetDocSalary(string stringSum)
         {
             string pattern = @"[\.]";
             string regexResult = Regex.Replace(stringSum, pattern, ",", RegexOptions.IgnoreCase);
             return float.Parse(regexResult);
             
         }
-
-        private string GetDocCounterparty(string counterparty) => counterparty;
-
 
     }
 }

@@ -53,21 +53,21 @@ namespace CheckDocumentRegistry
             return result;
         }
 
-        private int GetDocType(string docTypeString)
+
+        private protected virtual int GetDocType(string docTypeString)
         {
             return Int32.Parse(docTypeString);
         }
 
-        private string GetCounterParty(string counterparty) => counterparty;
+
+        private protected virtual string GetCounterParty(string counterparty) => counterparty;
 
 
-
-        private float GetDocSalary(string docSalary)
+        private protected virtual float GetDocSalary(string docSalary)
         {
             string regexResult = Regex.Replace(docSalary, @"\.", @",");
             return float.Parse(regexResult);
         }
-
 
 
         private protected string GetDocNumber(string docNumber)

@@ -9,7 +9,7 @@ namespace CheckDocumentRegistry
         {
             this.Type = this.GetDocType(document[docFieldIndex[0]]);
             this.Title = document[docFieldIndex[1]];
-            this.Counterparty = this.GetDocCounterparty(document[docFieldIndex[3]]);
+            this.Counterparty = this.GetCounterParty(document[docFieldIndex[3]]);
             this.Company = document[docFieldIndex[2]];
             this.Date = document[docFieldIndex[5]];
             this.Number = this.GetDocNumber(document[docFieldIndex[4]]);
@@ -20,7 +20,8 @@ namespace CheckDocumentRegistry
             if (document[docFieldIndex[7]] == "Да") this.IsUpd = true;
         }
 
-        private int GetDocType(string rawDocType)
+
+        private protected override int GetDocType(string rawDocType)
         {
             return rawDocType switch
             {
@@ -31,7 +32,16 @@ namespace CheckDocumentRegistry
             };
         }
 
-        private float GetDocSalary(string stringSum)
+
+        private protected override string GetCounterParty(string docCounterparty)
+        {
+            string pattern = @"\s\([/\s\d]*\)";
+            string regexResult = Regex.Replace(docCounterparty, pattern, String.Empty, RegexOptions.IgnoreCase);
+            return regexResult;
+        }
+
+
+        private protected override float GetDocSalary(string stringSum)
         {
             string pattern = @"[A-Z\s]";
             string regexResult = Regex.Replace(stringSum, pattern, String.Empty, RegexOptions.IgnoreCase);
@@ -39,11 +49,6 @@ namespace CheckDocumentRegistry
             return float.Parse(regexResult);
         }
 
-        private protected string GetDocCounterparty(string docCounterparty)
-        {
-            string pattern = @"\s\([/\s\d]*\)";
-            string regexResult = Regex.Replace(docCounterparty, pattern, String.Empty, RegexOptions.IgnoreCase);
-            return regexResult;
-        }
+
     }
 }
