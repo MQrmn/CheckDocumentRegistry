@@ -9,14 +9,13 @@ namespace CheckDocumentRegistry
         {
             this.Type = this.GetDocType(document[docFieldIndex[0]]);
             this.Title = document[docFieldIndex[1]];
-            this.Date = document[docFieldIndex[5]];
             this.Counterparty = this.GetDocCounterparty(document[docFieldIndex[3]]);
-            this.Number = this.SetDocNumber(document[docFieldIndex[4]]);
             this.Company = document[docFieldIndex[2]];
+            this.Date = document[docFieldIndex[5]];
+            this.Number = this.SetDocNumber(document[docFieldIndex[4]]);
 
             if (document[docFieldIndex[6]] != String.Empty)
                 this.Salary = this.GetDocSalary(document[docFieldIndex[6]]);
-
 
             if (document[docFieldIndex[7]] == "Да") this.IsUpd = true;
         }

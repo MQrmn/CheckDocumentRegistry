@@ -23,10 +23,10 @@ namespace CheckDocumentRegistry
         {
             this.Type = Int32.Parse(docFields[0]);
             this.Title = docFields[1];
-            this.Date = docFields[4];
             this.Counterparty = docFields[2];
-            this.Number = docFields[5];
             this.Company = docFields[3];
+            this.Date = docFields[4];
+            this.Number = docFields[5];
             this.Salary = this.GetDocSalary(docFields[6]);
 
             if (docFields[7] == "Да") this.IsUpd = true;
