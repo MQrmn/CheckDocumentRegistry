@@ -72,13 +72,6 @@ namespace CheckDocumentRegistry
         private protected virtual string GetDocCounterparty(string counterparty) => counterparty;
 
 
-        private protected virtual float GetDocSalary(string docSalary)
-        {
-            string regexResult = Regex.Replace(docSalary, @"\.", @",");
-            return float.Parse(regexResult);
-        }
-
-
         private protected string GetDocNumber(string docNumber)
         {
             string digitRus = "АВСЕНКМОРТХ";
@@ -112,6 +105,12 @@ namespace CheckDocumentRegistry
             }
 
             return docNumberConverted;
+        }
+
+        private protected virtual float GetDocSalary(string docSalary)
+        {
+            string regexResult = Regex.Replace(docSalary, @"\.", @",");
+            return float.Parse(regexResult);
         }
     }
 }
