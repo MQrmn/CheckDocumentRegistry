@@ -5,17 +5,8 @@ namespace CheckDocumentRegistry
     public class Document1CDO : Document
     {
 
-        public Document1CDO(string[] document, int[] docFieldIndex) 
+        public Document1CDO(string[] docFields, int[] docFieldsIndex) : base(docFields, docFieldsIndex)
         {
-            this.Type = this.GetDocType(document[docFieldIndex[0]]);
-            this.Title = document[docFieldIndex[1]];
-            this.Counterparty = this.GetCounterParty(document[docFieldIndex[3]]);
-            this.Company = document[docFieldIndex[2]];
-            this.Date = document[docFieldIndex[5]];
-            this.Number = this.GetDocNumber(document[docFieldIndex[4]]);
-            this.Salary = this.GetDocSalary(document[docFieldIndex[6]]);
-
-            if (document[docFieldIndex[docFieldIndex.Length - 1]] == "Да") this.IsUpd = true;
         }
 
 
@@ -31,7 +22,7 @@ namespace CheckDocumentRegistry
         }
 
 
-        private protected override string GetCounterParty(string docCounterparty)
+        private protected override string GetDocCounterparty(string docCounterparty)
         {
             string pattern = @"\s\([/\s\d]*\)";
             string regexResult = Regex.Replace(docCounterparty, pattern, String.Empty, RegexOptions.IgnoreCase);

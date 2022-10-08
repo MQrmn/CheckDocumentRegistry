@@ -20,7 +20,6 @@ namespace CheckDocumentRegistry
 
         public Document() 
         {
-            
         }
 
 
@@ -28,13 +27,13 @@ namespace CheckDocumentRegistry
         {
             this.Type = this.GetDocType(docFields[docFieldsIndex[0]]);
             this.Title = docFields[docFieldsIndex[1]];
-            this.Counterparty = this.GetCounterParty(docFields[docFieldsIndex[2]]);
+            this.Counterparty = this.GetDocCounterparty(docFields[docFieldsIndex[2]]);
             this.Company = docFields[docFieldsIndex[3]];
             this.Date = docFields[docFieldsIndex[4]];
             this.Number = this.GetDocNumber(docFields[docFieldsIndex[5]]);
             this.Salary = this.GetDocSalary(docFields[docFieldsIndex[6]]);
 
-            if (docFields[docFields.Length - 1] == "Да") this.IsUpd = true;
+            if (docFields[docFieldsIndex[docFieldsIndex.Length - 1]] == "Да") this.IsUpd = true;
             this.Comment = String.Empty;
         }
 
@@ -70,7 +69,7 @@ namespace CheckDocumentRegistry
         }
 
 
-        private protected virtual string GetCounterParty(string counterparty) => counterparty;
+        private protected virtual string GetDocCounterparty(string counterparty) => counterparty;
 
 
         private protected virtual float GetDocSalary(string docSalary)
@@ -82,7 +81,6 @@ namespace CheckDocumentRegistry
 
         private protected string GetDocNumber(string docNumber)
         {
-
             string digitRus = "АВСЕНКМОРТХ";
             string digitEng = "ABCEHKMOPTX";
             string patternWord = @$"[{digitEng}]";

@@ -6,16 +6,8 @@ namespace CheckDocumentRegistry
     public class Document1CUPP : Document
     {
 
-        public Document1CUPP(string[] document, int[] docFieldIndex)
+        public Document1CUPP(string[] docFields, int[] docFieldsIndex) : base(docFields, docFieldsIndex) 
         {
-
-            this.Type = this.GetDocType(document[docFieldIndex[0]]);
-            this.Title = document[docFieldIndex[1]];
-            this.Counterparty = this.GetCounterParty(document[docFieldIndex[3]]);
-            this.Company = document[docFieldIndex[5]];
-            this.Date = document[docFieldIndex[2]];
-            this.Number = this.GetDocNumber(document[docFieldIndex[4]]);
-            this.Salary = this.GetDocSalary(document[docFieldIndex[6]]);
         }
 
         private protected override int GetDocType(string input)
