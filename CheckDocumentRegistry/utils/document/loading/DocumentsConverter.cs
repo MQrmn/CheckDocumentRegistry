@@ -1,103 +1,103 @@
-﻿
-using System.Runtime.CompilerServices;
-
-namespace CheckDocumentRegistry
+﻿namespace CheckDocumentRegistry
 {
-    internal class DocumentsConverter<T> where T : Document
+
+    internal class DocumentConverter<T> where T : Document
     {
-        internal List<string[]>? ExceptedDocuments;
-
-        private int[] docFileIndexStandard;
-        private int[] docFileIndexCustom;
+        internal List<string[]>? PassedDocs;
+        private int[] docFieldsIndexStandard;
+        private int[] docFieldsIndexCustom;
         private int maxPassedRowForSwitchIndex;
-        private int rowLength;
+        private int rowLenght;
 
 
-        internal DocumentsConverter( int[] inputDocFileIndexStandard, 
+        internal DocumentConverter(    int[] inputDocFileIndexStandard, 
                                         int[] inputDocFileIndexCustom,
                                         int inputMaxPassedRowForSwitchIndex,
-                                        int inputRowLength
-                                        )
+                                        int inputRowLength )
         {
-            this.docFileIndexStandard = inputDocFileIndexStandard;
-            this.docFileIndexCustom = inputDocFileIndexCustom;
-            this.ExceptedDocuments = new List<string[]>();
+            this.docFieldsIndexStandard = inputDocFileIndexStandard;
+            this.docFieldsIndexCustom = inputDocFileIndexCustom;
+            this.PassedDocs = new List<string[]>();
             this.maxPassedRowForSwitchIndex = inputMaxPassedRowForSwitchIndex;
-            this.rowLength = inputRowLength;
+            this.rowLenght = inputRowLength;
         }
 
-        internal DocumentsConverter() { }
 
-        internal List<Document> ConvertDocuments(string[][] documentsArr, string exceptedDoPath)
+        internal DocumentConverter(int[] inputDocFileIndex) 
         {
-            List<T> preDocuments = new List<T>(documentsArr.Length);
+            this.docFieldsIndexStandard = inputDocFileIndex;
+        }
 
-            int numberOfExceptions = 0;
-            bool isSwithedByException = false;
-            int[] fieldIndexes = this.docFileIndexStandard;
 
-            for (int i = 0; i < documentsArr.Length; i++)
+        // Specific documents is exported from 1C:DO or 1C:UPP spreadsheets
+        internal List<Document> ConvertSpecificDocs(string[][] docsArr, string passedDocsReportPath)
+        {
+            List<T> specificDocObjList = new List<T>(docsArr.Length);
+
+            int exceptCount = 0;
+            bool isSwithedIndex = false;
+            int[] fieldIndexes = this.docFieldsIndexStandard;
+
+            for (int i = 0; i < docsArr.Length; i++)
             {
                 try
                 {
-                    preDocuments.Add((T)Activator.CreateInstance(typeof(T), documentsArr[i], fieldIndexes));
-                    numberOfExceptions = 0;
+                    specificDocObjList.Add((T)Activator.CreateInstance(typeof(T), docsArr[i], fieldIndexes));
+                    exceptCount = 0;
                 }
                 catch
                 {
-                    numberOfExceptions++;
+                    exceptCount++;
 
-                    if ((numberOfExceptions > this.maxPassedRowForSwitchIndex && isSwithedByException == false) || isSwithedByException == true)
+                    if ((exceptCount > this.maxPassedRowForSwitchIndex && isSwithedIndex == false) || isSwithedIndex == true)
                     {
-                        this.ExceptedDocuments.Add(documentsArr[i]);
+                        this.PassedDocs.Add(docsArr[i]);
                     }
 
-                    if (numberOfExceptions >= this.maxPassedRowForSwitchIndex && isSwithedByException == false && documentsArr[i].Length < this.rowLength)
+                    if (exceptCount >= this.maxPassedRowForSwitchIndex && isSwithedIndex == false && docsArr[i].Length < this.rowLenght)
                     {
-                        isSwithedByException = true;
-                        numberOfExceptions = 0;
+                        isSwithedIndex = true;
+                        exceptCount = 0;
                         i = -1;
-                        fieldIndexes = this.docFileIndexCustom;
+                        fieldIndexes = this.docFieldsIndexCustom; // Switch fields index set
                     }
                 }
             }
 
-            if (ExceptedDocuments.Count > 0)
-                CreateExceptedDocumentReport(exceptedDoPath);
+            if (PassedDocs.Count > 0)
+                CreateReportPassedDocs(passedDocsReportPath);
 
-            List<Document> documents = preDocuments
-                .ConvertAll(new Converter<T, Document>(delegate (T document) {
-                    return (Document)document;
-                }));
+            List<Document> universalDocs = specificDocObjList
+                .ConvertAll(new Converter<T, Document>(
+                (T document) => (Document)document
+                ));
 
-            return documents;
-
-
+            return universalDocs;
         }
 
 
-        public List<Document> ConvertIgnoreDoc(string[][] ignoreArrDoDocuments, int[] docFileIndexStandard)
+        // Universal documents is exported from this program spreadsheets
+        public List<Document> ConvertUniversalDocs(string[][] ignoreArrDoDocuments)
         {
             List<Document> documents = new List<Document>(ignoreArrDoDocuments.Length);
 
             for (int i = 0; i < ignoreArrDoDocuments.Length; i++)
             {
-                documents.Add(new Document(ignoreArrDoDocuments[i], docFileIndexStandard));
-                
+                documents.Add(new Document(ignoreArrDoDocuments[i], this.docFieldsIndexStandard));
             }
             return documents;
         }
 
 
-        private void CreateExceptedDocumentReport(string exceptedUppPath)
+        private void CreateReportPassedDocs(string exceptedUppPath)
         {
-            this.PrintExceptedDocuments(this.ExceptedDocuments);
+            this.PrintConsolePassedDocs(this.PassedDocs);
             SpreadSheetWriterXLSX spreadSheetWriterXLSX = new SpreadSheetWriterXLSX(exceptedUppPath);
-            spreadSheetWriterXLSX.CreateSpreadsheet(ExceptedDocuments);
+            spreadSheetWriterXLSX.CreateSpreadsheet(PassedDocs);
         }
 
 
-        private void PrintExceptedDocuments(List<string[]> exceptedDocuments)
+        private void PrintConsolePassedDocs(List<string[]> exceptedDocuments)
         {
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Red;
