@@ -1,7 +1,7 @@
 ﻿namespace CheckDocumentRegistry
 {
 
-    internal class DocumentConverter<T> where T : Document
+    internal class DocConverter<T> where T : Document
     {
         internal List<string[]>? PassedDocs;
         private int[] docFieldsIndexStandard;
@@ -10,7 +10,7 @@
         private int rowLenght;
 
 
-        internal DocumentConverter(    int[] inputDocFileIndexStandard, 
+        internal DocConverter(    int[] inputDocFileIndexStandard, 
                                         int[] inputDocFileIndexCustom,
                                         int inputMaxPassedRowForSwitchIndex,
                                         int inputRowLength )
@@ -23,7 +23,7 @@
         }
 
 
-        internal DocumentConverter(int[] inputDocFileIndex) 
+        internal DocConverter(int[] inputDocFileIndex) 
         {
             this.docFieldsIndexStandard = inputDocFileIndex;
         }

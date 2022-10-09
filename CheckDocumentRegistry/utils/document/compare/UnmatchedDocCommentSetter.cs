@@ -1,7 +1,7 @@
 ﻿
 namespace CheckDocumentRegistry
 {
-    internal class PartialDocumentsComparator
+    internal class UnmatchedDocCommentSetter
     {
         internal List<Document> DocumentsDo;
         internal List<Document> DocumentsUpp;
@@ -14,7 +14,7 @@ namespace CheckDocumentRegistry
             None = 3
         }
 
-        internal PartialDocumentsComparator(List<Document> documentsDo, List<Document> documentsUpp)
+        internal UnmatchedDocCommentSetter(List<Document> documentsDo, List<Document> documentsUpp)
         {
             DocumentsDo = documentsDo;
             DocumentsUpp = documentsUpp;

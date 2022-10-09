@@ -10,15 +10,15 @@ namespace CheckDocumentRegistry
             List<Document> uppDocuments;                        // Source 1C:UPP documents for compare
             List<Document> ignoreDoDocuments;                   // Ignore list of 1C:DO documents 
             List<Document> ignoreUppDocuments;                  // Ignore list of 1C:UPP documents 
-            FullDocumentsComparator compareResult;              // Class contains results of documents comparing 
-            PartialDocumentsComparator unmatchedDocumentsCommentator;  // Class set comments in unmatched documents
+            FullDocComparator compareResult;              // Class contains results of documents comparing 
+            UnmatchedDocCommentSetter unmatchedDocumentsCommentator;  // Class set comments in unmatched documents
             SpreadSheetWriterXLSX spreadSheetWriterPassedDo;    // Spreadsheet creator
             SpreadSheetWriterXLSX spreadSheetWriterPassedUpp;   // Spreadsheet creator
             SpreadSheetWriterXLSX spreadSheetWriterMatchedDo;   // Spreadsheet creator
             SpreadSheetWriterXLSX spreadSheetWriterMatcheUpp;   // Spreadsheet creator
             InternalParameters fixedParameters;                    // Static parameters
             UserParameters programParameters;             // Loaded from config file parameters
-            DocumentsLoader documentsLoader;
+            DocLoader documentsLoader;
             DocumentsAmount documentsAmount = new();
 
             GetProgramParameters();                             // Getting program parameters
@@ -47,17 +47,17 @@ namespace CheckDocumentRegistry
             void GetSourseDocoments()
             {
                 documentsLoader = new();
-                doDocuments = documentsLoader.GetDocuments1CDO(programParameters.doSpreadSheetPath, 
+                doDocuments = documentsLoader.GetDocs1CDO(programParameters.doSpreadSheetPath, 
                                                                programParameters.exceptedDoPath);
-                uppDocuments = documentsLoader.GetDocuments1CUPP(programParameters.uppSpreadSheetPath,
+                uppDocuments = documentsLoader.GetDocs1CUPP(programParameters.uppSpreadSheetPath,
                                                                programParameters.exceptedUppPath);
             }
 
 
             void GetIgnoreListsAndCounts()
             {
-                ignoreDoDocuments = documentsLoader.GetIgnoreDocs(programParameters.doIgnoreSpreadSheetPath);
-                ignoreUppDocuments = documentsLoader.GetIgnoreDocs(programParameters.uppIgnoreSpreadSheetPath);
+                ignoreDoDocuments = documentsLoader.GetDocsPass(programParameters.doIgnoreSpreadSheetPath);
+                ignoreUppDocuments = documentsLoader.GetDocsPass(programParameters.uppIgnoreSpreadSheetPath);
                 
             }
 
@@ -65,8 +65,8 @@ namespace CheckDocumentRegistry
             void CompareDocuments()
             {
                 compareResult = new(doDocuments, uppDocuments, ignoreDoDocuments, ignoreUppDocuments);
-                unmatchedDocumentsCommentator = new(compareResult.UnmatchedDocuments1CDO,
-                                                                                    compareResult.UnmatchedDocuments1CUPP);
+                unmatchedDocumentsCommentator = new(compareResult.UnmatchedDocs1CDO,
+                                                                                    compareResult.UnmatchedDocs1CUPP);
                 unmatchedDocumentsCommentator.CommentUnmatchedDocuments();
             }
 
@@ -74,16 +74,16 @@ namespace CheckDocumentRegistry
             void GenerateOutputSpreadsheets()
             {
                 spreadSheetWriterPassedDo = new(programParameters.passedDoPath);
-                spreadSheetWriterPassedDo.CreateSpreadsheet(compareResult.UnmatchedDocuments1CDO);
+                spreadSheetWriterPassedDo.CreateSpreadsheet(compareResult.UnmatchedDocs1CDO);
                 spreadSheetWriterPassedUpp = new(programParameters.passedUppPath);
-                spreadSheetWriterPassedUpp.CreateSpreadsheet(compareResult.UnmatchedDocuments1CUPP, false);
+                spreadSheetWriterPassedUpp.CreateSpreadsheet(compareResult.UnmatchedDocs1CUPP, false);
 
                 if (programParameters.printMatchedDocuments)
                 {
                     spreadSheetWriterMatchedDo = new(programParameters.matchedDoPath);
-                    spreadSheetWriterMatchedDo.CreateSpreadsheet(compareResult.MatchedDocuments1CDO, false);
+                    spreadSheetWriterMatchedDo.CreateSpreadsheet(compareResult.MatchedDocs1CDO, false);
                     spreadSheetWriterMatcheUpp = new(programParameters.matchedUppPath);
-                    spreadSheetWriterMatcheUpp.CreateSpreadsheet(compareResult.MatchedDocuments1CUPP, false);
+                    spreadSheetWriterMatcheUpp.CreateSpreadsheet(compareResult.MatchedDocs1CUPP, false);
                 }
             }
 
@@ -99,10 +99,10 @@ namespace CheckDocumentRegistry
 
             void GetDocumentsAmounts()
             {
-                documentsAmount.Documents1CDoUnmatchedCount = compareResult.UnmatchedDocuments1CDO.Count;
-                documentsAmount.Documents1CUppUnmatchedCount = compareResult.UnmatchedDocuments1CUPP.Count;
-                documentsAmount.Documents1CDoMatchedCount = compareResult.MatchedDocuments1CDO.Count;
-                documentsAmount.Documents1CUppMatchedCount = compareResult.MatchedDocuments1CUPP.Count;
+                documentsAmount.Documents1CDoUnmatchedCount = compareResult.UnmatchedDocs1CDO.Count;
+                documentsAmount.Documents1CUppUnmatchedCount = compareResult.UnmatchedDocs1CUPP.Count;
+                documentsAmount.Documents1CDoMatchedCount = compareResult.MatchedDocs1CDO.Count;
+                documentsAmount.Documents1CUppMatchedCount = compareResult.MatchedDocs1CUPP.Count;
             }
 
 
