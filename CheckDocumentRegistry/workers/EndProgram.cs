@@ -1,4 +1,4 @@
-﻿namespace CheckDocumentRegistry.workers
+﻿namespace RegComparator.workers
 {
     internal class EndProgram
     {

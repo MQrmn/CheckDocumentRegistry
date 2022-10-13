@@ -1,7 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 
-namespace CheckDocumentRegistry
+namespace RegComparator
 {
     
     internal class WorkAbilityChecker

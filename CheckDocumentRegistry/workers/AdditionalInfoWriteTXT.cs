@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace CheckDocumentRegistry
+namespace RegComparator
 {
     internal class AdditionalInfoWriteTXT
     {

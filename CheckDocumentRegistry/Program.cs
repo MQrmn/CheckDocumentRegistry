@@ -1,5 +1,5 @@
 ﻿
-namespace CheckDocumentRegistry
+namespace RegComparator
 {
     internal class Program
     {
@@ -16,13 +16,13 @@ namespace CheckDocumentRegistry
             SpreadSheetWriterXLSX spreadSheetWriterPassedUpp;   // Spreadsheet creator
             SpreadSheetWriterXLSX spreadSheetWriterMatchedDo;   // Spreadsheet creator
             SpreadSheetWriterXLSX spreadSheetWriterMatcheUpp;   // Spreadsheet creator
-            InternalParameters fixedParameters;                    // Static parameters
-            UserParameters programParameters;             // Loaded from config file parameters
+            InternalParameters internalParameters;                    // Static parameters
+            UserParameters userParameters;             // Loaded from config file parameters
             DocLoader documentsLoader;
             DocumentsAmount documentsAmount = new();
 
             GetProgramParameters();                             // Getting program parameters
-            WorkAbilityChecker.CheckFiles(programParameters);   // Checkimg for existing files to comparingg
+            WorkAbilityChecker.CheckFiles(userParameters);   // Checkimg for existing files to comparingg
             GetSourseDocoments();                               // Getting documents from spreadsheets
             GetIgnoreListsAndCounts();                          // Getting ignored documents from spreadsheets
             GetSourceDocumentsCounts();
@@ -30,7 +30,7 @@ namespace CheckDocumentRegistry
             GetDocumentsAmounts();
 
             // Creating reports
-            DocumentAmountReporter documentsAmountReporter = new(programParameters.reportFilePath);
+            DocumentAmountReporter documentsAmountReporter = new(userParameters.reportFilePath);
             documentsAmountReporter.CreateAllReports(uppDocuments, documentsAmount);
             GenerateOutputSpreadsheets();                       
             CloseProgram();
@@ -38,26 +38,26 @@ namespace CheckDocumentRegistry
 
             void GetProgramParameters()
             {
-                fixedParameters = new();
-                ProgramParametersReadWrite programParameters1 = new(fixedParameters.ProgramParametersFilePath);
-                programParameters = programParameters1.GetProgramParameters();
+                internalParameters = new();
+                ProgramParametersReadWrite programParameters1 = new(internalParameters.ProgramParametersFilePath);
+                userParameters = programParameters1.GetProgramParameters();
             }
 
 
             void GetSourseDocoments()
             {
                 documentsLoader = new();
-                doDocuments = documentsLoader.GetDocs1CDO(programParameters.doSpreadSheetPath, 
-                                                               programParameters.exceptedDoPath);
-                uppDocuments = documentsLoader.GetDocs1CUPP(programParameters.uppSpreadSheetPath,
-                                                               programParameters.exceptedUppPath);
+                doDocuments = documentsLoader.GetDocs1CDO(userParameters.doSpreadSheetPath, 
+                                                               userParameters.exceptedDoPath);
+                uppDocuments = documentsLoader.GetDocs1CUPP(userParameters.uppSpreadSheetPath,
+                                                               userParameters.exceptedUppPath);
             }
 
 
             void GetIgnoreListsAndCounts()
             {
-                ignoreDoDocuments = documentsLoader.GetDocsPass(programParameters.doIgnoreSpreadSheetPath);
-                ignoreUppDocuments = documentsLoader.GetDocsPass(programParameters.uppIgnoreSpreadSheetPath);
+                ignoreDoDocuments = documentsLoader.GetDocsPass(userParameters.doIgnoreSpreadSheetPath);
+                ignoreUppDocuments = documentsLoader.GetDocsPass(userParameters.uppIgnoreSpreadSheetPath);
                 
             }
 
@@ -73,16 +73,16 @@ namespace CheckDocumentRegistry
 
             void GenerateOutputSpreadsheets()
             {
-                spreadSheetWriterPassedDo = new(programParameters.passedDoPath);
+                spreadSheetWriterPassedDo = new(userParameters.passedDoPath);
                 spreadSheetWriterPassedDo.CreateSpreadsheet(compareResult.UnmatchedDocs1CDO);
-                spreadSheetWriterPassedUpp = new(programParameters.passedUppPath);
+                spreadSheetWriterPassedUpp = new(userParameters.passedUppPath);
                 spreadSheetWriterPassedUpp.CreateSpreadsheet(compareResult.UnmatchedDocs1CUPP, false);
 
-                if (programParameters.printMatchedDocuments)
+                if (userParameters.printMatchedDocuments)
                 {
-                    spreadSheetWriterMatchedDo = new(programParameters.matchedDoPath);
+                    spreadSheetWriterMatchedDo = new(userParameters.matchedDoPath);
                     spreadSheetWriterMatchedDo.CreateSpreadsheet(compareResult.MatchedDocs1CDO, false);
-                    spreadSheetWriterMatcheUpp = new(programParameters.matchedUppPath);
+                    spreadSheetWriterMatcheUpp = new(userParameters.matchedUppPath);
                     spreadSheetWriterMatcheUpp.CreateSpreadsheet(compareResult.MatchedDocs1CUPP, false);
                 }
             }
@@ -108,7 +108,7 @@ namespace CheckDocumentRegistry
 
             void CloseProgram()
             {
-                if (programParameters.askAboutCloseProgram)
+                if (userParameters.askAboutCloseProgram)
                 {
                     Console.WriteLine("Для завершения программы нажмите любую клавишу.");
                     Console.ReadKey();

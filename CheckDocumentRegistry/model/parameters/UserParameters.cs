@@ -1,5 +1,5 @@
 ﻿
-namespace CheckDocumentRegistry
+namespace RegComparator
 {
     public class UserParameters
     {

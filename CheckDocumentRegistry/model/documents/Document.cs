@@ -1,7 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Spreadsheet;
 using System.Text.RegularExpressions;
 
-namespace CheckDocumentRegistry
+namespace RegComparator
 {
     public class Document
     {

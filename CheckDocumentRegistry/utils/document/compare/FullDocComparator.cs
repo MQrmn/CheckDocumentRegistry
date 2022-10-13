@@ -1,5 +1,5 @@
 ﻿
-namespace CheckDocumentRegistry
+namespace RegComparator
 {
 
     internal class FullDocComparator

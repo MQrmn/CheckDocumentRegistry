@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace CheckDocumentRegistry
+namespace RegComparator
 {
     public class Document1CDO : Document
     {

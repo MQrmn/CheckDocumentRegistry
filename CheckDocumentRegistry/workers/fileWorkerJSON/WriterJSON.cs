@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
 
-namespace CheckDocumentRegistry
+namespace RegComparator
 {
     internal class WriterJSON<T>
     {

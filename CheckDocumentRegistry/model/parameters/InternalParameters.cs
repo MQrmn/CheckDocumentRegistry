@@ -1,13 +1,12 @@
 ﻿
-namespace CheckDocumentRegistry
+namespace RegComparator
 {
-    internal class InternalParameters
+    public class InternalParameters
     {
 
-        readonly internal string ProgramParametersFilePath;
-        readonly internal string LastCompareDocumentsAnountsFilePath;
-
-        internal InternalParameters()
+        readonly public string ProgramParametersFilePath;
+        readonly public string LastCompareDocumentsAnountsFilePath;
+        public InternalParameters()
         {
 
             this.ProgramParametersFilePath = "params.json";

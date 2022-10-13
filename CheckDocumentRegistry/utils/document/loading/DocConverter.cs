@@ -1,4 +1,4 @@
-﻿namespace CheckDocumentRegistry
+﻿namespace RegComparator
 {
 
     internal class DocConverter<T> where T : Document

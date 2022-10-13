@@ -2,7 +2,7 @@
 using DocumentFormat.OpenXml.Spreadsheet;
 using System.Text.RegularExpressions;
 
-namespace CheckDocumentRegistry
+namespace RegComparator
 {
     internal class SpreadSheetReaderXLSX
     {
