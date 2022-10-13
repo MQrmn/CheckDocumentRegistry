@@ -17,6 +17,7 @@ namespace CheckDocumentRegistry
             UserParameters parameters = ReadProgramParameters();
             if (parameters is null)
             {
+                parameters = new UserParameters();
                 parameters.SetDefaults();
                 this.WriteDefaultParameters(parameters);
             }
