@@ -43,10 +43,12 @@
                 try
                 {
                     specificDocObjList.Add((T)Activator.CreateInstance(typeof(T), docsArr[i], fieldIndexes));
+
                     exceptCount = 0;
                 }
-                catch
+                catch (Exception e)
                 {
+                    Console.WriteLine(e);
                     exceptCount++;
 
                     if ((exceptCount > this.maxPassedRowForSwitchIndex && isSwithedIndex == false) || isSwithedIndex == true)

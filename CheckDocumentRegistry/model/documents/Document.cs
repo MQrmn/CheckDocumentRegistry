@@ -1,21 +1,20 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace RegComparator
 {
     public class Document
     {
-        internal int Type { get; set; }
-        internal string Title { get; set; }
-        internal string Company { get; set; }
-        internal string Counterparty { get; set; }
-        internal string Number { get; set; }
-        internal string Date { get; set; }
-        internal float Salary { get; set; }
-        internal bool IsUpd { get; set; }
-        internal string? Comment { get; set; }
-        internal int StylePosition { get; set; }
-        
+        internal protected int Type { get; set; }
+        internal protected string Title { get; set; }
+        internal protected string Company { get; set; }
+        internal protected string Counterparty { get; set; }
+        internal protected string Number { get; set; }
+        internal protected string Date { get; set; }
+        internal protected float Salary { get; set; }
+        internal protected bool IsUpd { get; set; }
+        internal protected string? Comment { get; set; }
+        internal protected int StylePosition { get; set; }
+
 
 
         public Document() 
@@ -23,7 +22,7 @@ namespace RegComparator
         }
 
 
-        internal Document(string[] docFields, int[] docFieldsIndex)
+        public Document(string[] docFields, int[] docFieldsIndex)
         {
             this.Type = this.GetDocType(docFields[docFieldsIndex[0]]);
             this.Title = docFields[docFieldsIndex[1]];
@@ -38,13 +37,13 @@ namespace RegComparator
         }
 
 
-        internal Document(string[] docFields)
+        internal protected Document(string[] docFields)
         {
             
         }
 
 
-        internal string[] GetArray()
+        internal protected string[] GetArray()
         {
             string isUpd = this.IsUpd ? "Да" : "Нет";
 
@@ -63,16 +62,16 @@ namespace RegComparator
         }
 
 
-        private protected virtual int GetDocType(string docTypeString)
+        internal protected virtual int GetDocType(string docTypeString)
         {
             return Int32.Parse(docTypeString);
         }
 
 
-        private protected virtual string GetDocCounterparty(string counterparty) => counterparty;
+        internal protected virtual string GetDocCounterparty(string counterparty) => counterparty;
 
 
-        private protected string GetDocNumber(string docNumber)
+        internal protected string GetDocNumber(string docNumber)
         {
             string digitRus = "АВСЕНКМОРТХ";
             string digitEng = "ABCEHKMOPTX";
@@ -107,7 +106,7 @@ namespace RegComparator
             return docNumberConverted;
         }
 
-        private protected virtual float GetDocSalary(string docSalary)
+        internal protected virtual float GetDocSalary(string docSalary)
         {
             string regexResult = Regex.Replace(docSalary, @"\.", @",");
             return float.Parse(regexResult);

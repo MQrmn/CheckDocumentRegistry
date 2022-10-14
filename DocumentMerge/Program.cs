@@ -1,5 +1,4 @@
-﻿using RegComparator;
-
+﻿
 namespace DocumentMerge
 {
     internal class Program
@@ -8,10 +7,6 @@ namespace DocumentMerge
         {
             InternalParameters internalParameters;                      // Static parameters
             UserParameters userParameters;                              // Loaded from config file parameters
-
-
-
-
 
             void GetProgramParameters()
             {

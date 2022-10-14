@@ -4,9 +4,9 @@ namespace RegComparator
     public class InternalParameters
     {
 
-        readonly public string ProgramParametersFilePath;
-        readonly public string LastCompareDocumentsAnountsFilePath;
-        public InternalParameters()
+        readonly internal protected string ProgramParametersFilePath;
+        readonly internal protected string LastCompareDocumentsAnountsFilePath;
+        internal protected InternalParameters()
         {
 
             this.ProgramParametersFilePath = "params.json";

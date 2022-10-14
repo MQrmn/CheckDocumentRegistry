@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DocumentMerge.model.parameters
+﻿namespace DocumentMerge
 {
-    internal class DocumentFieldsIndex
+    internal class DocumentFieldsIndex : RegComparator.DocFieldsIndex
     {
     }
 }

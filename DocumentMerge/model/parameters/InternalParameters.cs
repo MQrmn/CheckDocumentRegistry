@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DocumentMerge.model.parameters
+﻿namespace DocumentMerge 
 {
-    internal class InternalParameters
+    internal class InternalParameters : RegComparator.InternalParameters
     {
     }
 }
