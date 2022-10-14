@@ -46,9 +46,8 @@
 
                     exceptCount = 0;
                 }
-                catch (Exception e)
+                catch
                 {
-                    Console.WriteLine(e);
                     exceptCount++;
 
                     if ((exceptCount > this.maxPassedRowForSwitchIndex && isSwithedIndex == false) || isSwithedIndex == true)
