@@ -1,18 +1,17 @@
-﻿
-namespace RegComparator
+﻿namespace RegComparator
 {
-    internal class ProgramParametersReadWrite
+    public class ProgramParametersReadWrite
     {
 
-        internal string parmetersFilePath;
+        internal protected string parmetersFilePath;
 
-        internal ProgramParametersReadWrite(string filePath)
+        internal protected ProgramParametersReadWrite(string filePath)
         {
             this.parmetersFilePath = filePath;
         }
 
 
-        internal UserParameters GetProgramParameters()
+        internal protected UserParameters GetProgramParameters()
         {
             UserParameters parameters = ReadProgramParameters();
             if (parameters is null)
@@ -25,7 +24,7 @@ namespace RegComparator
         }
 
 
-        private UserParameters ReadProgramParameters()
+        internal protected UserParameters ReadProgramParameters()
         {
             UserParameters? programParameters;
             ReaderJSON<UserParameters> readerJSON = new();
@@ -34,7 +33,7 @@ namespace RegComparator
             return programParameters;
         }
 
-        private void WriteDefaultParameters(UserParameters programParameters)
+        internal protected void WriteDefaultParameters(UserParameters programParameters)
         {
             WriterJSON<UserParameters> writerJSON = new();
             writerJSON.WriteFileJSON(programParameters, parmetersFilePath);

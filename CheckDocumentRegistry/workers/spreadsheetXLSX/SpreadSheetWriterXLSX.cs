@@ -5,14 +5,14 @@ using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace RegComparator
 {
-    internal class SpreadSheetWriterXLSX
+    public class SpreadSheetWriterXLSX
     {
-        private SpreadsheetDocument spreadsheetDocument;
-        private WorkbookPart workbookpart;
-        private WorksheetPart worksheetPart;
-        private Worksheet worksheet;
+        internal protected SpreadsheetDocument spreadsheetDocument;
+        internal protected WorkbookPart workbookpart;
+        internal protected WorksheetPart worksheetPart;
+        internal protected Worksheet worksheet;
 
-        internal SpreadSheetWriterXLSX(string filePath)
+        internal protected SpreadSheetWriterXLSX(string filePath)
         {
             this.spreadsheetDocument = SpreadsheetDocument
                 .Create(filePath, DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook);
@@ -38,7 +38,7 @@ namespace RegComparator
             this.worksheet = worksheetPart.Worksheet;
         }
 
-        internal void CreateSpreadsheet(List<Document> documents, bool isDoDocument = true)
+        internal protected void CreateSpreadsheet(List<Document> documents, bool isDoDocument = true)
         {
             // Setting columns
             SetColumns(ref this.worksheetPart);
@@ -65,7 +65,7 @@ namespace RegComparator
         }
 
 
-        internal void CreateSpreadsheet(List<string[]> documents)
+        internal protected void CreateSpreadsheet(List<string[]> documents)
         {
             // Setting columns
             SheetData sheetData = this.worksheet.GetFirstChild<SheetData>();
@@ -83,7 +83,7 @@ namespace RegComparator
 
 
         // Getting slyle index by document data
-        private uint GetStyleIndex(Document document, int currentPosition, bool isDoDocument)
+        internal protected uint GetStyleIndex(Document document, int currentPosition, bool isDoDocument)
         {
             if (!isDoDocument) return 0;
 
@@ -100,7 +100,7 @@ namespace RegComparator
         }
 
         // Filling body
-        private Row GetRow( Document document, bool isDoDocument)
+        internal protected Row GetRow( Document document, bool isDoDocument)
         {
             Row row = new Row();
 
@@ -124,7 +124,7 @@ namespace RegComparator
             return row;
         }
 
-        private Row GetRow(string[] document)
+        internal protected Row GetRow(string[] document)
         {
             Row row = new Row();
 
@@ -144,10 +144,10 @@ namespace RegComparator
 
             return row;
         }
-    
+
 
         // Filling header
-        private Row GetHeaderRow(string[] titleOfColumn)
+        internal protected Row GetHeaderRow(string[] titleOfColumn)
         {
             Row row = new Row();
             foreach (var i in titleOfColumn)
@@ -165,7 +165,7 @@ namespace RegComparator
         }
 
         // Setting columns
-        private void SetColumns(ref WorksheetPart worksheetPart)
+        internal protected void SetColumns(ref WorksheetPart worksheetPart)
         {
             Columns columns = worksheetPart.Worksheet.GetFirstChild<Columns>();
             columns = new Columns();
@@ -185,7 +185,7 @@ namespace RegComparator
         }
 
         // Setting styles
-        private Stylesheet GenerateStylesheet()
+        internal protected Stylesheet GenerateStylesheet()
         {
             Stylesheet styleSheet = null;
 

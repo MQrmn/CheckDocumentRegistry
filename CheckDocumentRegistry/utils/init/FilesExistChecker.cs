@@ -4,10 +4,10 @@ using DocumentFormat.OpenXml.Spreadsheet;
 namespace RegComparator
 {
     
-    internal class WorkAbilityChecker
+    public class WorkAbilityChecker
     {
         
-        public static void CheckFiles(UserParameters programParameters)
+        internal protected static void CheckFiles(UserParameters programParameters)
         {
             bool doExist = File.Exists(programParameters.doSpreadSheetPath);
             bool uppExist = File.Exists(programParameters.uppSpreadSheetPath);
@@ -32,8 +32,8 @@ namespace RegComparator
             TryCreateSpreadSheet(programParameters.passedDoPath);
             TryCreateSpreadSheet(programParameters.passedUppPath);
         }
-        
-        private static void TryOpenSpreadSheet(string filePath)
+
+        internal protected static void TryOpenSpreadSheet(string filePath)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace RegComparator
             }
         }
 
-        private static void TryCreateSpreadSheet(string filePath)
+        internal protected static void TryCreateSpreadSheet(string filePath)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace RegComparator
             }
         }
 
-        private static void WriteMessageExit(string message)
+        internal protected static void WriteMessageExit(string message)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(message);

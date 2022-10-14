@@ -1,5 +1,4 @@
-﻿
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace RegComparator
 {
@@ -10,7 +9,7 @@ namespace RegComparator
         {
         }
 
-        private protected override int GetDocType(string input)
+        internal protected override int GetDocType(string input)
         {
             return input switch
             {
@@ -20,7 +19,7 @@ namespace RegComparator
             };
         }
 
-        private protected override float GetDocSalary(string stringSum)
+        internal protected override float GetDocSalary(string stringSum)
         {
             float floatSum;
             if (stringSum != String.Empty)

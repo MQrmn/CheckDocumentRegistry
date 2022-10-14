@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DocumentMerge.utils.load
+﻿namespace DocumentMerge
 {
-    internal class docLoader
+    internal class DocLoader : RegComparator.DocLoader
     {
     }
 }

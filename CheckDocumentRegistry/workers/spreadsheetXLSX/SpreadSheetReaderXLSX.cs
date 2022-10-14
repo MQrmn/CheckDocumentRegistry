@@ -4,10 +4,9 @@ using System.Text.RegularExpressions;
 
 namespace RegComparator
 {
-    internal class SpreadSheetReaderXLSX
+    public class SpreadSheetReaderXLSX
     {
-
-        internal string[][] GetDocumentsFromTable(string filePath)
+        internal protected string[][] GetDocumentsFromTable(string filePath)
         {
             using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(filePath, false))
             {

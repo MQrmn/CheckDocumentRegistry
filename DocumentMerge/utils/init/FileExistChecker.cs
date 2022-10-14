@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DocumentMerge.utils.init
+﻿namespace DocumentMerge
 {
-    internal class FileExistChecker
+    internal class FileExistChecker : RegComparator.WorkAbilityChecker
     {
     }
 }

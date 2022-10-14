@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DocumentMerge.workers.fileWorkerJSON
+﻿namespace DocumentMerge
 {
-    internal class ReaderJSON
+    internal class ReaderJSON<T> : RegComparator.ReaderJSON<T> where T : Document
     {
     }
 }

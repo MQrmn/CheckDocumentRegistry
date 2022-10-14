@@ -1,12 +1,12 @@
 ﻿namespace RegComparator
 {
-    internal class DocLoader
+    public class DocLoader
     {
 
         DocFieldsIndex docFieldsIndex = new();
 
         // Getting 1C:DO specific documents
-        internal List<Document> GetDocs1CDO(string spreadsheetPath, string passDocsPath)
+        internal protected List<Document> GetDocs1CDO(string spreadsheetPath, string passDocsPath)
         {
             string[][] docArrs1CDO = GetDocsFromWorker(spreadsheetPath);
 
@@ -19,7 +19,7 @@
         }
 
         // Getting 1C:UPP specific documents
-        internal List<Document> GetDocs1CUPP(string spreadsheetPath, string exceptedDocsPath)
+        internal protected List<Document> GetDocs1CUPP(string spreadsheetPath, string exceptedDocsPath)
         {
             string[][] docArrs1CUPP = GetDocsFromWorker(spreadsheetPath);
 
@@ -33,7 +33,7 @@
         }
 
         // Getting pass-through documents during comparison
-        internal List<Document> GetDocsPass(string spreadsheetPath)
+        internal protected List<Document> GetDocsPass(string spreadsheetPath)
         {
             List<Document> docObjs = new List<Document>();
 
@@ -56,7 +56,7 @@
         }
 
 
-        private string[][] GetDocsFromWorker(string spreadsheetPath)
+        internal protected string[][] GetDocsFromWorker(string spreadsheetPath)
         {
             Console.WriteLine($"Чтение электронной таблицы: {spreadsheetPath}");
             SpreadSheetReaderXLSX spreadSheetReaderXLSX = new SpreadSheetReaderXLSX();
