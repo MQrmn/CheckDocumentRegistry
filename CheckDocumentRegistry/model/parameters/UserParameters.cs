@@ -3,49 +3,38 @@ namespace RegComparator
 {
     public class UserParameters
     {
-        public string doSpreadSheetPath { get; set; }
-        public string uppSpreadSheetPath { get; set; }
-        public string doIgnoreSpreadSheetPath { get; set; }
-        public string uppIgnoreSpreadSheetPath { get; set; }
-        public string matchedDoPath { get; set; }
-        public string matchedUppPath { get; set; }
-        public string passedDoPath { get; set; }
-        public string passedUppPath { get; set; }
-        public string exceptedDoPath { get; set; }
-        public string exceptedUppPath { get; set; }
-        public string reportFilePath { get; set; }
-        public bool printMatchedDocuments { get; set; }
-        public bool askAboutCloseProgram { get; set; }
-        public string kaSpreadsheetSf { get; set; }
-        public string kaSpreadsheetTn { get; set; }
-        public string kaSpreadsheedMergeResult { get; set; }
-        public string exceptSpreadsheet1CKASf { get; set; }
-        public string exceptSpreadsheet1CKATn { get; set; }
+        public string inputSpreadsheetDocManagePath { get; set; }
+        public string[] inputSpreadsheetDocRegistryPath { get; set; }
+        public string passSpreadsheetDocManagePath { get; set; }
+        public string passSpreadSheetDocRegistryPath { get; set; }
+        public string outputMatchedDocManagePath { get; set; }
+        public string outputMatchedDocRestryPath { get; set; }
+        public string outputUnmatchDocManagePath { get; set; }
+        public string outputUnmatchedDocRegistryPath { get; set; }
+        public string exceptedDocManagePath { get; set; }
+        public string exceptedDocRegistryPath { get; set; }
+        public string programReportFilePath { get; set; }
+        public bool isPrintMatchedDocuments { get; set; }
+        public bool isAskAboutCloseProgram { get; set; }
         public string programMode { get; set; }
 
-        
 
         public void SetDefaults()
         {
-            this.doSpreadSheetPath = ".\\input\\DO.xlsx";
-            this.uppSpreadSheetPath = ".\\input\\UPP.xlsx";
-            this.doIgnoreSpreadSheetPath = ".\\input\\IgnoreDO.xlsx";
-            this.uppIgnoreSpreadSheetPath = ".\\input\\IgnoreUPP.xlsx";
-            this.matchedDoPath = ".\\output\\MatchedDO.xlsx";
-            this.matchedUppPath = ".\\output\\MatchedUPP.xlsx";
-            this.passedDoPath = ".\\output\\PassedDO.xlsx";
-            this.passedUppPath = ".\\output\\PassedUpp.xlsx";
-            this.exceptedDoPath = ".\\output\\exceptedDo.xlsx";
-            this.exceptedUppPath = ".\\output\\exceptedUpp.xlsx";
-            this.reportFilePath = ".\\output\\report.txt";
-            this.printMatchedDocuments = false;
-            this.askAboutCloseProgram = true;
-            this.kaSpreadsheetSf = ".\\intput\\KASF.xlsx";
-            this.kaSpreadsheetTn = ".\\intput\\KATN.xlsx";
-            this.kaSpreadsheedMergeResult = ".\\output\\RegKA.xlsx";
-            this.exceptSpreadsheet1CKASf = ".\\intput\\ExeptKASF.xlsx";
-            this.exceptSpreadsheet1CKATn = ".\\intput\\ExeptKATN.xlsx"; 
-            this.programMode = "compare";
+            this.inputSpreadsheetDocManagePath = ".\\input\\DocManagement.xlsx";
+            this.inputSpreadsheetDocRegistryPath = new string[] { ".\\input\\DocRegistry.xlsx" };
+            this.passSpreadsheetDocManagePath = ".\\input\\PassDocManagement.xlsx";
+            this.passSpreadSheetDocRegistryPath = ".\\input\\PassDocRegistry.xlsx";
+            this.outputMatchedDocManagePath = ".\\output\\MatchedDocManagement.xlsx";
+            this.outputMatchedDocRestryPath = ".\\output\\MatchedDocRegistry.xlsx";
+            this.outputUnmatchDocManagePath = ".\\output\\UnmatchedDocManagement.xlsx";
+            this.outputUnmatchedDocRegistryPath = ".\\output\\UnmatchedDocRegistry.xlsx";
+            this.exceptedDocManagePath = ".\\output\\exceptedDocManagement.xlsx";
+            this.exceptedDocRegistryPath = ".\\output\\exceptedDocRegistry.xlsx";
+            this.programReportFilePath = ".\\output\\report.txt";
+            this.isPrintMatchedDocuments = false;
+            this.isAskAboutCloseProgram = true;
+            this.programMode = "UPP";
         }
     }
 }

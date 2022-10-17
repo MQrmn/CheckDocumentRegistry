@@ -6,61 +6,40 @@ namespace RegComparator
         static void Main(string[] args)
         {
             
-            List<Document> doDocuments;                         // Source 1C:DO documents for compare
-            List<Document> regDocuments;                        // Source 1C:UPP documents for compare
-
-
-            List<Document> kaDocumentsSf;                        
-            List<Document> kaDocumentsTn;
-            List<Document> kaDocumentsAll;
-
-            List<Document> ignoreDoDocuments;                   // Ignore list of 1C:DO documents 
-            List<Document> ignoreRegDocuments;                  // Ignore list of 1C:UPP documents
+            List<Document> documentsDocManage;                  // Source 1C:DO documents for compare
+            List<Document> documentsRegistry;                   // Source 1C:UPP documents for compare
+            List<Document> passDocumentsDocManage;              // Ignore list of 1C:DO documents 
+            List<Document> passDocumentsRegistry;               // Ignore list of 1C:UPP documents
             FullDocComparator compareResult;                    // Class contains results of documents comparing 
             UnmatchedDocCommentSetter unmatchedDocumentsCommentator;  // Class set comments in unmatched documents
-            SpreadSheetWriterXLSX spreadSheetWriterPassedDo;    // Spreadsheet creator
+            SpreadSheetWriterXLSX spreadsheetWriterPassedDo;    // Spreadsheet creator
             SpreadSheetWriterXLSX spreadSheetWriterPassedUpp;   // Spreadsheet creator
             SpreadSheetWriterXLSX spreadSheetWriterMatchedDo;   // Spreadsheet creator
             SpreadSheetWriterXLSX spreadSheetWriterMatcheUpp;   // Spreadsheet creator
             InternalParameters internalParameters;              // Static parameters
-            UserParameters userParameters;                      // Loaded from config file parameters
+            UserParameters userParameters;
             DocLoader documentsLoader;
             DocumentsAmount documentsAmount = new();
 
-            GetProgramParameters(args);                             // Getting program parameters
+            GetProgramParameters(args);                         // Getting program parameters
+            WorkAbilityChecker.CheckFiles(userParameters);    // Checkimg for existing files to comparing
 
-            //WorkAbilityChecker.CheckFiles(userParameters);   // Checkimg for existing files to comparing
+            GetSourseDocuments1CDO();
 
             if (userParameters.programMode == "UPP")
-            {
-                GetSourseDocuments1CDO();
-                GetSourseDocuments1CUPP();                               // Getting documents from spreadsheets
-                GetIgnoreLists();                          // Getting ignored documents from spreadsheets
-                GetSourceDocumentsCounts();
-                CompareDocuments();
-                GetDocumentsAmounts();
-                DocumentAmountReporter documentsAmountReporter = new(userParameters.reportFilePath);
-                documentsAmountReporter.CreateAllReports(regDocuments, documentsAmount);
-                GenerateOutputSpreadsheets();
-            }
-
-            if (userParameters.programMode == "KA")
-            {
-                GetSourseDocuments1CDO();
+                GetSourseDocuments1CUPP();                      // Getting documents from spreadsheets
+            else
                 GetSourseDocuments1CKA();
-                GetIgnoreLists();                          // Getting ignored documents from spreadsheets
-                GetSourceDocumentsCounts();
-                CompareDocuments();
-                GetDocumentsAmounts();
-                DocumentAmountReporter documentsAmountReporter = new(userParameters.reportFilePath);
-                documentsAmountReporter.CreateAllReports(regDocuments, documentsAmount);
-                GenerateOutputSpreadsheets();
-            }
 
+            GetIgnoreLists();                                   // Getting ignored documents from spreadsheets
+            GetSourceDocumentsCounts();
+            CompareDocuments();
+            GetDocumentsAmounts();
+            DocumentAmountReporter documentsAmountReporter = new(userParameters.programReportFilePath);
+            documentsAmountReporter.CreateAllReports(documentsRegistry, documentsAmount);
+            GenerateOutputSpreadsheets();
+            CloseProgram();
 
-                // Creating reports
-
-                CloseProgram();
 
             void ArgsHandler(string[] args)
             { 
@@ -79,48 +58,49 @@ namespace RegComparator
                 ArgsHandler(args);
                 ProgramParametersReadWrite programParameters1 = new(internalParameters.ProgramParametersFilePath);
                 userParameters = programParameters1.GetProgramParameters();
-                return;
             }
 
             void GetSourseDocuments1CDO()
             {
                 documentsLoader = new();
-                doDocuments = documentsLoader.GetDocs1CDO(userParameters.doSpreadSheetPath,
-                                                               userParameters.exceptedDoPath);
+                documentsDocManage = documentsLoader.GetDocs1CDO(userParameters.inputSpreadsheetDocManagePath,
+                                                               userParameters.exceptedDocManagePath);
             }
 
 
-                void GetSourseDocuments1CUPP()
+            void GetSourseDocuments1CUPP()
             {
                 documentsLoader = new();
-                regDocuments = documentsLoader.GetDocs1CUPP(userParameters.uppSpreadSheetPath,
-                                                               userParameters.exceptedUppPath);
+                documentsRegistry = documentsLoader.GetDocs1CUPP(userParameters.inputSpreadsheetDocRegistryPath[0],
+                                                               userParameters.exceptedDocRegistryPath);
             }
 
             void GetSourseDocuments1CKA()
             {
+                List<Document> documentsRegistryKaPart1;
+                List<Document> documentsRegistryKaPart2;
                 documentsLoader = new();
-                kaDocumentsSf = documentsLoader.GetDocs1CKASf(userParameters.kaSpreadsheetSf,
-                                                               userParameters.exceptSpreadsheet1CKASf);
+                documentsRegistryKaPart1 = documentsLoader.GetDocs1CKASf(userParameters.inputSpreadsheetDocRegistryPath[0],
+                                                               userParameters.exceptedDocManagePath);
 
-                kaDocumentsTn = documentsLoader.GetDocs1CKATn(userParameters.kaSpreadsheetTn,
-                                                               userParameters.exceptSpreadsheet1CKATn);
+                documentsRegistryKaPart2 = documentsLoader.GetDocs1CKATn(userParameters.inputSpreadsheetDocRegistryPath[1],
+                                                               userParameters.exceptedDocManagePath);
 
-                regDocuments = kaDocumentsSf.Concat(kaDocumentsTn).ToList();
+                documentsRegistry = documentsRegistryKaPart1.Concat(documentsRegistryKaPart2).ToList();
 
             }
 
 
             void GetIgnoreLists()
             {
-                ignoreDoDocuments = documentsLoader.GetDocsPass(userParameters.doIgnoreSpreadSheetPath);
-                ignoreRegDocuments = documentsLoader.GetDocsPass(userParameters.uppIgnoreSpreadSheetPath);
+                passDocumentsDocManage = documentsLoader.GetDocsPass(userParameters.passSpreadsheetDocManagePath);
+                passDocumentsRegistry = documentsLoader.GetDocsPass(userParameters.passSpreadSheetDocRegistryPath);
             }
 
 
             void CompareDocuments()
             {
-                compareResult = new(doDocuments, regDocuments, ignoreDoDocuments, ignoreRegDocuments);
+                compareResult = new(documentsDocManage, documentsRegistry, passDocumentsDocManage, passDocumentsRegistry);
                 unmatchedDocumentsCommentator = new(compareResult.UnmatchedDocs1CDO,
                                                                                     compareResult.UnmatchedDocs1CUPP);
                 unmatchedDocumentsCommentator.CommentUnmatchedDocuments();
@@ -129,16 +109,16 @@ namespace RegComparator
 
             void GenerateOutputSpreadsheets()
             {
-                spreadSheetWriterPassedDo = new(userParameters.passedDoPath);
-                spreadSheetWriterPassedDo.CreateSpreadsheet(compareResult.UnmatchedDocs1CDO);
-                spreadSheetWriterPassedUpp = new(userParameters.passedUppPath);
+                spreadsheetWriterPassedDo = new(userParameters.outputUnmatchDocManagePath);
+                spreadsheetWriterPassedDo.CreateSpreadsheet(compareResult.UnmatchedDocs1CDO);
+                spreadSheetWriterPassedUpp = new(userParameters.outputUnmatchedDocRegistryPath);
                 spreadSheetWriterPassedUpp.CreateSpreadsheet(compareResult.UnmatchedDocs1CUPP, false);
 
-                if (userParameters.printMatchedDocuments)
+                if (userParameters.isPrintMatchedDocuments)
                 {
-                    spreadSheetWriterMatchedDo = new(userParameters.matchedDoPath);
+                    spreadSheetWriterMatchedDo = new(userParameters.outputMatchedDocManagePath);
                     spreadSheetWriterMatchedDo.CreateSpreadsheet(compareResult.MatchedDocs1CDO, false);
-                    spreadSheetWriterMatcheUpp = new(userParameters.matchedUppPath);
+                    spreadSheetWriterMatcheUpp = new(userParameters.outputMatchedDocRestryPath);
                     spreadSheetWriterMatcheUpp.CreateSpreadsheet(compareResult.MatchedDocs1CUPP, false);
                 }
             }
@@ -146,10 +126,10 @@ namespace RegComparator
 
             void GetSourceDocumentsCounts()
             {
-                documentsAmount.doDocumentsCount = doDocuments.Count;
-                documentsAmount.uppDocumentsCount = regDocuments.Count;
-                documentsAmount.ignoreDoDocumentsCount = ignoreDoDocuments.Count;
-                documentsAmount.ignoreUppDocumentsCount = ignoreRegDocuments.Count;
+                documentsAmount.doDocumentsCount = documentsDocManage.Count;
+                documentsAmount.uppDocumentsCount = documentsRegistry.Count;
+                documentsAmount.ignoreDoDocumentsCount = passDocumentsDocManage.Count;
+                documentsAmount.ignoreUppDocumentsCount = passDocumentsRegistry.Count;
             }
 
 
@@ -164,14 +144,12 @@ namespace RegComparator
 
             void CloseProgram()
             {
-                if (userParameters.askAboutCloseProgram)
+                if (userParameters.isAskAboutCloseProgram)
                 {
                     Console.WriteLine("Для завершения программы нажмите любую клавишу.");
                     Console.ReadKey();
                 }
             }
-
-
         }
     }
 }

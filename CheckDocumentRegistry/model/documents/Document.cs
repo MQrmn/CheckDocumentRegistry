@@ -16,7 +16,6 @@ namespace RegComparator
         internal protected int StylePosition { get; set; }
 
 
-
         public Document() 
         {
         }

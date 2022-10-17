@@ -9,28 +9,28 @@ namespace RegComparator
         
         internal protected static void CheckFiles(UserParameters programParameters)
         {
-            bool doExist = File.Exists(programParameters.doSpreadSheetPath);
-            bool uppExist = File.Exists(programParameters.uppSpreadSheetPath);
+            bool doExist = File.Exists(programParameters.inputSpreadsheetDocManagePath);
+            bool uppExist = File.Exists(programParameters.inputSpreadsheetDocRegistryPath[0]);
 
             if (doExist && uppExist)
             {
-                TryOpenSpreadSheet(programParameters.doSpreadSheetPath);
-                TryOpenSpreadSheet(programParameters.uppSpreadSheetPath);
+                TryOpenSpreadSheet(programParameters.inputSpreadsheetDocManagePath);
+                TryOpenSpreadSheet(programParameters.inputSpreadsheetDocRegistryPath[0]);
             }
             else
             {
                 if (!doExist)
                 {
-                    WriteMessageExit($"Error: Файл \"{programParameters.doSpreadSheetPath}\" не найден.");
+                    WriteMessageExit($"Error: Файл \"{programParameters.inputSpreadsheetDocManagePath}\" не найден.");
                 }
                 if (!uppExist)
                 {
-                    WriteMessageExit($"Error: Файл \"{programParameters.uppSpreadSheetPath}\" не найден.");
+                    WriteMessageExit($"Error: Файл \"{programParameters.inputSpreadsheetDocRegistryPath}\" не найден.");
                 }
             }
 
-            TryCreateSpreadSheet(programParameters.passedDoPath);
-            TryCreateSpreadSheet(programParameters.passedUppPath);
+            TryCreateSpreadSheet(programParameters.outputUnmatchDocManagePath);
+            TryCreateSpreadSheet(programParameters.outputUnmatchedDocRegistryPath);
         }
 
         internal protected static void TryOpenSpreadSheet(string filePath)
