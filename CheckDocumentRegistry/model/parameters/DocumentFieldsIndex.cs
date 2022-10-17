@@ -12,6 +12,17 @@
         internal protected int maxPassedRowForSwitchUPP = 2;
         internal protected int rowLenght1CUPP = 8;
 
+        internal protected int[] DocFieldsIndex1CKASf = new int[] { 0, 0, 3, 4, 5, 6, 7};             
+        internal protected int[] CustomDocFieldsIndex1CKASf = new int[] { 0, 0, 1, 2, 3, 4, 5 };        
+        internal protected int maxPassedRowForSwitch1CKASf = 4;
+        internal protected int rowLenght1CKASf = 8;
+
+        internal protected int[] DocFieldsIndex1CKATn = new int[] { 0, 0, 3, 4, 5, 6, 7 };              
+        internal protected int[] CustomDocFieldsIndex1CKATn = new int[] { 0, 0, 1, 2, 3, 4, 5 };        
+        internal protected int maxPassedRowForSwitch1CKATn = 4;
+        internal protected int rowLenght1CKATn = 8;
+
+
         internal protected int[] docFieldsIndexUniversal = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 };      // Universal document format
     }
 }

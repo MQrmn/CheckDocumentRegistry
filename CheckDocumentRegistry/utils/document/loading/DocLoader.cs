@@ -32,6 +32,32 @@
             return docObjs1CUPP;
         }
 
+        internal protected List<Document> GetDocs1CKASf(string spreadsheetPath, string exceptedDocsPath)
+        {
+            string[][] docArrs1KASf = GetDocsFromWorker(spreadsheetPath);
+
+            DocConverter<Document1CKASf> docsConverter = new(this.docFieldsIndex.DocFieldsIndex1CKASf,
+                                                                            this.docFieldsIndex.CustomDocFieldsIndex1CKASf,
+                                                                      this.docFieldsIndex.maxPassedRowForSwitch1CKASf,
+                                                                                   this.docFieldsIndex.rowLenght1CKASf);
+            List<Document> docObjs1CKASf = docsConverter.ConvertSpecificDocs(docArrs1KASf, exceptedDocsPath);
+
+            return docObjs1CKASf;
+        }
+
+        internal protected List<Document> GetDocs1CKATn(string spreadsheetPath, string exceptedDocsPath)
+        {
+            string[][] docArrs1KASf = GetDocsFromWorker(spreadsheetPath);
+
+            DocConverter<Document1CKATn> docsConverter = new(this.docFieldsIndex.DocFieldsIndex1CKATn,
+                                                                            this.docFieldsIndex.CustomDocFieldsIndex1CKATn,
+                                                                      this.docFieldsIndex.maxPassedRowForSwitch1CKATn,
+                                                                                   this.docFieldsIndex.rowLenght1CKATn);
+            List<Document> docObjs1CKATn = docsConverter.ConvertSpecificDocs(docArrs1KASf, exceptedDocsPath);
+
+            return docObjs1CKATn;
+        }
+
         // Getting pass-through documents during comparison
         internal protected List<Document> GetDocsPass(string spreadsheetPath)
         {

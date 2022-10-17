@@ -16,6 +16,13 @@ namespace RegComparator
         public string reportFilePath { get; set; }
         public bool printMatchedDocuments { get; set; }
         public bool askAboutCloseProgram { get; set; }
+        public string kaSpreadsheetSf { get; set; }
+        public string kaSpreadsheetTn { get; set; }
+        public string kaSpreadsheedMergeResult { get; set; }
+        public string exceptSpreadsheet1CKASf { get; set; }
+        public string exceptSpreadsheet1CKATn { get; set; }
+        public string programMode { get; set; }
+
         
 
         public void SetDefaults()
@@ -33,7 +40,12 @@ namespace RegComparator
             this.reportFilePath = ".\\output\\report.txt";
             this.printMatchedDocuments = false;
             this.askAboutCloseProgram = true;
-
+            this.kaSpreadsheetSf = ".\\intput\\KASF.xlsx";
+            this.kaSpreadsheetTn = ".\\intput\\KATN.xlsx";
+            this.kaSpreadsheedMergeResult = ".\\output\\RegKA.xlsx";
+            this.exceptSpreadsheet1CKASf = ".\\intput\\ExeptKASF.xlsx";
+            this.exceptSpreadsheet1CKATn = ".\\intput\\ExeptKATN.xlsx"; 
+            this.programMode = "compare";
         }
     }
 }

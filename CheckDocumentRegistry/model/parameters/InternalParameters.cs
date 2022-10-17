@@ -4,7 +4,7 @@ namespace RegComparator
     public class InternalParameters
     {
 
-        readonly internal protected string ProgramParametersFilePath;
+        internal protected string ProgramParametersFilePath;
         readonly internal protected string LastCompareDocumentsAnountsFilePath;
         internal protected InternalParameters()
         {
