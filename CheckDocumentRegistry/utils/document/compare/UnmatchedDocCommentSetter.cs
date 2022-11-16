@@ -101,7 +101,7 @@ namespace RegComparator
                     documentDo.Comment = $"Сумма: {documentUpp.Salary.ToString()}";
                     break;
                 case UnmatchedField.None:
-                    documentDo.Comment = "Докумен не найден в УПП";
+                    documentDo.Comment = "Докумен не найден в Реестре";
                     break;
             }
         }

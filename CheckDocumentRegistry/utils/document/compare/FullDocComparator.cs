@@ -2,7 +2,7 @@
 namespace RegComparator
 {
 
-    internal class FullDocComparator
+    internal class DocComparator
     {
         internal List<Document> MatchedDocs1CDO = new List<Document>();  // Documents from 1C:Document Management that coincided with 1C:UPP documents
         internal List<Document> MatchedDocs1CUPP = new List<Document>(); // Documents from 1C:UPP that coincided with 1C:Document Management documents
@@ -15,7 +15,7 @@ namespace RegComparator
         private List<Document> matchedDocs1CUPPbuffer;  
 
 
-        internal FullDocComparator(List<Document> docs1CDo, List<Document> docs1CUPP, List<Document> docsPass1CDO, List<Document> docsPassUPP)
+        internal DocComparator(List<Document> docs1CDo, List<Document> docs1CUPP, List<Document> docsPass1CDO, List<Document> docsPassUPP)
         {
             this.SourceDocs1CDO = docs1CDo;
             this.SourceDocs1CUPP = docs1CUPP;

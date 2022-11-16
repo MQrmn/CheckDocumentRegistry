@@ -2,7 +2,7 @@
 {
     internal class LastCompareAmountReaderJSON
     {
-        internal DocumentsAmount GetLastCompareDocumentsAmounts()
+        internal DocsAmount GetLastCompareDocumentsAmounts()
         {
             return null;
         }
