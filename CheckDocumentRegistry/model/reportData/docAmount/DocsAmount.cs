@@ -1,6 +1,6 @@
 ﻿namespace RegComparator
 {
-    internal  class DocsAmount
+    internal  class DocAmount
     {
         internal int doDocumentsCount;
         internal int uppDocumentsCount;
