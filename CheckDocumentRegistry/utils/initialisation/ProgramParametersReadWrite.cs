@@ -11,12 +11,12 @@
         }
 
 
-        internal protected WorkParameters GetProgramParameters()
+        internal protected WorkParams GetProgramParameters()
         {
-            WorkParameters parameters = ReadProgramParameters();
+            WorkParams parameters = ReadProgramParameters();
             if (parameters is null)
             {
-                parameters = new WorkParameters();
+                parameters = new WorkParams();
                 parameters.SetDefaults();
                 this.WriteDefaultParameters(parameters);
             }
@@ -24,18 +24,18 @@
         }
 
 
-        internal protected WorkParameters ReadProgramParameters()
+        internal protected WorkParams ReadProgramParameters()
         {
-            WorkParameters? programParameters;
-            ReaderJSON<WorkParameters> readerJSON = new();
+            WorkParams? programParameters;
+            ReaderJSON<WorkParams> readerJSON = new();
             programParameters = readerJSON.GetJSON(this.parmetersFilePath);
 
             return programParameters;
         }
 
-        internal protected void WriteDefaultParameters(WorkParameters programParameters)
+        internal protected void WriteDefaultParameters(WorkParams programParameters)
         {
-            WriterJSON<WorkParameters> writerJSON = new();
+            WriterJSON<WorkParams> writerJSON = new();
             writerJSON.WriteFileJSON(programParameters, parmetersFilePath);
 
             Console.WriteLine($"Файл конфигурации по умолчанию создан в папке приложения: {this.parmetersFilePath}");
