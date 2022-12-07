@@ -10,12 +10,7 @@ namespace RegComparator
             this.reportFilePath = filePath;
         }
 
-<<<<<<< HEAD
         internal void CreateAllReports(List<Document> docList, DocAmount documentsAmount)
-=======
-
-        internal void CreateAllReports(List<Document> documents, DocsAmount documentsAmount)
->>>>>>> parent of e7b3b6c (Added ArgsHandler)
         {
             string[] docAmounts = GetReportDataCommon(documentsAmount);
             List<string> companiesList = GetCompanies(docList);
@@ -48,12 +43,7 @@ namespace RegComparator
             }
         }
 
-<<<<<<< HEAD
         private string[] GetReportDataCommon(DocAmount documentsAmount)
-=======
-
-        private string[] GetReportDataCommon(DocsAmount documentsAmount)
->>>>>>> parent of e7b3b6c (Added ArgsHandler)
         {
             string[] commonReportData = new string[10];
 
