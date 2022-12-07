@@ -14,13 +14,13 @@ namespace RegComparator
             ConfFilesPath internalParameters;                               // Static parameters
             DocLoader docLoader;
 
-            ReportDocAmount reportDocAmount = new();
-            WorkParams workParams = GetWorkParams(args);                    // Getting program parameters
-            WorkAbilityChecker.CheckFiles(workParams);                      // Checkimg for existing files to comparing
+            DocsAmount docsAmount = new();
+            WorkParameters programParameters = GetProgramParams(args);      // Getting program parameters
+            WorkAbilityChecker.CheckFiles(programParameters);               // Checkimg for existing files to comparing
 
             GetSrcDocs1CDO();
 
-            if (workParams.programMode == "UPP")
+            if (programParameters.programMode == "UPP")
                 GetSrcDocs1CUPP();                                          // Getting documents from spreadsheets
             else
                 GetSrcDocs1CKA();
@@ -30,8 +30,8 @@ namespace RegComparator
             CompareDocuments();
             GetResultDocsAmount();
 
-            DocumentAmountReporter documentsAmountReporter = new(workParams.programReportFilePath);
-            documentsAmountReporter.CreateAllReports(docsRegistry, reportDocAmount);
+            DocumentAmountReporter documentsAmountReporter = new(programParameters.programReportFilePath);
+            documentsAmountReporter.CreateAllReports(docsRegistry, docsAmount);
 
             GenerateOutputSpreadsheets();
             CloseProgram();
@@ -49,7 +49,7 @@ namespace RegComparator
             }
 
 
-            WorkParams GetWorkParams(string[] args)
+            WorkParameters GetProgramParams(string[] args)
             {
                 internalParameters = new();
                 ArgsHandler(args);
@@ -61,16 +61,16 @@ namespace RegComparator
             void GetSrcDocs1CDO()
             {
                 docLoader = new();
-                docs1CDO = docLoader.GetDocs1CDO(workParams.inputSpreadsheetDocManagePath,
-                                                               workParams.exceptedDocManagePath);
+                docs1CDO = docLoader.GetDocs1CDO(programParameters.inputSpreadsheetDocManagePath,
+                                                               programParameters.exceptedDocManagePath);
             }
 
 
             void GetSrcDocs1CUPP()
             {
                 docLoader = new();
-                docsRegistry = docLoader.GetDocs1CUPP(workParams.inputSpreadsheetDocRegistryPath[0],
-                                                               workParams.exceptedDocRegistryPath);
+                docsRegistry = docLoader.GetDocs1CUPP(programParameters.inputSpreadsheetDocRegistryPath[0],
+                                                               programParameters.exceptedDocRegistryPath);
             }
 
             void GetSrcDocs1CKA()
@@ -78,11 +78,11 @@ namespace RegComparator
                 List<Document> documentsRegistryKaPart1;
                 List<Document> documentsRegistryKaPart2;
                 docLoader = new();
-                documentsRegistryKaPart1 = docLoader.GetDocs1CKASf(workParams.inputSpreadsheetDocRegistryPath[0],
-                                                               workParams.exceptedDocManagePath);
+                documentsRegistryKaPart1 = docLoader.GetDocs1CKASf(programParameters.inputSpreadsheetDocRegistryPath[0],
+                                                               programParameters.exceptedDocManagePath);
 
-                documentsRegistryKaPart2 = docLoader.GetDocs1CKATn(workParams.inputSpreadsheetDocRegistryPath[1],
-                                                               workParams.exceptedDocManagePath);
+                documentsRegistryKaPart2 = docLoader.GetDocs1CKATn(programParameters.inputSpreadsheetDocRegistryPath[1],
+                                                               programParameters.exceptedDocManagePath);
 
                 docsRegistry = documentsRegistryKaPart1.Concat(documentsRegistryKaPart2).ToList();
             }
@@ -90,8 +90,8 @@ namespace RegComparator
 
             void GetIgnoreDocList()
             {
-                passDocs1CDO = docLoader.GetDocsPass(workParams.passSpreadsheetDocManagePath);
-                passDocsRegistry = docLoader.GetDocsPass(workParams.passSpreadSheetDocRegistryPath);
+                passDocs1CDO = docLoader.GetDocsPass(programParameters.passSpreadsheetDocManagePath);
+                passDocsRegistry = docLoader.GetDocsPass(programParameters.passSpreadSheetDocRegistryPath);
             }
 
 
@@ -109,21 +109,21 @@ namespace RegComparator
                 SpreadSheetWriterXLSX spreadsheetWriterPassedDo;                
                 SpreadSheetWriterXLSX spreadSheetWriterPassedUpp;               
 
-                spreadsheetWriterPassedDo = new(workParams.outputUnmatchDocManagePath);
+                spreadsheetWriterPassedDo = new(programParameters.outputUnmatchDocManagePath);
                 spreadsheetWriterPassedDo.CreateSpreadsheet(docComparator.UnmatchedDocs1CDO);
 
-                spreadSheetWriterPassedUpp = new(workParams.outputUnmatchedDocRegistryPath);
+                spreadSheetWriterPassedUpp = new(programParameters.outputUnmatchedDocRegistryPath);
                 spreadSheetWriterPassedUpp.CreateSpreadsheet(docComparator.UnmatchedDocs1CUPP, false);
 
-                if (workParams.isPrintMatchedDocuments)
+                if (programParameters.isPrintMatchedDocuments)
                 {
                     SpreadSheetWriterXLSX spreadSheetWriterMatchedDo;               
                     SpreadSheetWriterXLSX spreadSheetWriterMatcheUpp;               
 
-                    spreadSheetWriterMatchedDo = new(workParams.outputMatchedDocManagePath);
+                    spreadSheetWriterMatchedDo = new(programParameters.outputMatchedDocManagePath);
                     spreadSheetWriterMatchedDo.CreateSpreadsheet(docComparator.MatchedDocs1CDO, false);
 
-                    spreadSheetWriterMatcheUpp = new(workParams.outputMatchedDocRestryPath);
+                    spreadSheetWriterMatcheUpp = new(programParameters.outputMatchedDocRestryPath);
                     spreadSheetWriterMatcheUpp.CreateSpreadsheet(docComparator.MatchedDocs1CUPP, false);
                 }
             }
@@ -131,25 +131,25 @@ namespace RegComparator
 
             void GetSrcDocsAmount()
             {
-                reportDocAmount.doDocumentsCount = docs1CDO.Count;
-                reportDocAmount.uppDocumentsCount = docsRegistry.Count;
-                reportDocAmount.ignoreDoDocumentsCount = passDocs1CDO.Count;
-                reportDocAmount.ignoreUppDocumentsCount = passDocsRegistry.Count;
+                docsAmount.doDocumentsCount = docs1CDO.Count;
+                docsAmount.uppDocumentsCount = docsRegistry.Count;
+                docsAmount.ignoreDoDocumentsCount = passDocs1CDO.Count;
+                docsAmount.ignoreUppDocumentsCount = passDocsRegistry.Count;
             }
 
 
             void GetResultDocsAmount()
             {
-                reportDocAmount.Documents1CDoUnmatchedCount = docComparator.UnmatchedDocs1CDO.Count;
-                reportDocAmount.Documents1CUppUnmatchedCount = docComparator.UnmatchedDocs1CUPP.Count;
-                reportDocAmount.Documents1CDoMatchedCount = docComparator.MatchedDocs1CDO.Count;
-                reportDocAmount.Documents1CUppMatchedCount = docComparator.MatchedDocs1CUPP.Count;
+                docsAmount.Documents1CDoUnmatchedCount = docComparator.UnmatchedDocs1CDO.Count;
+                docsAmount.Documents1CUppUnmatchedCount = docComparator.UnmatchedDocs1CUPP.Count;
+                docsAmount.Documents1CDoMatchedCount = docComparator.MatchedDocs1CDO.Count;
+                docsAmount.Documents1CUppMatchedCount = docComparator.MatchedDocs1CUPP.Count;
             }
 
 
             void CloseProgram()
             {
-                if (workParams.isAskAboutCloseProgram)
+                if (programParameters.isAskAboutCloseProgram)
                 {
                     Console.WriteLine("Для завершения программы нажмите любую клавишу.");
                     Console.ReadKey();

@@ -7,7 +7,7 @@ namespace RegComparator
     public class WorkAbilityChecker
     {
         
-        internal protected static void CheckFiles(WorkParams programParameters)
+        internal protected static void CheckFiles(WorkParameters programParameters)
         {
             bool doExist = File.Exists(programParameters.inputSpreadsheetDocManagePath);
             bool uppExist = File.Exists(programParameters.inputSpreadsheetDocRegistryPath[0]);

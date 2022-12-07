@@ -11,7 +11,7 @@ namespace RegComparator
         }
 
 
-        internal void CreateAllReports(List<Document> documents, ReportDocAmount documentsAmount)
+        internal void CreateAllReports(List<Document> documents, DocsAmount documentsAmount)
         {
             string[] commonReportData = GetReportDataCommon(documentsAmount);
             List<string> companies = GetCompanies(documents);
@@ -47,7 +47,7 @@ namespace RegComparator
         }
 
 
-        private string[] GetReportDataCommon(ReportDocAmount documentsAmount)
+        private string[] GetReportDataCommon(DocsAmount documentsAmount)
         {
 
             string[] commonReportData = new string[10];
