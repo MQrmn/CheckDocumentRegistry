@@ -1,12 +1,12 @@
 ﻿
 namespace RegComparator
 {
-    public class ConfFilesPath
+    public class ConfigFilesPath
     {
 
         internal protected string ProgramParametersFilePath;
         readonly internal protected string LastCompareDocumentsAnountsFilePath;
-        internal protected ConfFilesPath()
+        internal protected ConfigFilesPath()
         {
 
             this.ProgramParametersFilePath = "params.json";

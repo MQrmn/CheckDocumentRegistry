@@ -2,7 +2,11 @@
 {
     internal class LastCompareAmountReaderJSON
     {
-        internal ReportDocAmount GetLastCompareDocumentsAmounts()
+<<<<<<< HEAD
+        internal DocAmount GetLastCompareDocumentsAmounts()
+=======
+        internal DocsAmount GetLastCompareDocumentsAmounts()
+>>>>>>> parent of e7b3b6c (Added ArgsHandler)
         {
             return null;
         }

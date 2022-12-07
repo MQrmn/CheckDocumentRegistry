@@ -1,6 +1,10 @@
 ﻿namespace RegComparator
 {
-    internal  class ReportDocAmount
+<<<<<<< HEAD:CheckDocumentRegistry/model/reportData/docAmount/DocsAmount.cs
+    internal  class DocAmount
+=======
+    internal  class DocsAmount
+>>>>>>> parent of e7b3b6c (Added ArgsHandler):CheckDocumentRegistry/model/statistic/docAmount/DocsAmount.cs
     {
         internal int doDocumentsCount;
         internal int uppDocumentsCount;

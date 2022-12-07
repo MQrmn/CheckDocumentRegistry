@@ -10,18 +10,21 @@ namespace RegComparator
             this.reportFilePath = filePath;
         }
 
+<<<<<<< HEAD
+        internal void CreateAllReports(List<Document> docList, DocAmount documentsAmount)
+=======
 
-        internal void CreateAllReports(List<Document> documents, ReportDocAmount documentsAmount)
+        internal void CreateAllReports(List<Document> documents, DocsAmount documentsAmount)
+>>>>>>> parent of e7b3b6c (Added ArgsHandler)
         {
-            string[] commonReportData = GetReportDataCommon(documentsAmount);
-            List<string> companies = GetCompanies(documents);
-            string[] byCompaniesReportData = GetReportDataByCompanies(documents, companies);
-            string[] arrayReportData = commonReportData.Concat(byCompaniesReportData).ToArray();
+            string[] docAmounts = GetReportDataCommon(documentsAmount);
+            List<string> companiesList = GetCompanies(docList);
+            string[] compiledReportEntries = GetReportDataByCompanies(docList, companiesList);
+            string[] arrayReportData = docAmounts.Concat(compiledReportEntries).ToArray();
             string stringReportData = GetStringFromArr(arrayReportData);
             this.PutReportConsole(stringReportData);
             this.PutReportTXT(this.reportFilePath, stringReportData);
         }
-
 
         private void PutReportConsole(string reportData)
         {
@@ -30,7 +33,6 @@ namespace RegComparator
             Console.WriteLine(reportData);
             Console.ResetColor();
         }
-
 
         private void PutReportTXT(string reportFilePath, string reportData)
         {
@@ -46,13 +48,16 @@ namespace RegComparator
             }
         }
 
+<<<<<<< HEAD
+        private string[] GetReportDataCommon(DocAmount documentsAmount)
+=======
 
-        private string[] GetReportDataCommon(ReportDocAmount documentsAmount)
+        private string[] GetReportDataCommon(DocsAmount documentsAmount)
+>>>>>>> parent of e7b3b6c (Added ArgsHandler)
         {
-
             string[] commonReportData = new string[10];
 
-            commonReportData[0] = "Результат сравнения документов, внесенных в 1С:ДО, с реестром 1С:УПП\n";
+            commonReportData[0] = "Результат сравнения документов, внесенных в 1С:ДО, с реестром\n";
             commonReportData[1] = "От " + DateTime.Now.ToLongDateString() + ":\n\n";
             commonReportData[2] = "Документов в 1С:ДО всего: " + documentsAmount.doDocumentsCount + "\n";
             commonReportData[3] = "Документов в реестре всего: " + documentsAmount.uppDocumentsCount + "\n";
@@ -66,12 +71,11 @@ namespace RegComparator
             return commonReportData;
         }
 
-
         private string[] GetReportDataByCompanies(List<Document> documents, List<string> companies)
         {
             string[] byCompaniesreportData = new string[companies.Count + 1];
             int listPosition = 0;
-            byCompaniesreportData[listPosition] = "Количество не внесенных документов по организациям согласно 1С:УПП :\n\n";
+            byCompaniesreportData[listPosition] = "Количество не внесенных документов по организациям согласно реестру :\n\n";
 
             foreach (var company in companies)
             {
