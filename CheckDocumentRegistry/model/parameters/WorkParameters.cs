@@ -1,7 +1,7 @@
 ﻿
 namespace RegComparator
 {
-    public class WorkParameters
+    public class WorkParams
     {
         public string inputSpreadsheetDocManagePath { get; set; }
         public string[] inputSpreadsheetDocRegistryPath { get; set; }
