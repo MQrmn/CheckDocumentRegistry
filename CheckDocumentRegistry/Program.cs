@@ -67,8 +67,8 @@ namespace RegComparator
             void GetSrcDocs1CUPP()
             {
                 docLoader = new();
-                docsRegistry = docLoader.GetDocs1CUPP(programParameters.inputSpreadsheetDocRegistryPath[0],
-                                                               programParameters.exceptedDocRegistryPath);
+                docsRegistry = docLoader.GetDocs1CUPP(workParams.inputSpreadsheetDocRegistryPath[0],
+                                                               workParams.exceptedDocRegistryPath);
             }
 
             void GetSrcDocs1CKA()
@@ -76,11 +76,11 @@ namespace RegComparator
                 List<Document> documentsRegistryKaPart1;    // ?! What is a parts? 
                 List<Document> documentsRegistryKaPart2;    // ?! What is a parts? 
                 docLoader = new();
-                documentsRegistryKaPart1 = docLoader.GetDocs1CKASf(programParameters.inputSpreadsheetDocRegistryPath[0],
-                                                               programParameters.exceptedDocManagePath);
+                documentsRegistryKaPart1 = docLoader.GetDocs1CKASf(workParams.inputSpreadsheetDocRegistryPath[0],
+                                                               workParams.exceptedDocManagePath);
 
-                documentsRegistryKaPart2 = docLoader.GetDocs1CKATn(programParameters.inputSpreadsheetDocRegistryPath[1],
-                                                               programParameters.exceptedDocManagePath);
+                documentsRegistryKaPart2 = docLoader.GetDocs1CKATn(workParams.inputSpreadsheetDocRegistryPath[1],
+                                                               workParams.exceptedDocManagePath);
 
                 docsRegistry = documentsRegistryKaPart1.Concat(documentsRegistryKaPart2).ToList();
             }
@@ -107,18 +107,18 @@ namespace RegComparator
                 spreadsheetWriterPassedDo = new(workParams.outputUnmatchDocManagePath);
                 spreadsheetWriterPassedDo.CreateSpreadsheet(docComparator.UnmatchedDocs1CDO);
 
-                spreadSheetWriterPassedUpp = new(programParameters.outputUnmatchedDocRegistryPath);
+                spreadSheetWriterPassedUpp = new(workParams.outputUnmatchedDocRegistryPath);
                 spreadSheetWriterPassedUpp.CreateSpreadsheet(docComparator.UnmatchedDocs1CUPP, false);
 
-                if (programParameters.isPrintMatchedDocuments)
+                if (workParams.isPrintMatchedDocuments)
                 {
                     SpreadSheetWriterXLSX spreadSheetWriterMatchedDo;               
                     SpreadSheetWriterXLSX spreadSheetWriterMatcheUpp;               
 
-                    spreadSheetWriterMatchedDo = new(programParameters.outputMatchedDocManagePath);
+                    spreadSheetWriterMatchedDo = new(workParams.outputMatchedDocManagePath);
                     spreadSheetWriterMatchedDo.CreateSpreadsheet(docComparator.MatchedDocs1CDO, false);
 
-                    spreadSheetWriterMatcheUpp = new(programParameters.outputMatchedDocRestryPath);
+                    spreadSheetWriterMatcheUpp = new(workParams.outputMatchedDocRestryPath);
                     spreadSheetWriterMatcheUpp.CreateSpreadsheet(docComparator.MatchedDocs1CUPP, false);
                 }
             }
@@ -144,7 +144,7 @@ namespace RegComparator
 
             void CloseProgram()
             {
-                if (programParameters.isAskAboutCloseProgram)
+                if (workParams.isAskAboutCloseProgram)
                 {
                     Console.WriteLine("Для завершения программы нажмите любую клавишу.");
                     Console.ReadKey();
