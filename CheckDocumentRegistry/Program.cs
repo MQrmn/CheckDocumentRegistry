@@ -11,20 +11,16 @@ namespace RegComparator
             List<Document> passDocsRegistry;                                // Ignore list of 1C:UPP documents
             DocComparator docComparator;                                    // Class contains results of documents comparing 
             UnmatchedDocCommentSetter unmatchedDocsCommentator;             // Class set comments in unmatched documents
-            ConfigFilesPath configFilesPath;                                // Static parameters
+            ConfigFilesPath configFilesPath;                                
             DocLoader docLoader;
 
             ReportDocAmount reportDocAmount = new();
+
             WorkParams workParams = GetWorkParams(args);                    // Getting program parameters
             WorkAbilityChecker.CheckFiles(workParams);                      // Checkimg for existing files to comparing
 
-            GetSrcDocs1CDO();
-
-            if (workParams.programMode == "UPP")
-                GetSrcDocs1CUPP();                                          // Getting documents from spreadsheets
-            else
-                GetSrcDocs1CKA();
-
+            GetSrcDocs1CDO();                                               // Getting documents from 1C:DO
+            GetRegistryDocs();                                              // Getting documents from 1C:RF or UPP registry
             GetIgnoreDocList();                                             // Getting ignored documents from spreadsheets
             GetSrcDocsAmount();
             CompareDocuments();                                             // Comparing
@@ -37,31 +33,18 @@ namespace RegComparator
             GenerateOutputSpreadsheets();
             CloseProgram();
 
-
-            void ArgsHandler(string[] args)
-            { 
-                if(args.Length < 2)
-                    return;
-                if (args[0] == "-c")
-                {
-                    configFilesPath.ProgramParametersFilePath = args[1];
-                }
-            }
-
-
-            WorkParams GetWorkParams(string[] args)
-            {
-                configFilesPath = new();
-                ArgsHandler(args);
-                WorkParametersReadWrite workParametersReadWrite = new(configFilesPath.ProgramParametersFilePath);
-                return workParametersReadWrite.GetProgramParameters();
-            }
-
             void GetSrcDocs1CDO()
             {
                 docLoader = new();
                 docs1CDO = docLoader.GetDocs1CDO(workParams.inputSpreadsheetDocManagePath,
                                                                workParams.exceptedDocManagePath);
+            }
+
+            void GetRegistryDocs(){
+                if (workParams.programMode == "UPP")
+                    GetSrcDocs1CUPP();
+                else
+                    GetSrcDocs1CKA();
             }
 
             void GetSrcDocs1CUPP()
@@ -99,6 +82,24 @@ namespace RegComparator
                 unmatchedDocsCommentator.CommentUnmatchedDocuments();
             }
 
+            void ArgsHandler(string[] args)
+            { 
+                if(args.Length < 2)
+                    return;
+                if (args[0] == "-c")
+                {
+                    configFilesPath.ProgramParametersFilePath = args[1];
+                }
+            }
+
+            WorkParams GetWorkParams(string[] args)
+            {
+                configFilesPath = new();
+                ArgsHandler(args);
+                WorkParametersReadWrite workParametersReadWrite = new(configFilesPath.ProgramParametersFilePath);
+                return workParametersReadWrite.GetProgramParameters();
+            }
+
             void GenerateOutputSpreadsheets()
             {
                 SpreadSheetWriterXLSX spreadsheetWriterPassedDo;                
@@ -123,7 +124,6 @@ namespace RegComparator
                 }
             }
 
-
             void GetSrcDocsAmount()
             {
                 reportDocAmount.doDocumentsCount = docs1CDO.Count;
@@ -132,7 +132,6 @@ namespace RegComparator
                 reportDocAmount.ignoreUppDocumentsCount = passDocsRegistry.Count;
             }
 
-
             void GetResultDocsAmount()
             {
                 reportDocAmount.Documents1CDoUnmatchedCount = docComparator.UnmatchedDocs1CDO.Count;
@@ -140,7 +139,6 @@ namespace RegComparator
                 reportDocAmount.Documents1CDoMatchedCount = docComparator.MatchedDocs1CDO.Count;
                 reportDocAmount.Documents1CUppMatchedCount = docComparator.MatchedDocs1CUPP.Count;
             }
-
 
             void CloseProgram()
             {
