@@ -30,7 +30,6 @@ namespace RegComparator
             CompareDocuments();                                             // Comparing
             GetResultDocsAmount();
 
-<<<<<<< HEAD
             DocumentAmountReporter documentsAmountReporter = new(workParams.programReportFilePath);
             documentsAmountReporter.CreateAllReports(docsRegistry, docAmount);
 
