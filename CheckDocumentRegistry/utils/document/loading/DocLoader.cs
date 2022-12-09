@@ -1,4 +1,6 @@
-﻿namespace RegComparator
+﻿using RegistryComparator.model.documents.commonDocument;
+
+namespace RegComparator
 {
     public class DocLoader
     {

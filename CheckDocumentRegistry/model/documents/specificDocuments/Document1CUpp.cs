@@ -1,17 +1,23 @@
 ﻿using System.Text.RegularExpressions;
+using RegistryComparator.model.documents.commonDocument;
 
 namespace RegComparator
 {
-    public class Document1CKATn : Document
+    public class Document1CUPP : Document
     {
 
-        public Document1CKATn(string[] docFields, int[] docFieldsIndex) : base(docFields, docFieldsIndex) 
+        public Document1CUPP(string[] docFields, int[] docFieldsIndex) : base(docFields, docFieldsIndex) 
         {
         }
 
         internal protected override int GetDocType(string input)
         {
-            return 1;
+            return input switch
+            {
+                "Да Поступление товаров и услуг" => 1,
+                "Да Счет-фактура полученный" => 2,
+                _ => 0
+            };
         }
 
         internal protected override float GetDocSalary(string stringSum)

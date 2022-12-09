@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace RegComparator
+namespace RegistryComparator.model.documents.commonDocument
 {
     public class Document
     {
@@ -15,47 +15,41 @@ namespace RegComparator
         internal protected string? Comment { get; set; }
         internal protected int StylePosition { get; set; }
 
-
-        public Document() 
+        public Document()
         {
         }
-
 
         public Document(string[] docFields, int[] docFieldsIndex)
         {
-            this.Type = this.GetDocType(docFields[docFieldsIndex[0]]);
-            this.Title = docFields[docFieldsIndex[1]];
-            this.Counterparty = this.GetDocCounterparty(docFields[docFieldsIndex[2]]);
-            this.Company = docFields[docFieldsIndex[3]];
-            this.Date = docFields[docFieldsIndex[4]];
-            this.Number = this.GetDocNumber(docFields[docFieldsIndex[5]]);
-            this.Salary = this.GetDocSalary(docFields[docFieldsIndex[6]]);
+            Type = GetDocType(docFields[docFieldsIndex[0]]);
+            Title = docFields[docFieldsIndex[1]];
+            Counterparty = GetDocCounterparty(docFields[docFieldsIndex[2]]);
+            Company = docFields[docFieldsIndex[3]];
+            Date = docFields[docFieldsIndex[4]];
+            Number = GetDocNumber(docFields[docFieldsIndex[5]]);
+            Salary = GetDocSalary(docFields[docFieldsIndex[6]]);
 
-            if (docFields[docFieldsIndex[docFieldsIndex.Length - 1]] == "Да") this.IsUpd = true;
-            this.Comment = String.Empty;
+            if (docFields[docFieldsIndex[docFieldsIndex.Length - 1]] == "Да") IsUpd = true;
+            Comment = string.Empty;
         }
-
 
         internal protected Document(string[] docFields)
-        {
-            
-        }
-
+        {}
 
         internal protected string[] GetArray()
         {
-            string isUpd = this.IsUpd ? "Да" : "Нет";
+            string isUpd = IsUpd ? "Да" : "Нет";
 
             string[] result = new string[] {
-                                             this.Type.ToString(),
-                                             this.Title,
-                                             this.Counterparty,
-                                             this.Company,
-                                             this.Date,
-                                             this.Number,
-                                             this.Salary.ToString(),
+                                             Type.ToString(),
+                                             Title,
+                                             Counterparty,
+                                             Company,
+                                             Date,
+                                             Number,
+                                             Salary.ToString(),
                                              isUpd,
-                                             this.Comment
+                                             Comment
             };
             return result;
         }
@@ -63,12 +57,10 @@ namespace RegComparator
 
         internal protected virtual int GetDocType(string docTypeString)
         {
-            return Int32.Parse(docTypeString);
+            return int.Parse(docTypeString);
         }
 
-
         internal protected virtual string GetDocCounterparty(string counterparty) => counterparty;
-
 
         internal protected string GetDocNumber(string docNumber)
         {
@@ -81,15 +73,13 @@ namespace RegComparator
             docNumberConverted = docNumber.ToUpper();
             docNumberConverted = Regex.Replace(docNumberConverted, patternAddNumber, string.Empty);
             docNumberConverted = Regex.Replace(docNumberConverted, @"\s+", string.Empty);
-            docNumberConverted = (Regex.IsMatch(docNumberConverted, patternWord) ? ReplaceDigitsFromEngToRus(docNumberConverted) : docNumberConverted );
-            docNumberConverted = (Regex.IsMatch(docNumberConverted, @"\w+") ? RemoveZeroInStartOfString(docNumberConverted) : docNumberConverted );
-
+            docNumberConverted = Regex.IsMatch(docNumberConverted, patternWord) ? ReplaceDigitsFromEngToRus(docNumberConverted) : docNumberConverted;
+            docNumberConverted = Regex.IsMatch(docNumberConverted, @"\w+") ? RemoveZeroInStartOfString(docNumberConverted) : docNumberConverted;
 
             string RemoveZeroInStartOfString(string docNumber)
             {
                 return Regex.Replace(docNumber, @"^0+", string.Empty); ;
             }
-
 
             string ReplaceDigitsFromEngToRus(string docNumber)
             {

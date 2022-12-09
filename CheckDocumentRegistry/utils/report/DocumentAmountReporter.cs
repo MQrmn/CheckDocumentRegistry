@@ -1,4 +1,6 @@
 ﻿
+using RegistryComparator.model.documents.commonDocument;
+
 namespace RegComparator
 {
     internal class DocumentAmountReporter
