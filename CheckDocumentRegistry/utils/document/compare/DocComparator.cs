@@ -1,10 +1,6 @@
-﻿
-using RegistryComparator.model.documents.commonDocument;
-
-namespace RegComparator
+﻿namespace RegComparator
 {
-
-    internal class DocComparator
+   internal class DocComparator
     {
         internal List<Document> MatchedDocs1CDO = new List<Document>();  // Documents from 1C:Document Management that coincided with 1C:UPP documents
         internal List<Document> MatchedDocs1CUPP = new List<Document>(); // Documents from 1C:UPP that coincided with 1C:Document Management documents
@@ -15,7 +11,6 @@ namespace RegComparator
         private List<Document> passDocs1CDO;                             // Ignored documents in 1C:Document Management
         private List<Document> passDocs1CUPP;                            // Ignored documents in 1C:UPP
         private List<Document> matchedDocs1CUPPbuffer;  
-
 
         internal DocComparator(List<Document> docs1CDo, List<Document> docs1CUPP, List<Document> docsPass1CDO, List<Document> docsPassUPP)
         {

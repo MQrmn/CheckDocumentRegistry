@@ -12,7 +12,7 @@ namespace RegComparator
             this.reportFilePath = filePath;
         }
 
-        internal void CreateAllReports(List<Document> docList, ReportDocAmount documentsAmount)
+        internal void CreateAllReports(List<Document> docList, DocAmountReportData documentsAmount)
         {
             string[] docAmounts = GetReportDataCommon(documentsAmount);
             List<string> companiesList = GetCompanies(docList);
@@ -45,7 +45,7 @@ namespace RegComparator
             }
         }
 
-        private string[] GetReportDataCommon(ReportDocAmount documentsAmount)
+        private string[] GetReportDataCommon(DocAmountReportData documentsAmount)
         {
             string[] commonReportData = new string[10];
 

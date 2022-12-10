@@ -16,7 +16,7 @@ namespace RegComparator
             ConfigFilesPath configFilesPath;                                
             DocLoader docLoader;
 
-            ReportDocAmount reportDocAmount = new();
+            DocAmountReportData reportDocAmount = new();
 
             WorkParams workParams = GetWorkParams(args);                    // Getting program parameters
             WorkAbilityChecker.CheckFiles(workParams);                      // Checkimg for existing files to comparing
@@ -24,9 +24,9 @@ namespace RegComparator
             GetSrcDocs1CDO();                                               // Getting documents from 1C:DO
             GetRegistryDocs();                                              // Getting documents from 1C:RF or UPP registry
             GetIgnoreDocList();                                             // Getting ignored documents from spreadsheets
-            GetSrcDocsAmount();
+            FillSrcDocAmount();
             CompareDocuments();                                             // Comparing
-            GetResultDocsAmount();
+            FillResultDocAmount();
 
             DocumentAmountReporter documentsAmountReporter = new(workParams.programReportFilePath);
             documentsAmountReporter.CreateAllReports(docsRegistry, reportDocAmount);
@@ -126,7 +126,7 @@ namespace RegComparator
                 }
             }
 
-            void GetSrcDocsAmount()
+            void FillSrcDocAmount()
             {
                 reportDocAmount.doDocumentsCount = docs1CDO.Count;
                 reportDocAmount.uppDocumentsCount = docsRegistry.Count;
@@ -134,7 +134,7 @@ namespace RegComparator
                 reportDocAmount.ignoreUppDocumentsCount = passDocsRegistry.Count;
             }
 
-            void GetResultDocsAmount()
+            void FillResultDocAmount()
             {
                 reportDocAmount.Documents1CDoUnmatchedCount = docComparator.UnmatchedDocs1CDO.Count;
                 reportDocAmount.Documents1CUppUnmatchedCount = docComparator.UnmatchedDocs1CUPP.Count;
