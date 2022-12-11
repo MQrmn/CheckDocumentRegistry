@@ -1,6 +1,6 @@
 ﻿namespace RegComparator
 {
-    public class DocFieldsIndex
+    public class DocFieldsSettings
     {
         public int[] DocFielsdIndex1CDO = new int[] { 0, 3, 7, 6, 9, 8, 10, 11};          // Standard 1C:DO document format
         public int[] CustomDocFieldsIndex1CDO = new int[] { 0, 1, 3, 2, 5, 4, 6, 7};      // Simplified 1C:DO document format

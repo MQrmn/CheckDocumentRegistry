@@ -4,7 +4,7 @@ namespace RegComparator
     public class DocLoader
     {
 
-        DocFieldsIndex docFieldsSettings = new();
+        DocFieldsSettings docFieldsSettings = new();
 
         // Getting 1C:DO specific documents
         public List<Document> GetDocs1CDO(string spreadsheetPath, string passDocsPath)
