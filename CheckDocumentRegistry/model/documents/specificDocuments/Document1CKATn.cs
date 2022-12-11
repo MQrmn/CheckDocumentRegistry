@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using Microsoft.VisualBasic;
+using System.Text.RegularExpressions;
 
 namespace RegComparator
 {
@@ -9,8 +10,14 @@ namespace RegComparator
         {
         }
 
-        internal protected override int GetDocType(string input)
+        internal protected override int GetDocType(string docName)
         {
+            string patternTn = @"Приобретение товаров и услуг";
+            string patternSf = @"Счет-фактура";
+            bool regexResult = Regex.IsMatch(docName, patternTn, RegexOptions.IgnoreCase);
+
+            rere
+
             return 1;
         }
 

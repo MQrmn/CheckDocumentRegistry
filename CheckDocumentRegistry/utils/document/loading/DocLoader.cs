@@ -7,7 +7,7 @@ namespace RegComparator
         DocFieldsIndex docFieldsIndex = new();
 
         // Getting 1C:DO specific documents
-        internal protected List<Document> GetDocs1CDO(string spreadsheetPath, string passDocsPath)
+        public List<Document> GetDocs1CDO(string spreadsheetPath, string passDocsPath)
         {
             string[][] docArrs1CDO = GetDocsFromWorker(spreadsheetPath);
 
@@ -20,7 +20,7 @@ namespace RegComparator
         }
 
         // Getting 1C:UPP specific documents
-        internal protected List<Document> GetDocs1CUPP(string spreadsheetPath, string exceptedDocsPath)
+        public List<Document> GetDocs1CUPP(string spreadsheetPath, string exceptedDocsPath)
         {
             string[][] docArrs1CUPP = GetDocsFromWorker(spreadsheetPath);
 
@@ -33,7 +33,26 @@ namespace RegComparator
             return docObjs1CUPP;
         }
 
-        internal protected List<Document> GetDocs1CKASf(string spreadsheetPath, string exceptedDocsPath)
+        public List<Document> GetDocs1CKA(string[] spreadsheetPathArr, string exceptedDocsPath)
+        {
+            List<Document> docObjs1CKASf = new();
+            List<Document> docObjs1CKA = new();
+            foreach (var spreadsheetPath in spreadsheetPathArr)
+            {
+                string[][] docArrs1KASf = GetDocsFromWorker(spreadsheetPath);
+
+                DocConverter<Document1CKASf> docsConverter = new(this.docFieldsIndex.DocFieldsIndex1CKASf,
+                                                                                this.docFieldsIndex.CustomDocFieldsIndex1CKASf,
+                                                                          this.docFieldsIndex.maxPassedRowForSwitch1CKASf,
+                                                                                       this.docFieldsIndex.rowLenght1CKASf);
+                docObjs1CKASf = docsConverter.ConvertSpecificDocs(docArrs1KASf, exceptedDocsPath);
+                docObjs1CKA.Concat(docObjs1CKASf).ToList();
+            }
+
+            return docObjs1CKA;
+        }
+
+        public List<Document> GetDocs1CKASf(string spreadsheetPath, string exceptedDocsPath)
         {
             string[][] docArrs1KASf = GetDocsFromWorker(spreadsheetPath);
 
@@ -46,7 +65,7 @@ namespace RegComparator
             return docObjs1CKASf;
         }
 
-        internal protected List<Document> GetDocs1CKATn(string spreadsheetPath, string exceptedDocsPath)
+        public List<Document> GetDocs1CKATn(string spreadsheetPath, string exceptedDocsPath)
         {
             string[][] docArrs1KASf = GetDocsFromWorker(spreadsheetPath);
 
@@ -60,7 +79,7 @@ namespace RegComparator
         }
 
         // Getting pass-through documents during comparison
-        internal protected List<Document> GetDocsPass(string spreadsheetPath)
+        public List<Document> GetDocsPass(string spreadsheetPath)
         {
             List<Document> docObjs = new List<Document>();
 
@@ -83,7 +102,7 @@ namespace RegComparator
         }
 
 
-        internal protected string[][] GetDocsFromWorker(string spreadsheetPath)
+        private string[][] GetDocsFromWorker(string spreadsheetPath)
         {
             Console.WriteLine($"Чтение электронной таблицы: {spreadsheetPath}");
             SpreadSheetReaderXLSX spreadSheetReaderXLSX = new SpreadSheetReaderXLSX();
