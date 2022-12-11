@@ -1,6 +1,5 @@
-﻿using RegComparator;
-
-namespace RegistryComparator
+﻿
+namespace RegComparator
 {
     public class DocRepositoryBase
     {

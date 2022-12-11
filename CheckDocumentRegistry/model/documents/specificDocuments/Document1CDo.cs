@@ -9,7 +9,6 @@ namespace RegComparator
         {
         }
 
-
         internal protected override int GetDocType(string rawDocType)
         {
             int docType = rawDocType switch

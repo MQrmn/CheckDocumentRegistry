@@ -1,5 +1,4 @@
-﻿using RegistryComparator;
-
+﻿
 namespace RegComparator
 {
    internal class DocComparator

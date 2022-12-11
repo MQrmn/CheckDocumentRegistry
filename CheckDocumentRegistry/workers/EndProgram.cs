@@ -1,4 +1,4 @@
-﻿namespace RegComparator.workers
+﻿namespace RegComparator
 {
     internal class EndProgram
     {

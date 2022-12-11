@@ -1,7 +1,4 @@
 ﻿
-using RegistryComparator;
-using RegistryComparator.model.documents.commonDocument;
-
 namespace RegComparator
 {
     internal class Program
