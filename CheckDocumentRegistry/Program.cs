@@ -13,10 +13,9 @@ namespace RegComparator
             DocComparator docComparator;                                    // Class contains results of documents comparing 
             UnmatchedDocCommentSetter unmatchedDocsCommentator;             // Class set comments in unmatched documents
             ConfigFilesPath configFilesPath;                                
+            
             DocLoader docLoader = new();
-
             DocAmountReportData reportDocAmount = new();
-
             WorkParams workParams = GetWorkParams(args);                    // Getting program parameters
             WorkAbilityChecker.CheckFiles(workParams);                      // Checkimg for existing files to comparing
 
@@ -37,7 +36,7 @@ namespace RegComparator
             void GetSrcDocs1CDO()
             {
                 docs1CDO = docLoader.GetDocs1CDO(workParams.inputSpreadsheetDocManagePath,
-                                                               workParams.exceptedDocManagePath);
+                                                 workParams.exceptedDocManagePath);
             }
 
             void GetRegistryDocs(){
@@ -50,13 +49,13 @@ namespace RegComparator
             void GetSrcDocs1CUPP()
             {
                 docsRegistry = docLoader.GetDocs1CUPP(workParams.inputSpreadsheetDocRegistryPath[0],
-                                                               workParams.exceptedDocRegistryPath);
+                                                      workParams.exceptedDocRegistryPath);
             }
 
             void GetSrcDocs1CKA()
             {
                 docsRegistry = docLoader.GetDocs1CKA(workParams.inputSpreadsheetDocRegistryPath,
-                                                               workParams.exceptedDocManagePath);
+                                                     workParams.exceptedDocManagePath);
             }
 
             void GetIgnoreDocList()
@@ -69,7 +68,7 @@ namespace RegComparator
             {
                 docComparator = new(docs1CDO, docsRegistry, passDocs1CDO, passDocsRegistry);
                 unmatchedDocsCommentator = new(docComparator.UnmatchedDocs1CDO,
-                                                                                    docComparator.UnmatchedDocs1CUPP);
+                                               docComparator.UnmatchedDocs1CUPP);
                 unmatchedDocsCommentator.CommentUnmatchedDocuments();
             }
 

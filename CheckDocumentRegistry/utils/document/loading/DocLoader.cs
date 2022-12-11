@@ -4,17 +4,17 @@ namespace RegComparator
     public class DocLoader
     {
 
-        DocFieldsIndex docFieldsIndex = new();
+        DocFieldsIndex docFieldsSettings = new();
 
         // Getting 1C:DO specific documents
         public List<Document> GetDocs1CDO(string spreadsheetPath, string passDocsPath)
         {
             string[][] docArrs1CDO = GetDocsFromFile(spreadsheetPath);
 
-            DocConverter<Document1CDO> docsConverter = new(this.docFieldsIndex.DocFielsdIndex1CDO,
-                                                           this.docFieldsIndex.CustomDocFieldsIndex1CDO,
-                                                           this.docFieldsIndex.maxPassedRowForSwitch1CDO,
-                                                           this.docFieldsIndex.rowLenght1CDO);
+            DocConverter<Document1CDO> docsConverter = new(docFieldsSettings.DocFielsdIndex1CDO,
+                                                           docFieldsSettings.CustomDocFieldsIndex1CDO,
+                                                           docFieldsSettings.MaxPassedRowForSwitch1CDO,
+                                                           docFieldsSettings.RowLenght1CDO);
             List<Document> docObjs1CDO = docsConverter.ConvertSpecificDocs(docArrs1CDO, passDocsPath);
             return docObjs1CDO;
         }
@@ -24,10 +24,10 @@ namespace RegComparator
         {
             string[][] docArrs1CUPP = GetDocsFromFile(spreadsheetPath);
 
-            DocConverter<Document1CUPP> docsConverter = new(this.docFieldsIndex.DocFieldsIndex1CUPP,
-                                                            this.docFieldsIndex.CustomDocFieldsIndex1CUPP,
-                                                            this.docFieldsIndex.maxPassedRowForSwitchUPP,
-                                                            this.docFieldsIndex.rowLenght1CUPP);
+            DocConverter<Document1CUPP> docsConverter = new(docFieldsSettings.DocFieldsIndex1CUPP,
+                                                            docFieldsSettings.CustomDocFieldsIndex1CUPP,
+                                                            docFieldsSettings.MaxPassedRowForSwitchUPP,
+                                                            docFieldsSettings.RowLenght1CUPP);
             List<Document> docObjs1CUPP = docsConverter.ConvertSpecificDocs(docArrs1CUPP, exceptedDocsPath);
 
             return docObjs1CUPP;
@@ -42,10 +42,10 @@ namespace RegComparator
             {
                 string[][] docArrsTmp = GetDocsFromFile(spreadsheetPath);
 
-                DocConverter<Document1CKA> docsConverter = new(this.docFieldsIndex.DocFieldsIndex1CKASf,
-                                                               this.docFieldsIndex.CustomDocFieldsIndex1CKASf,
-                                                               this.docFieldsIndex.maxPassedRowForSwitch1CKASf,
-                                                               this.docFieldsIndex.rowLenght1CKASf);
+                DocConverter<Document1CKA> docsConverter = new(docFieldsSettings.DocFieldsIndex1CKA,
+                                                               docFieldsSettings.CustomDocFieldsIndex1CKA,
+                                                               docFieldsSettings.MaxPassedRowForSwitch1CKA,
+                                                               docFieldsSettings.RowLenght1CKA);
                 List<Document>  docObjs1CKATmp = docsConverter.ConvertSpecificDocs(docArrsTmp, exceptedDocsPath);
                 docObjs1CKA = docObjs1CKA.Concat(docObjs1CKATmp).ToList();
             }
@@ -64,7 +64,7 @@ namespace RegComparator
                 if (File.Exists(spreadsheetPath))
                 {
                     string[][] ignore = GetDocsFromFile(spreadsheetPath);
-                    DocConverter<Document> docsConverter = new(this.docFieldsIndex.docFieldsIndexUniversal);
+                    DocConverter<Document> docsConverter = new(this.docFieldsSettings.docFieldsIndexCommon);
                     docObjs = docsConverter.ConvertUniversalDocs(ignore);
                 }
                 else
