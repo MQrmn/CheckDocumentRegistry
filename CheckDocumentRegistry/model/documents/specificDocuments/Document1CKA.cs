@@ -3,22 +3,29 @@ using System.Text.RegularExpressions;
 
 namespace RegComparator
 {
-    public class Document1CKATn : Document
+    public class Document1CKA : Document
     {
 
-        public Document1CKATn(string[] docFields, int[] docFieldsIndex) : base(docFields, docFieldsIndex) 
+        public Document1CKA(string[] docFields, int[] docFieldsIndex) : base(docFields, docFieldsIndex) 
         {
         }
 
         internal protected override int GetDocType(string docName)
         {
+            int typeCode = 0;
             string patternTn = @"Приобретение товаров и услуг";
             string patternSf = @"Счет-фактура";
-            bool regexResult = Regex.IsMatch(docName, patternTn, RegexOptions.IgnoreCase);
 
-            rere
+            bool RegexResult(string pattern) => Regex.IsMatch(docName, pattern, RegexOptions.IgnoreCase);
 
-            return 1;
+            if (RegexResult(patternTn))
+                typeCode = 1;
+            else if (RegexResult(patternSf))
+                typeCode = 2;
+
+            //Console.WriteLine(typeCode);
+
+            return typeCode;
         }
 
         internal protected override float GetDocSalary(string stringSum)

@@ -57,16 +57,9 @@ namespace RegComparator
 
             void GetSrcDocs1CKA()
             {
-                List<Document> documentsRegistryKaPart1;    // ?! What is a parts? 
-                List<Document> documentsRegistryKaPart2;    // ?! What is a parts? 
                 docLoader = new();
-                documentsRegistryKaPart1 = docLoader.GetDocs1CKASf(workParams.inputSpreadsheetDocRegistryPath[0],
+                docsRegistry = docLoader.GetDocs1CKA(workParams.inputSpreadsheetDocRegistryPath,
                                                                workParams.exceptedDocManagePath);
-
-                documentsRegistryKaPart2 = docLoader.GetDocs1CKATn(workParams.inputSpreadsheetDocRegistryPath[1],
-                                                               workParams.exceptedDocManagePath);
-
-                docsRegistry = documentsRegistryKaPart1.Concat(documentsRegistryKaPart2).ToList();
             }
 
             void GetIgnoreDocList()
