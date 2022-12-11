@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="repository\params\docFields\" />
     <Folder Include="repository\report\" />
-    <Folder Include="repository\params\" />
   </ItemGroup>
 
 </Project>

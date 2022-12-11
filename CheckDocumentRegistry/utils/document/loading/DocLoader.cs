@@ -1,5 +1,4 @@
-﻿
-namespace RegComparator
+﻿namespace RegComparator
 {
     public class DocLoader
     {
