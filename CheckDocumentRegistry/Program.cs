@@ -13,7 +13,7 @@ namespace RegComparator
             DocComparator docComparator;                                    // Class contains results of documents comparing 
             UnmatchedDocCommentSetter unmatchedDocsCommentator;             // Class set comments in unmatched documents
             ConfigFilesPath configFilesPath;                                
-            DocLoader docLoader;
+            DocLoader docLoader = new();
 
             DocAmountReportData reportDocAmount = new();
 
@@ -36,7 +36,6 @@ namespace RegComparator
 
             void GetSrcDocs1CDO()
             {
-                docLoader = new();
                 docs1CDO = docLoader.GetDocs1CDO(workParams.inputSpreadsheetDocManagePath,
                                                                workParams.exceptedDocManagePath);
             }
@@ -50,14 +49,12 @@ namespace RegComparator
 
             void GetSrcDocs1CUPP()
             {
-                docLoader = new();
                 docsRegistry = docLoader.GetDocs1CUPP(workParams.inputSpreadsheetDocRegistryPath[0],
                                                                workParams.exceptedDocRegistryPath);
             }
 
             void GetSrcDocs1CKA()
             {
-                docLoader = new();
                 docsRegistry = docLoader.GetDocs1CKA(workParams.inputSpreadsheetDocRegistryPath,
                                                                workParams.exceptedDocManagePath);
             }
