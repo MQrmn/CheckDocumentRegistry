@@ -2,8 +2,30 @@
 {
     public class DocLoader
     {
+        private DocFieldsBase _docFieldsSettings;
+        private List<DocumentBase> _documents;
+
+        public DocLoader() { }
+        public DocLoader(DocFieldsBase docFields, List<DocumentBase> documents)
+        {
+            _docFieldsSettings = docFields;
+            _documents = documents;
+        }
 
         DocFieldsSettings docFieldsSettings = new();
+
+
+        public void GetDocObjectList<T>(string spreadsheetPath, string passDocsPath) where T: Document
+        {
+            string[][] docArrs = GetDocsFromFile(spreadsheetPath);
+
+            DocConverter<T> docsConverter = new(_docFieldsSettings.DocFielsdIndex,
+                                                _docFieldsSettings.DocFielsdIndex,
+                                                _docFieldsSettings.MaxPassedRows,
+                                                _docFieldsSettings.RowLenght);
+            _documents = docsConverter.ConvertSpecificDocs(docArrs, passDocsPath);
+        }
+
 
         // Getting 1C:DO specific documents
         public List<Document> GetDocs1CDO(string spreadsheetPath, string passDocsPath)
