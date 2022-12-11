@@ -2,7 +2,7 @@
 
 namespace RegComparator
 {
-    public abstract class DocumentAbstract
+    public abstract class DocumentBase
     {
         public int Type { get; set; }
         public string Title { get; set; }
@@ -16,11 +16,11 @@ namespace RegComparator
         public int StylePosition { get; set; }
 
 
-        public DocumentAbstract() 
+        public DocumentBase() 
         {
         }
 
-        public DocumentAbstract(string[] docFields, int[] docFieldsIndex)
+        public DocumentBase(string[] docFields, int[] docFieldsIndex)
         {
             this.Type = this.GetDocType(docFields[docFieldsIndex[0]]);
             this.Title = docFields[docFieldsIndex[1]];
@@ -29,12 +29,11 @@ namespace RegComparator
             this.Date = docFields[docFieldsIndex[4]];
             this.Number = this.GetDocNumber(docFields[docFieldsIndex[5]]);
             this.Salary = this.GetDocSalary(docFields[docFieldsIndex[6]]);
-
             if (docFields[docFieldsIndex[docFieldsIndex.Length - 1]] == "Да") this.IsUpd = true;
             this.Comment = String.Empty;
         }
 
-        public DocumentAbstract(string[] docFields)
+        public DocumentBase(string[] docFields)
         {}
         public string[] GetArray()
         {

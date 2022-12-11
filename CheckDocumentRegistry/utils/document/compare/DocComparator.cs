@@ -1,4 +1,6 @@
-﻿namespace RegComparator
+﻿using RegistryComparator;
+
+namespace RegComparator
 {
    internal class DocComparator
     {
@@ -11,6 +13,8 @@
         private List<Document> passDocs1CDO;                             // Ignored documents in 1C:Document Management
         private List<Document> passDocs1CUPP;                            // Ignored documents in 1C:UPP
         private List<Document> matchedDocs1CUPPbuffer;  
+        
+        private DocRepositoryBase = _documents;
 
         internal DocComparator(List<Document> docs1CDo, List<Document> docs1CUPP, List<Document> docsPass1CDO, List<Document> docsPassUPP)
         {

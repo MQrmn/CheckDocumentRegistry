@@ -1,4 +1,5 @@
 ﻿
+using RegistryComparator;
 using RegistryComparator.model.documents.commonDocument;
 
 namespace RegComparator
@@ -6,7 +7,8 @@ namespace RegComparator
     internal class Program
     {
         static void Main(string[] args)
-        { 
+        {
+            DocRepositoryBase docRepository;
             List<Document> docs1CDO;                                        // Source 1C:DO documents for compare
             List<Document> docsRegistry;                                    // Source 1C:UPP, 1C:KA documents for compare
             List<Document> passDocs1CDO;                                    // Ignore list of 1C:DO documents 
