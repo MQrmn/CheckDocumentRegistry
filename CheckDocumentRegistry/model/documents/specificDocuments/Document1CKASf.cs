@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using RegistryComparator.model.documents.commonDocument;
 
 namespace RegComparator
 {
