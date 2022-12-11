@@ -9,12 +9,12 @@ namespace RegComparator
         // Getting 1C:DO specific documents
         public List<Document> GetDocs1CDO(string spreadsheetPath, string passDocsPath)
         {
-            string[][] docArrs1CDO = GetDocsFromWorker(spreadsheetPath);
+            string[][] docArrs1CDO = GetDocsFromFile(spreadsheetPath);
 
             DocConverter<Document1CDO> docsConverter = new(this.docFieldsIndex.DocFielsdIndex1CDO,
-                                                                           this.docFieldsIndex.CustomDocFieldsIndex1CDO,
-                                                                     this.docFieldsIndex.maxPassedRowForSwitch1CDO,
-                                                                                  this.docFieldsIndex.rowLenght1CDO);
+                                                           this.docFieldsIndex.CustomDocFieldsIndex1CDO,
+                                                           this.docFieldsIndex.maxPassedRowForSwitch1CDO,
+                                                           this.docFieldsIndex.rowLenght1CDO);
             List<Document> docObjs1CDO = docsConverter.ConvertSpecificDocs(docArrs1CDO, passDocsPath);
             return docObjs1CDO;
         }
@@ -22,12 +22,12 @@ namespace RegComparator
         // Getting 1C:UPP specific documents
         public List<Document> GetDocs1CUPP(string spreadsheetPath, string exceptedDocsPath)
         {
-            string[][] docArrs1CUPP = GetDocsFromWorker(spreadsheetPath);
+            string[][] docArrs1CUPP = GetDocsFromFile(spreadsheetPath);
 
             DocConverter<Document1CUPP> docsConverter = new(this.docFieldsIndex.DocFieldsIndex1CUPP,
-                                                                            this.docFieldsIndex.CustomDocFieldsIndex1CUPP,
-                                                                      this.docFieldsIndex.maxPassedRowForSwitchUPP,
-                                                                                   this.docFieldsIndex.rowLenght1CUPP);
+                                                            this.docFieldsIndex.CustomDocFieldsIndex1CUPP,
+                                                            this.docFieldsIndex.maxPassedRowForSwitchUPP,
+                                                            this.docFieldsIndex.rowLenght1CUPP);
             List<Document> docObjs1CUPP = docsConverter.ConvertSpecificDocs(docArrs1CUPP, exceptedDocsPath);
 
             return docObjs1CUPP;
@@ -40,12 +40,12 @@ namespace RegComparator
             List<Document> docObjs1CKA = new();
             foreach (var spreadsheetPath in spreadsheetPathArr)
             {
-                string[][] docArrsTmp = GetDocsFromWorker(spreadsheetPath);
+                string[][] docArrsTmp = GetDocsFromFile(spreadsheetPath);
 
                 DocConverter<Document1CKA> docsConverter = new(this.docFieldsIndex.DocFieldsIndex1CKASf,
-                                                                                this.docFieldsIndex.CustomDocFieldsIndex1CKASf,
-                                                                          this.docFieldsIndex.maxPassedRowForSwitch1CKASf,
-                                                                                       this.docFieldsIndex.rowLenght1CKASf);
+                                                               this.docFieldsIndex.CustomDocFieldsIndex1CKASf,
+                                                               this.docFieldsIndex.maxPassedRowForSwitch1CKASf,
+                                                               this.docFieldsIndex.rowLenght1CKASf);
                 List<Document>  docObjs1CKATmp = docsConverter.ConvertSpecificDocs(docArrsTmp, exceptedDocsPath);
                 docObjs1CKA = docObjs1CKA.Concat(docObjs1CKATmp).ToList();
             }
@@ -63,7 +63,7 @@ namespace RegComparator
             {
                 if (File.Exists(spreadsheetPath))
                 {
-                    string[][] ignore = GetDocsFromWorker(spreadsheetPath);
+                    string[][] ignore = GetDocsFromFile(spreadsheetPath);
                     DocConverter<Document> docsConverter = new(this.docFieldsIndex.docFieldsIndexUniversal);
                     docObjs = docsConverter.ConvertUniversalDocs(ignore);
                 }
@@ -78,7 +78,7 @@ namespace RegComparator
         }
 
 
-        private string[][] GetDocsFromWorker(string spreadsheetPath)
+        private string[][] GetDocsFromFile(string spreadsheetPath)
         {
             Console.WriteLine($"Чтение электронной таблицы: {spreadsheetPath}");
             SpreadSheetReaderXLSX spreadSheetReaderXLSX = new SpreadSheetReaderXLSX();
