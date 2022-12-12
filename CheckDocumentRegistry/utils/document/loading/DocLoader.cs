@@ -3,10 +3,10 @@
     public class DocLoader
     {
         private DocFieldsBase _docFieldsSettings;
-        private List<DocumentBase> _documents;
+        private List<Document> _documents;
 
         public DocLoader() { }
-        public DocLoader(DocFieldsBase docFields, List<DocumentBase> documents)
+        public DocLoader(DocFieldsBase docFields, List<Document> documents)
         {
             _docFieldsSettings = docFields;
             _documents = documents;
@@ -23,6 +23,7 @@
                                                 _docFieldsSettings.DocFielsdIndex,
                                                 _docFieldsSettings.MaxPassedRows,
                                                 _docFieldsSettings.RowLenght);
+
             _documents = docsConverter.ConvertSpecificDocs(docArrs, passDocsPath);
         }
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualBasic;
+﻿
 using System.Text.RegularExpressions;
 
 namespace RegComparator
@@ -6,11 +6,11 @@ namespace RegComparator
     public class Document1CKA : Document
     {
 
-        public Document1CKA(string[] docFields, int[] docFieldsIndex) : base(docFields, docFieldsIndex) 
+        public Document1CKA(string[] docFields, int[] docFieldsIndex) : base(docFields, docFieldsIndex)
         {
         }
 
-        internal protected override int GetDocType(string docName)
+        public override int GetDocType(string docName)
         {
             int typeCode = 0;
             string patternTn = @"Приобретение товаров и услуг";
@@ -28,10 +28,10 @@ namespace RegComparator
             return typeCode;
         }
 
-        internal protected override float GetDocSalary(string stringSum)
+        public override float GetDocSalary(string stringSum)
         {
             float floatSum;
-            if (stringSum != String.Empty)
+            if (stringSum != string.Empty)
             {
                 string pattern = @"[\.]";
                 string regexResult = Regex.Replace(stringSum, pattern, ",", RegexOptions.IgnoreCase);

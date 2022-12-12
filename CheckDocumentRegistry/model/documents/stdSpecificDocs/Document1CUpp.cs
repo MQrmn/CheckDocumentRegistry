@@ -1,15 +1,15 @@
 ﻿using System.Text.RegularExpressions;
 
 namespace RegComparator
-{
+{ 
     public class Document1CUPP : Document
     {
 
-        public Document1CUPP(string[] docFields, int[] docFieldsIndex) : base(docFields, docFieldsIndex) 
+        public Document1CUPP(string[] docFields, int[] docFieldsIndex) : base(docFields, docFieldsIndex)
         {
         }
 
-        internal protected override int GetDocType(string input)
+        public override int GetDocType(string input)
         {
             return input switch
             {
@@ -19,10 +19,10 @@ namespace RegComparator
             };
         }
 
-        internal protected override float GetDocSalary(string stringSum)
+        public override float GetDocSalary(string stringSum)
         {
             float floatSum;
-            if (stringSum != String.Empty)
+            if (stringSum != string.Empty)
             {
                 string pattern = @"[\.]";
                 string regexResult = Regex.Replace(stringSum, pattern, ",", RegexOptions.IgnoreCase);

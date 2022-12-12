@@ -4,16 +4,16 @@ namespace RegComparator
 {
     public class Document
     {
-        internal protected int Type { get; set; }
-        internal protected string Title { get; set; }
-        internal protected string Company { get; set; }
-        internal protected string Counterparty { get; set; }
-        internal protected string Number { get; set; }
-        internal protected string Date { get; set; }
-        internal protected float Salary { get; set; }
-        internal protected bool IsUpd { get; set; }
-        internal protected string? Comment { get; set; }
-        internal protected int StylePosition { get; set; }
+        public int Type { get; set; }
+        public string Title { get; set; }
+        public string Company { get; set; }
+        public string Counterparty { get; set; }
+        public string Number { get; set; }
+        public string Date { get; set; }
+        public float Salary { get; set; }
+        public bool IsUpd { get; set; }
+        public string? Comment { get; set; }
+        public int StylePosition { get; set; }
 
         public Document()
         {
@@ -33,10 +33,7 @@ namespace RegComparator
             Comment = string.Empty;
         }
 
-        internal protected Document(string[] docFields)
-        {}
-
-        internal protected string[] GetArray()
+        public string[] GetArray()
         {
             string isUpd = IsUpd ? "Да" : "Нет";
 
@@ -55,14 +52,14 @@ namespace RegComparator
         }
 
 
-        internal protected virtual int GetDocType(string docTypeString)
+        public virtual int GetDocType(string docTypeString)
         {
             return int.Parse(docTypeString);
         }
 
-        internal protected virtual string GetDocCounterparty(string counterparty) => counterparty;
+        public virtual string GetDocCounterparty(string counterparty) => counterparty;
 
-        internal protected string GetDocNumber(string docNumber)
+        public virtual string GetDocNumber(string docNumber)
         {
             string digitRus = "АВСЕНКМОРТХ";
             string digitEng = "ABCEHKMOPTX";
@@ -95,7 +92,7 @@ namespace RegComparator
             return docNumberConverted;
         }
 
-        internal protected virtual float GetDocSalary(string docSalary)
+        public virtual float GetDocSalary(string docSalary)
         {
             string regexResult = Regex.Replace(docSalary, @"\.", @",");
             return float.Parse(regexResult);

@@ -1,7 +1,6 @@
-﻿
-namespace RegComparator
+﻿namespace RegComparator
 {
-   internal class DocComparator
+    internal class DocComparator
     {
         internal List<Document> MatchedDocs1CDO = new List<Document>();  // Documents from 1C:Document Management that coincided with 1C:UPP documents
         internal List<Document> MatchedDocs1CUPP = new List<Document>(); // Documents from 1C:UPP that coincided with 1C:Document Management documents

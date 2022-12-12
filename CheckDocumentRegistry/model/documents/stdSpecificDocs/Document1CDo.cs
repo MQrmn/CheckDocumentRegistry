@@ -9,7 +9,7 @@ namespace RegComparator
         {
         }
 
-        internal protected override int GetDocType(string rawDocType)
+        public override int GetDocType(string rawDocType)
         {
             int docType = rawDocType switch
             {
@@ -25,22 +25,22 @@ namespace RegComparator
         }
 
 
-        internal protected override string GetDocCounterparty(string docCounterparty)
+        public override string GetDocCounterparty(string docCounterparty)
         {
             string pattern = @"\s\([/\s\d]*\)";
-            string regexResult = Regex.Replace(docCounterparty, pattern, String.Empty, RegexOptions.IgnoreCase);
+            string regexResult = Regex.Replace(docCounterparty, pattern, string.Empty, RegexOptions.IgnoreCase);
             return regexResult;
         }
 
 
-        internal protected override float GetDocSalary(string stringSum)
+        public override float GetDocSalary(string stringSum)
         {
             float floatSum;
-            if (stringSum != String.Empty)
+            if (stringSum != string.Empty)
             {
                 string pattern = @"[A-Z\s]";
-                string regexResult = Regex.Replace(stringSum, pattern, String.Empty, RegexOptions.IgnoreCase);
-                floatSum = float.Parse(regexResult); 
+                string regexResult = Regex.Replace(stringSum, pattern, string.Empty, RegexOptions.IgnoreCase);
+                floatSum = float.Parse(regexResult);
             }
             else
                 floatSum = 0;
