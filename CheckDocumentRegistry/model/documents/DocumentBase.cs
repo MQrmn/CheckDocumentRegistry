@@ -22,15 +22,15 @@ namespace RegComparator
 
         public DocumentBase(string[] docFields, int[] docFieldsIndex)
         {
-            this.Type = this.GetDocType(docFields[docFieldsIndex[0]]);
-            this.Title = docFields[docFieldsIndex[1]];
-            this.Counterparty = this.GetDocCounterparty(docFields[docFieldsIndex[2]]);
-            this.Company = docFields[docFieldsIndex[3]];
-            this.Date = docFields[docFieldsIndex[4]];
-            this.Number = this.GetDocNumber(docFields[docFieldsIndex[5]]);
-            this.Salary = this.GetDocSalary(docFields[docFieldsIndex[6]]);
-            if (docFields[docFieldsIndex[docFieldsIndex.Length - 1]] == "Да") this.IsUpd = true;
-            this.Comment = String.Empty;
+            Type = GetDocType(docFields[docFieldsIndex[0]]);
+            Title = docFields[docFieldsIndex[1]];
+            Counterparty = GetDocCounterparty(docFields[docFieldsIndex[2]]);
+            Company = docFields[docFieldsIndex[3]];
+            Date = docFields[docFieldsIndex[4]];
+            Number = GetDocNumber(docFields[docFieldsIndex[5]]);
+            Salary = GetDocSalary(docFields[docFieldsIndex[6]]);
+            if (docFields[docFieldsIndex[docFieldsIndex.Length - 1]] == "Да") IsUpd = true;
+            Comment = String.Empty;
         }
 
         public DocumentBase(string[] docFields)
@@ -52,9 +52,9 @@ namespace RegComparator
             };
             return result;
         }
-        abstract public int GetDocType(string docTypeString);
-        abstract public string GetDocCounterparty(string counterparty);
-        abstract public string GetDocNumber(string docNumberString);
-        abstract public float GetDocSalary(string docSalary);
+        public abstract int GetDocType(string docTypeString);
+        public abstract string GetDocCounterparty(string counterparty);
+        public abstract string GetDocNumber(string docNumberString);
+        public abstract float GetDocSalary(string docSalary);
     }
 }
