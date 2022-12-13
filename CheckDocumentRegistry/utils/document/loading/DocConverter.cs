@@ -9,14 +9,25 @@
         private int maxPassedRowForSwitchIndex;
         private int rowLenght;
 
+        private List<Document> _universalDocs;
+
+        internal DocConverter(int[] inputDocFileIndexStandard,
+                                 int inputMaxPassedRowForSwitchIndex,
+                                 int inputRowLength,
+                                 List<Document> universalDocs)
+        {
+            this.docFieldsIndexStandard = inputDocFileIndexStandard;
+            this.PassedDocs = new List<string[]>();
+            this.maxPassedRowForSwitchIndex = inputMaxPassedRowForSwitchIndex;
+            this.rowLenght = inputRowLength;
+            _universalDocs = universalDocs;
+        }
 
         internal DocConverter(    int[] inputDocFileIndexStandard, 
-                                        //int[] inputDocFileIndexCustom,
                                         int inputMaxPassedRowForSwitchIndex,
                                         int inputRowLength )
         {
             this.docFieldsIndexStandard = inputDocFileIndexStandard;
-            //this.docFieldsIndexCustom = inputDocFileIndexCustom;
             this.PassedDocs = new List<string[]>();
             this.maxPassedRowForSwitchIndex = inputMaxPassedRowForSwitchIndex;
             this.rowLenght = inputRowLength;
@@ -59,12 +70,9 @@
             if (PassedDocs.Count > 0)
                 CreateReportPassedDocs(passedDocsReportPath);
 
-            List<Document> universalDocs = specificDocObjList
-                .ConvertAll(new Converter<T, Document>(
-                (T document) => (Document)document
-                ));
+            _universalDocs = specificDocObjList.ConvertAll(new Converter<T, Document>((T document) => (Document)document));
 
-            return universalDocs;
+            return _universalDocs;
         }
 
 

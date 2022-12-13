@@ -4,12 +4,15 @@
     {
         private DocFieldsBase _docFieldsSettings;
         private List<Document> _documents;
+        
 
         public DocLoader() { }
         public DocLoader(DocFieldsBase docFields, List<Document> documents)
         {
             _docFieldsSettings = docFields;
             _documents = documents;
+            Console.WriteLine("DocLoader 1 " + documents.GetHashCode());
+            Console.WriteLine("DocLoader 2 " + _documents.GetHashCode());
         }
 
         DocFieldsSettings docFieldsSettings = new();
@@ -21,9 +24,12 @@
 
             DocConverter<T> docsConverter = new(_docFieldsSettings.DocFielsdIndex,
                                                 _docFieldsSettings.MaxPassedRows,
-                                                _docFieldsSettings.RowLenght);
-
+                                                _docFieldsSettings.RowLenght,
+                                                _documents);
+            Console.WriteLine("DocLoader 3 " + _documents.GetHashCode());
             _documents = docsConverter.ConvertSpecificDocs(docArrs, passDocsPath);
+            Console.WriteLine("DocLoader 4 " + _documents.GetHashCode());
+            Console.WriteLine(_documents.Count);
         }
 
 
