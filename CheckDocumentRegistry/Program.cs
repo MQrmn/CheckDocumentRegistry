@@ -4,9 +4,6 @@
     {
         static void Main(string[] args)
         {
-            //DocRepositoryBase docRepository;
-            //List<Document> passDocs1CDO;                                    // Ignore list of 1C:DO documents 
-            //List<Document> passDocsRegistry;                                // Ignore list of 1C:UPP documents
             DocComparator docComparator;                                    // Class contains results of documents comparing 
             UnmatchedDocCommentSetter unmatchedDocsCommentator;             // Class set comments in unmatched documents
             ConfigFilesPath configFilesPath;
@@ -54,10 +51,8 @@
 
             void GetSrcDocs1CKA()
             {
-
                 docRepository.SrcRegistry = docLoader.GetDocs1CKA(workParams.inputSpreadsheetDocRegistryPath,
                                                                   workParams.exceptedDocManagePath);
-
             }
 
             void GetIgnoreDocList()
