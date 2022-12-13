@@ -5,18 +5,18 @@
     {
         internal List<string[]>? PassedDocs;
         private int[] docFieldsIndexStandard;
-        private int[] docFieldsIndexCustom;
+        //private int[] docFieldsIndexCustom;
         private int maxPassedRowForSwitchIndex;
         private int rowLenght;
 
 
         internal DocConverter(    int[] inputDocFileIndexStandard, 
-                                        int[] inputDocFileIndexCustom,
+                                        //int[] inputDocFileIndexCustom,
                                         int inputMaxPassedRowForSwitchIndex,
                                         int inputRowLength )
         {
             this.docFieldsIndexStandard = inputDocFileIndexStandard;
-            this.docFieldsIndexCustom = inputDocFileIndexCustom;
+            //this.docFieldsIndexCustom = inputDocFileIndexCustom;
             this.PassedDocs = new List<string[]>();
             this.maxPassedRowForSwitchIndex = inputMaxPassedRowForSwitchIndex;
             this.rowLenght = inputRowLength;
@@ -35,33 +35,24 @@
             List<T> specificDocObjList = new List<T>(docsArr.Length);
 
             int exceptCount = 0;
-            bool isSwithedIndex = false;
+            //bool isSwithedIndex = false;
             int[] fieldIndexes = this.docFieldsIndexStandard;
 
-            for (int i = 0; i < docsArr.Length; i++)
+            for (int i = 0; i < docsArr.Length; i++)                        // Going through an array of documents
             {
                 try
                 {
-                    specificDocObjList.Add((T)Activator.CreateInstance(typeof(T), docsArr[i], fieldIndexes));
-
-                    exceptCount = 0;
+                                                                            // Adding a document object to the list
+                    specificDocObjList.Add((T)Activator.CreateInstance(typeof(T), docsArr[i], fieldIndexes));   
                 }
                 catch
                 {
                     exceptCount++;
 
-                    if ((exceptCount > this.maxPassedRowForSwitchIndex && isSwithedIndex == false) || isSwithedIndex == true)
-                    {
-                        this.PassedDocs.Add(docsArr[i]);
-                    }
+                    if (exceptCount > this.maxPassedRowForSwitchIndex)
+                        this.PassedDocs.Add(docsArr[i]);                    // Adding document into error list
+                    
 
-                    if (exceptCount >= this.maxPassedRowForSwitchIndex && isSwithedIndex == false && docsArr[i].Length < this.rowLenght)
-                    {
-                        isSwithedIndex = true;
-                        exceptCount = 0;
-                        i = -1;
-                        fieldIndexes = this.docFieldsIndexCustom; // Switch fields index set
-                    }
                 }
             }
 
