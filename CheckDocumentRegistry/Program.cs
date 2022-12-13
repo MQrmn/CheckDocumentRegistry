@@ -4,14 +4,15 @@
     {
         static void Main(string[] args)
         {
-            DocRepositoryBase docRepository;
-            List<Document> docs1CDO;                                        // Source 1C:DO documents for compare
-            List<Document> docsRegistry;                                    // Source 1C:UPP, 1C:KA documents for compare
-            List<Document> passDocs1CDO;                                    // Ignore list of 1C:DO documents 
-            List<Document> passDocsRegistry;                                // Ignore list of 1C:UPP documents
+            //DocRepositoryBase docRepository;
+            //List<Document> passDocs1CDO;                                    // Ignore list of 1C:DO documents 
+            //List<Document> passDocsRegistry;                                // Ignore list of 1C:UPP documents
             DocComparator docComparator;                                    // Class contains results of documents comparing 
             UnmatchedDocCommentSetter unmatchedDocsCommentator;             // Class set comments in unmatched documents
-            ConfigFilesPath configFilesPath;                                
+            ConfigFilesPath configFilesPath;
+
+            DocFieldsSettingsRepository docFieldsSettingsRepository = new();
+            DocRepository docRepository = new();
             
             DocLoader docLoader = new();
             DocAmountReportData reportDocAmount = new();
@@ -26,7 +27,7 @@
             FillResultDocAmount();
 
             DocumentAmountReporter documentsAmountReporter = new(workParams.programReportFilePath);
-            documentsAmountReporter.CreateAllReports(docsRegistry, reportDocAmount);
+            documentsAmountReporter.CreateAllReports(docRepository.SrcRegistry, reportDocAmount);
 
             // Result spreadsheets generating
             GenerateOutputSpreadsheets();
@@ -34,8 +35,8 @@
 
             void GetSrcDocs1CDO()
             {
-                docs1CDO = docLoader.GetDocs1CDO(workParams.inputSpreadsheetDocManagePath,
-                                                 workParams.exceptedDocManagePath);
+                docRepository.Src1CDO = docLoader.GetDocs1CDO(workParams.inputSpreadsheetDocManagePath,
+                                                              workParams.exceptedDocManagePath);
             }
 
             void GetRegistryDocs(){
@@ -47,25 +48,28 @@
 
             void GetSrcDocs1CUPP()
             {
-                docsRegistry = docLoader.GetDocs1CUPP(workParams.inputSpreadsheetDocRegistryPath[0],
-                                                      workParams.exceptedDocRegistryPath);
+                docRepository.SrcRegistry = docLoader.GetDocs1CUPP(workParams.inputSpreadsheetDocRegistryPath[0],
+                                                                   workParams.exceptedDocRegistryPath);
             }
 
             void GetSrcDocs1CKA()
             {
-                docsRegistry = docLoader.GetDocs1CKA(workParams.inputSpreadsheetDocRegistryPath,
-                                                     workParams.exceptedDocManagePath);
+
+                docRepository.SrcRegistry = docLoader.GetDocs1CKA(workParams.inputSpreadsheetDocRegistryPath,
+                                                                  workParams.exceptedDocManagePath);
+
             }
 
             void GetIgnoreDocList()
             {
-                passDocs1CDO = docLoader.GetDocsPass(workParams.passSpreadsheetDocManagePath);
-                passDocsRegistry = docLoader.GetDocsPass(workParams.passSpreadSheetDocRegistryPath);
+                docRepository.Pass1CDO = docLoader.GetDocsPass(workParams.passSpreadsheetDocManagePath);
+                docRepository.PassRegistry = docLoader.GetDocsPass(workParams.passSpreadSheetDocRegistryPath);
             }
 
             void CompareDocuments()
             {
-                docComparator = new(docs1CDO, docsRegistry, passDocs1CDO, passDocsRegistry);
+                docComparator = new(docRepository.Src1CDO, docRepository.SrcRegistry, 
+                                    docRepository.Pass1CDO, docRepository.PassRegistry);
                 unmatchedDocsCommentator = new(docComparator.UnmatchedDocs1CDO,
                                                docComparator.UnmatchedDocs1CUPP);
                 unmatchedDocsCommentator.CommentUnmatchedDocuments();
@@ -115,10 +119,10 @@
 
             void FillSrcDocAmount()
             {
-                reportDocAmount.doDocumentsCount = docs1CDO.Count;
-                reportDocAmount.uppDocumentsCount = docsRegistry.Count;
-                reportDocAmount.ignoreDoDocumentsCount = passDocs1CDO.Count;
-                reportDocAmount.ignoreUppDocumentsCount = passDocsRegistry.Count;
+                reportDocAmount.doDocumentsCount = docRepository.Src1CDO.Count;
+                reportDocAmount.uppDocumentsCount = docRepository.SrcRegistry.Count;
+                reportDocAmount.ignoreDoDocumentsCount = docRepository.Pass1CDO.Count;
+                reportDocAmount.ignoreUppDocumentsCount = docRepository.PassRegistry.Count;
             }
 
             void FillResultDocAmount()
