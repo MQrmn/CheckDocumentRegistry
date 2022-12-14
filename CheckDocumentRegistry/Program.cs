@@ -33,14 +33,8 @@
 
             void GetSrcDocs1CDO()
             {
-                //_docLoader = new();
-                //docRepository.Src1CDO = docLoader.GetDocs1CDO(workParams.inputSpreadsheetDocManagePath,
-                //                                              workParams.exceptedDocManagePath);
                 _docLoader = new(docFieldsSettingsRepository.DocFieldsDO, docRepository.Src1CDO);
-                Console.WriteLine(docRepository.Src1CDO.GetHashCode());
                 _docLoader.GetDocObjectList<Document1CDO>(workParams.inputSpreadsheetDocManagePath, workParams.exceptedDocManagePath);
-                Console.WriteLine(docRepository.Src1CDO.GetHashCode());
-                Console.WriteLine(docRepository.Src1CDO.Count);
             }
 
             void GetRegistryDocs(){
@@ -54,17 +48,12 @@
             {
                 _docLoader = new(docFieldsSettingsRepository.DocFieldsRegUPP, docRepository.SrcRegistry);
                 _docLoader.GetDocObjectList<Document1CUPP>(workParams.inputSpreadsheetDocRegistryPath, workParams.exceptedDocRegistryPath);
-
-                //docRepository.SrcRegistry = docLoader.GetDocs1CUPP(workParams.inputSpreadsheetDocRegistryPath[0],
-                //                                                   workParams.exceptedDocRegistryPath);
             }
 
             void GetSrcDocs1CKA()
             {
                 _docLoader = new(docFieldsSettingsRepository.DocFieldsKA, docRepository.SrcRegistry);
                 _docLoader.GetDocObjectList<Document1CKA>(workParams.inputSpreadsheetDocRegistryPath, workParams.exceptedDocRegistryPath);
-                //docRepository.SrcRegistry = docLoader.GetDocs1CKA(workParams.inputSpreadsheetDocRegistryPath,
-                //                                                  workParams.exceptedDocManagePath);
             }
 
             void GetIgnoreDocList()

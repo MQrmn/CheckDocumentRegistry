@@ -13,12 +13,9 @@ namespace RegComparator
         {
             _docFieldsSettings = docFields;
             _documents = documents;
-            Console.WriteLine("DocLoader 1 " + documents.GetHashCode());
-            Console.WriteLine("DocLoader 2 " + _documents.GetHashCode());
         }
 
         DocFieldsSettings docFieldsSettings = new();
-
 
         public void GetDocObjectList<T>(string spreadsheetPath, string passDocsPath) where T: Document
         {
@@ -28,73 +25,22 @@ namespace RegComparator
                                                 _docFieldsSettings.MaxPassedRows,
                                                 _docFieldsSettings.RowLenght,
                                                 _documents);
-            Console.WriteLine("DocLoader 3 " + _documents.GetHashCode());
-            _documents = docsConverter.ConvertSpecificDocs(docArrs, passDocsPath);
-            Console.WriteLine("DocLoader 4 " + _documents.GetHashCode());
-            Console.WriteLine(_documents.Count);
+            docsConverter.ConvertSpecificDocs(docArrs, passDocsPath);
         }
 
         public void GetDocObjectList<T>(string[] spreadsheetPathArr, string exceptedDocsPath) where T : Document
         {
-            List<Document> docObjs1CKA = new();
+            string[][] docArrsTmp;
+            DocConverter<T> docsConverter = new(_docFieldsSettings.DocFielsdIndex,
+                                    _docFieldsSettings.MaxPassedRows,
+                                    _docFieldsSettings.RowLenght,
+                                    _documents);
+
             foreach (var spreadsheetPath in spreadsheetPathArr)
             {
-                string[][] docArrsTmp = GetDocsFromFile(spreadsheetPath);
-
-                DocConverter<T> docsConverter = new(_docFieldsSettings.DocFielsdIndex,
-                                                    _docFieldsSettings.MaxPassedRows,
-                                                    _docFieldsSettings.RowLenght,
-                                                    _documents);
-                List<Document> docObjs1CKATmp = docsConverter.ConvertSpecificDocs(docArrsTmp, exceptedDocsPath);
-                docObjs1CKA = docObjs1CKA.Concat(docObjs1CKATmp).ToList();
-
-                _documents = _documents.Concat(docsConverter.ConvertSpecificDocs(docArrsTmp, exceptedDocsPath)).ToList(); 
+                docArrsTmp = GetDocsFromFile(spreadsheetPath);
+                docsConverter.ConvertSpecificDocs(docArrsTmp, exceptedDocsPath);
             }
-        }
-
-            // Getting 1C:DO specific documents
-            public List<Document> GetDocs1CDO(string spreadsheetPath, string passDocsPath)
-        {
-            string[][] docArrs1CDO = GetDocsFromFile(spreadsheetPath);
-
-            DocConverter<Document1CDO> docsConverter = new(docFieldsSettings.DocFielsdIndex1CDO,
-                                                           docFieldsSettings.MaxPassedRowForSwitch1CDO,
-                                                           docFieldsSettings.RowLenght1CDO);
-            List<Document> docObjs1CDO = docsConverter.ConvertSpecificDocs(docArrs1CDO, passDocsPath);
-            return docObjs1CDO;
-        }
-
-        // Getting 1C:UPP specific documents
-        public List<Document> GetDocs1CUPP(string spreadsheetPath, string exceptedDocsPath)
-        {
-            string[][] docArrs1CUPP = GetDocsFromFile(spreadsheetPath);
-
-            DocConverter<Document1CUPP> docsConverter = new(docFieldsSettings.DocFieldsIndex1CUPP,
-                                                            docFieldsSettings.MaxPassedRowForSwitchUPP,
-                                                            docFieldsSettings.RowLenght1CUPP);
-            List<Document> docObjs1CUPP = docsConverter.ConvertSpecificDocs(docArrs1CUPP, exceptedDocsPath);
-
-            return docObjs1CUPP;
-        }
-
-        // Get 1C:KA registry documents 
-        public List<Document> GetDocs1CKA(string[] spreadsheetPathArr, string exceptedDocsPath)
-        {
-            
-            List<Document> docObjs1CKA = new();
-            foreach (var spreadsheetPath in spreadsheetPathArr)
-            {
-                string[][] docArrsTmp = GetDocsFromFile(spreadsheetPath);
-
-                DocConverter<Document1CKA> docsConverter = new(docFieldsSettings.DocFieldsIndex1CKA,
-                                                               docFieldsSettings.MaxPassedRowForSwitch1CKA,
-                                                               docFieldsSettings.RowLenght1CKA);
-                List<Document>  docObjs1CKATmp = docsConverter.ConvertSpecificDocs(docArrsTmp, exceptedDocsPath);
-                docObjs1CKA = docObjs1CKA.Concat(docObjs1CKATmp).ToList();
-            }
-            
-
-            return docObjs1CKA;
         }
 
         // Getting pass-through documents during comparison
@@ -119,7 +65,6 @@ namespace RegComparator
             }
             return docObjs;
         }
-
 
         private string[][] GetDocsFromFile(string spreadsheetPath)
         {
