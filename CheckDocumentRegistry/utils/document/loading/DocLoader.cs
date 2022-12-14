@@ -25,7 +25,7 @@
 
             foreach (var spreadsheetPath in spreadsheetPathArr)
             {
-                docArrsTmp = GetDocsFromFile(spreadsheetPath);
+                docArrsTmp = GetDocsFromFile(spreadsheetPath); 
                 docsConverter.ConvertSpecificDocs(docArrsTmp, exceptedDocsPath);
             }
         }

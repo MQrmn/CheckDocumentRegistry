@@ -4,59 +4,51 @@
     internal class DocConverter<T> where T : Document
     {
         internal List<string[]>? _passedDocs;
-        private int[] _docFieldsIndexStandard;
-        //private int[] docFieldsIndexCustom;
-        private int _maxPassedRowForSwitchIndex;
+        private int[] _docFieldsIndex;
+        private int _maxPassedRows;
         private int _rowLenght;
 
-        private List<Document> _universalDocs;
+        private List<Document> _docObjects;
 
-        internal DocConverter(int[] inputDocFileIndexStandard,
-                                 int inputMaxPassedRowForSwitchIndex,
+        internal DocConverter(int[] docFieldsIndex,
+                                 int maxPassedRows,
                                  int inputRowLength,
-                                 List<Document> universalDocs)
+                                 List<Document> docObjects)
         {
-            _docFieldsIndexStandard = inputDocFileIndexStandard;
+            _docFieldsIndex = docFieldsIndex;
             _passedDocs = new List<string[]>();
-            _maxPassedRowForSwitchIndex = inputMaxPassedRowForSwitchIndex;
+            _maxPassedRows = maxPassedRows;
             _rowLenght = inputRowLength;
-            _universalDocs = universalDocs;
+            _docObjects = docObjects;
         }
 
         internal DocConverter(int[] inputDocFileIndex) 
         {
-            this._docFieldsIndexStandard = inputDocFileIndex;
+            _docFieldsIndex = inputDocFileIndex;
         }
 
         // Specific documents is exported from 1C:DO or 1C:UPP spreadsheets
         internal void ConvertSpecificDocs(string[][] docsArr, string passedDocsReportPath)
         {
-            List<T> specificDocObjList = new List<T>(docsArr.Length);
-
             int exceptCount = 0;
-                                                                            //bool isSwithedIndex = false;
-            int[] fieldIndexes = this._docFieldsIndexStandard;
 
-            for (int i = 0; i < docsArr.Length; i++)                        // Going through an array of documents
+            for (int i = 0; i < docsArr.Length; i++)                                                        // Going through an array of documents
             {
                 try
                 {
-                                                                            // Adding a document object to the list
-                    _universalDocs.Add((T)Activator.CreateInstance(typeof(T), docsArr[i], fieldIndexes));   
+                    _docObjects.Add((T)Activator
+                               .CreateInstance(typeof(T), docsArr[i], _docFieldsIndex));   // Adding a document object to the list
                 }
                 catch
                 {
                     exceptCount++;
-                                                                            // Adding document into error list
-                    if (exceptCount > this._maxPassedRowForSwitchIndex)
-                        this._passedDocs.Add(docsArr[i]);                    
+                    if (exceptCount > this._maxPassedRows)
+                        this._passedDocs.Add(docsArr[i]);                   // Adding document into error list 
                 }
             }
 
             if (_passedDocs.Count > 0)
                 CreateReportPassedDocs(passedDocsReportPath);
-
-            Console.WriteLine("DocConverter" + _universalDocs.GetHashCode());
         }
 
                                                                             // Universal documents is exported from
@@ -67,7 +59,7 @@
 
             for (int i = 0; i < ignoreArrDoDocuments.Length; i++)
             {
-                documents.Add(new Document(ignoreArrDoDocuments[i], this._docFieldsIndexStandard));
+                documents.Add(new Document(ignoreArrDoDocuments[i], this._docFieldsIndex));
             }
             return documents;
         }
