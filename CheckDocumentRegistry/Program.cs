@@ -52,14 +52,19 @@
 
             void GetSrcDocs1CUPP()
             {
-                docRepository.SrcRegistry = docLoader.GetDocs1CUPP(workParams.inputSpreadsheetDocRegistryPath[0],
-                                                                   workParams.exceptedDocRegistryPath);
+                _docLoader = new(docFieldsSettingsRepository.DocFieldsRegUPP, docRepository.SrcRegistry);
+                _docLoader.GetDocObjectList<Document1CUPP>(workParams.inputSpreadsheetDocRegistryPath, workParams.exceptedDocRegistryPath);
+
+                //docRepository.SrcRegistry = docLoader.GetDocs1CUPP(workParams.inputSpreadsheetDocRegistryPath[0],
+                //                                                   workParams.exceptedDocRegistryPath);
             }
 
             void GetSrcDocs1CKA()
             {
-                docRepository.SrcRegistry = docLoader.GetDocs1CKA(workParams.inputSpreadsheetDocRegistryPath,
-                                                                  workParams.exceptedDocManagePath);
+                _docLoader = new(docFieldsSettingsRepository.DocFieldsKA, docRepository.SrcRegistry);
+                _docLoader.GetDocObjectList<Document1CKA>(workParams.inputSpreadsheetDocRegistryPath, workParams.exceptedDocRegistryPath);
+                //docRepository.SrcRegistry = docLoader.GetDocs1CKA(workParams.inputSpreadsheetDocRegistryPath,
+                //                                                  workParams.exceptedDocManagePath);
             }
 
             void GetIgnoreDocList()

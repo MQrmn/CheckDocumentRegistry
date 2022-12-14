@@ -1,4 +1,6 @@
-﻿namespace RegComparator
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+
+namespace RegComparator
 {
     public class DocLoader
     {
@@ -32,9 +34,26 @@
             Console.WriteLine(_documents.Count);
         }
 
+        public void GetDocObjectList<T>(string[] spreadsheetPathArr, string exceptedDocsPath) where T : Document
+        {
+            List<Document> docObjs1CKA = new();
+            foreach (var spreadsheetPath in spreadsheetPathArr)
+            {
+                string[][] docArrsTmp = GetDocsFromFile(spreadsheetPath);
 
-        // Getting 1C:DO specific documents
-        public List<Document> GetDocs1CDO(string spreadsheetPath, string passDocsPath)
+                DocConverter<T> docsConverter = new(_docFieldsSettings.DocFielsdIndex,
+                                                    _docFieldsSettings.MaxPassedRows,
+                                                    _docFieldsSettings.RowLenght,
+                                                    _documents);
+                List<Document> docObjs1CKATmp = docsConverter.ConvertSpecificDocs(docArrsTmp, exceptedDocsPath);
+                docObjs1CKA = docObjs1CKA.Concat(docObjs1CKATmp).ToList();
+
+                _documents = _documents.Concat(docsConverter.ConvertSpecificDocs(docArrsTmp, exceptedDocsPath)).ToList(); 
+            }
+        }
+
+            // Getting 1C:DO specific documents
+            public List<Document> GetDocs1CDO(string spreadsheetPath, string passDocsPath)
         {
             string[][] docArrs1CDO = GetDocsFromFile(spreadsheetPath);
 

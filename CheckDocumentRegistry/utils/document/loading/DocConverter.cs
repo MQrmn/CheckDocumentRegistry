@@ -53,8 +53,8 @@
             {
                 try
                 {
-                                                                            // Adding a document object to the list
-                    specificDocObjList.Add((T)Activator.CreateInstance(typeof(T), docsArr[i], fieldIndexes));   
+                    // Adding a document object to the list
+                    _universalDocs.Add((T)Activator.CreateInstance(typeof(T), docsArr[i], fieldIndexes));   
                 }
                 catch
                 {
@@ -70,8 +70,9 @@
             if (PassedDocs.Count > 0)
                 CreateReportPassedDocs(passedDocsReportPath);
 
-            _universalDocs = specificDocObjList.ConvertAll(new Converter<T, Document>((T document) => (Document)document));
-
+            Console.WriteLine("DocConverter 1 " + _universalDocs.GetHashCode());
+            //_universalDocs = specificDocObjList.ConvertAll(new Converter<T, Document>((T document) => (Document)document));
+            Console.WriteLine("DocConverter 2 " + _universalDocs.GetHashCode());
             return _universalDocs;
         }
 
