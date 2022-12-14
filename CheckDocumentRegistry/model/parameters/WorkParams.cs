@@ -3,7 +3,7 @@ namespace RegComparator
 {
     public class WorkParams
     {
-        public string inputSpreadsheetDocManagePath { get; set; }
+        public string[] inputSpreadsheetDocManagePath { get; set; }
         public string[] inputSpreadsheetDocRegistryPath { get; set; }
         public string passSpreadsheetDocManagePath { get; set; }
         public string passSpreadSheetDocRegistryPath { get; set; }
@@ -21,7 +21,7 @@ namespace RegComparator
 
         public void SetDefaults()
         {
-            this.inputSpreadsheetDocManagePath = ".\\input\\DocManagement.xlsx";
+            this.inputSpreadsheetDocManagePath = new string[] { ".\\input\\DocManagement.xlsx",};
             this.inputSpreadsheetDocRegistryPath = new string[] { ".\\input\\DocRegistry.xlsx" };
             this.passSpreadsheetDocManagePath = ".\\input\\PassDocManagement.xlsx";
             this.passSpreadSheetDocRegistryPath = ".\\input\\PassDocRegistry.xlsx";

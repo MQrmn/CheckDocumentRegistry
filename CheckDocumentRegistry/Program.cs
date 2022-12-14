@@ -15,7 +15,7 @@
             DocLoader _docLoader;
             DocAmountReportData reportDocAmount = new();
             WorkParams workParams = GetWorkParams(args);                    // Getting program parameters
-            WorkAbilityChecker.CheckFiles(workParams);                      // Checkimg for existing files to comparing
+           // WorkAbilityChecker.CheckFiles(workParams);                    // Checkimg for existing files to comparing
 
             GetSrcDocs1CDO();                                               // Getting documents from 1C:DO
             GetRegistryDocs();                                              // Getting documents from 1C:RF or UPP registry

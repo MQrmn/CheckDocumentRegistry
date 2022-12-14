@@ -9,12 +9,12 @@ namespace RegComparator
         
         internal protected static void CheckFiles(WorkParams programParameters)
         {
-            bool doExist = File.Exists(programParameters.inputSpreadsheetDocManagePath);
+            bool doExist = File.Exists(programParameters.inputSpreadsheetDocManagePath[0]);
             bool uppExist = File.Exists(programParameters.inputSpreadsheetDocRegistryPath[0]);
 
             if (doExist && uppExist)
             {
-                TryOpenSpreadSheet(programParameters.inputSpreadsheetDocManagePath);
+                TryOpenSpreadSheet(programParameters.inputSpreadsheetDocManagePath[0]);
                 TryOpenSpreadSheet(programParameters.inputSpreadsheetDocRegistryPath[0]);
             }
             else

@@ -1,6 +1,4 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-
-namespace RegComparator
+﻿namespace RegComparator
 {
     public class DocLoader
     {
@@ -16,17 +14,6 @@ namespace RegComparator
         }
 
         DocFieldsSettings docFieldsSettings = new();
-
-        public void GetDocObjectList<T>(string spreadsheetPath, string passDocsPath) where T: Document
-        {
-            string[][] docArrs = GetDocsFromFile(spreadsheetPath);
-
-            DocConverter<T> docsConverter = new(_docFieldsSettings.DocFielsdIndex,
-                                                _docFieldsSettings.MaxPassedRows,
-                                                _docFieldsSettings.RowLenght,
-                                                _documents);
-            docsConverter.ConvertSpecificDocs(docArrs, passDocsPath);
-        }
 
         public void GetDocObjectList<T>(string[] spreadsheetPathArr, string exceptedDocsPath) where T : Document
         {
