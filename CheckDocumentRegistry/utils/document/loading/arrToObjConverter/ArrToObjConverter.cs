@@ -1,7 +1,9 @@
-﻿namespace RegComparator
+﻿using RegComparator.utils.document.loading.arrToObjConverter;
+
+namespace RegComparator
 {
 
-    internal class DocConverter<T> where T : Document
+    internal class DocConverter<T> : IArrToObjConverter where T : Document
     {
         internal List<string[]>? _passedDocs;
         private int[] _docFieldsIndex;
@@ -22,13 +24,13 @@
             _docObjects = docObjects;
         }
 
-        internal DocConverter(int[] inputDocFileIndex) 
+        internal DocConverter(int[] inputDocFileIndex)
         {
             _docFieldsIndex = inputDocFileIndex;
         }
 
         // Specific documents is exported from 1C:DO or 1C:UPP spreadsheets
-        internal void ConvertSpecificDocs(string[][] docsArr, string? passedDocsReportPath)
+        public void ConvertArrToObjs(string[][] docsArr, string? passedDocsReportPath)
         {
             int exceptCount = 0;
 
@@ -46,26 +48,13 @@
                 }
             }
 
-            if ((passedDocsReportPath is not null) && (_passedDocs?.Count > 0))
+            if (passedDocsReportPath is not null && _passedDocs?.Count > 0)
                 CreateReportPassedDocs(passedDocsReportPath);
-        }
-
-        // Universal documents is exported from
-        // this program spreadsheets
-        public List<Document> ConvertUniversalDocs(string[][] ignoreArrDoDocuments)
-        {
-            List<Document> documents = new List<Document>(ignoreArrDoDocuments.Length);
-
-            for (int i = 0; i < ignoreArrDoDocuments.Length; i++)
-            {
-                documents.Add(new Document(ignoreArrDoDocuments[i], this._docFieldsIndex));
-            }
-            return documents;
         }
 
         private void CreateReportPassedDocs(string exceptedUppPath)
         {
-            this.PrintConsolePassedDocs(this._passedDocs);
+            PrintConsolePassedDocs(_passedDocs);
             SpreadSheetWriterXLSX spreadSheetWriterXLSX = new SpreadSheetWriterXLSX(exceptedUppPath);
             spreadSheetWriterXLSX.CreateSpreadsheet(_passedDocs);
         }

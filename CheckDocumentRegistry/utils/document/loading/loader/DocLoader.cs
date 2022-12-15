@@ -4,7 +4,7 @@
     {
         private DocFieldsBase _docFieldsSettings;
         private List<Document> _documents;
-        
+
 
         public DocLoader() { }
         public DocLoader(DocFieldsBase docFields, List<Document> documents)
@@ -23,8 +23,8 @@
 
             foreach (var spreadsheetPath in spreadsheetPathArr)
             {
-                docArrsTmp = GetDocsFromFile(spreadsheetPath); 
-                docsConverter.ConvertSpecificDocs(docArrsTmp, exceptedDocsPath);
+                docArrsTmp = GetDocsFromFile(spreadsheetPath);
+                docsConverter.ConvertArrToObjs(docArrsTmp, exceptedDocsPath);
             }
         }
 
