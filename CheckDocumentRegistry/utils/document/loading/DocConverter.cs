@@ -28,7 +28,7 @@
         }
 
         // Specific documents is exported from 1C:DO or 1C:UPP spreadsheets
-        internal void ConvertSpecificDocs(string[][] docsArr, string passedDocsReportPath)
+        internal void ConvertSpecificDocs(string[][] docsArr, string? passedDocsReportPath)
         {
             int exceptCount = 0;
 
@@ -36,23 +36,22 @@
             {
                 try
                 {
-                    _docObjects.Add((T)Activator
-                               .CreateInstance(typeof(T), docsArr[i], _docFieldsIndex));   // Adding a document object to the list
+                    _docObjects.Add((T)Activator.CreateInstance(typeof(T), docsArr[i], _docFieldsIndex));   // Adding a document object to the list
                 }
                 catch
                 {
                     exceptCount++;
-                    if (exceptCount > this._maxPassedRows)
-                        this._passedDocs.Add(docsArr[i]);                   // Adding document into error list 
+                    if (exceptCount > _maxPassedRows)
+                        _passedDocs?.Add(docsArr[i]);                                                       // Adding document into error list 
                 }
             }
 
-            if (_passedDocs.Count > 0)
+            if ((passedDocsReportPath is not null) && (_passedDocs?.Count > 0))
                 CreateReportPassedDocs(passedDocsReportPath);
         }
 
-                                                                            // Universal documents is exported from
-                                                                            // this program spreadsheets
+        // Universal documents is exported from
+        // this program spreadsheets
         public List<Document> ConvertUniversalDocs(string[][] ignoreArrDoDocuments)
         {
             List<Document> documents = new List<Document>(ignoreArrDoDocuments.Length);

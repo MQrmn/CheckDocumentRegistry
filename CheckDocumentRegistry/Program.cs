@@ -11,7 +11,6 @@
             DocFieldsSettingsRepository docFieldsSettingsRepository = new();
             DocRepository docRepository = new();
             
-            DocLoader docLoader = new();
             DocLoader _docLoader;
             DocAmountReportData reportDocAmount = new();
             WorkParams workParams = GetWorkParams(args);                    // Getting program parameters
@@ -47,19 +46,27 @@
             void GetSrcDocs1CUPP()
             {
                 _docLoader = new(docFieldsSettingsRepository.DocFieldsRegUPP, docRepository.SrcRegistry);
-                _docLoader.GetDocObjectList<Document1CUPP>(workParams.inputSpreadsheetDocRegistryPath, workParams.exceptedDocRegistryPath);
+                _docLoader.GetDocObjectList<Document1CUPP>(workParams.inputSpreadsheetDocRegistryPath, 
+                                                           workParams.exceptedDocRegistryPath);
             }
 
             void GetSrcDocs1CKA()
             {
                 _docLoader = new(docFieldsSettingsRepository.DocFieldsKA, docRepository.SrcRegistry);
-                _docLoader.GetDocObjectList<Document1CKA>(workParams.inputSpreadsheetDocRegistryPath, workParams.exceptedDocRegistryPath);
+                _docLoader.GetDocObjectList<Document1CKA>(workParams.inputSpreadsheetDocRegistryPath, 
+                                                          workParams.exceptedDocRegistryPath);
             }
 
             void GetIgnoreDocList()
             {
-                docRepository.Pass1CDO = docLoader.GetDocsPass(workParams.passSpreadsheetDocManagePath);
-                docRepository.PassRegistry = docLoader.GetDocsPass(workParams.passSpreadSheetDocRegistryPath);
+                _docLoader = new(docFieldsSettingsRepository.DocFieldsCmn, docRepository.Pass1CDO);
+                _docLoader.GetDocObjectList<Document>(workParams.passSpreadsheetDocManagePath);
+
+                _docLoader = new(docFieldsSettingsRepository.DocFieldsCmn, docRepository.PassRegistry);
+                _docLoader.GetDocObjectList<Document>(workParams.passSpreadSheetDocRegistryPath);
+
+                //docRepository.Pass1CDO = docLoader.GetDocsPass(workParams.passSpreadsheetDocManagePath);
+                //docRepository.PassRegistry = docLoader.GetDocsPass(workParams.passSpreadSheetDocRegistryPath);
             }
 
             void CompareDocuments()

@@ -5,8 +5,8 @@ namespace RegComparator
     {
         public string[] inputSpreadsheetDocManagePath { get; set; }
         public string[] inputSpreadsheetDocRegistryPath { get; set; }
-        public string passSpreadsheetDocManagePath { get; set; }
-        public string passSpreadSheetDocRegistryPath { get; set; }
+        public string[] passSpreadsheetDocManagePath { get; set; }
+        public string[] passSpreadSheetDocRegistryPath { get; set; }
         public string outputMatchedDocManagePath { get; set; }
         public string outputMatchedDocRestryPath { get; set; }
         public string outputUnmatchDocManagePath { get; set; }
@@ -21,10 +21,10 @@ namespace RegComparator
 
         public void SetDefaults()
         {
-            this.inputSpreadsheetDocManagePath = new string[] { ".\\input\\DocManagement.xlsx",};
-            this.inputSpreadsheetDocRegistryPath = new string[] { ".\\input\\DocRegistry.xlsx" };
-            this.passSpreadsheetDocManagePath = ".\\input\\PassDocManagement.xlsx";
-            this.passSpreadSheetDocRegistryPath = ".\\input\\PassDocRegistry.xlsx";
+            this.inputSpreadsheetDocManagePath = new string[] { ".\\input\\DocManagement.xlsx" };
+            this.inputSpreadsheetDocRegistryPath = new string[] { ".\\input\\DocRegistry.xlsx"  };
+            this.passSpreadsheetDocManagePath = new string[] { ".\\input\\PassDocManagement.xlsx" };
+            this.passSpreadSheetDocRegistryPath = new string[] { ".\\input\\PassDocRegistry.xlsx" };
             this.outputMatchedDocManagePath = ".\\output\\MatchedDocManagement.xlsx";
             this.outputMatchedDocRestryPath = ".\\output\\MatchedDocRegistry.xlsx";
             this.outputUnmatchDocManagePath = ".\\output\\UnmatchedDocManagement.xlsx";
