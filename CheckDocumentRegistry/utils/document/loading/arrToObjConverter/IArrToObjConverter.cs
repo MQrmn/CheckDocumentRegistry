@@ -1,4 +1,4 @@
-﻿namespace RegComparator.utils.document.loading.arrToObjConverter
+﻿namespace RegComparator
 {
     public interface IArrToObjConverter
     {

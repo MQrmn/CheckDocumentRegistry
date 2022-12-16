@@ -2,29 +2,31 @@
 {
     public class DocLoader
     {
-        private DocFieldsBase _docFieldsSettings;
-        private List<Document> _documents;
-
+        //private DocFieldsBase _docFieldsSettings;
+        //private List<Document> _documents;
+        private IArrToObjConverter _arrToObjConverter;
+        
 
         public DocLoader() { }
-        public DocLoader(DocFieldsBase docFields, List<Document> documents)
+        public DocLoader( IArrToObjConverter arrToObjConverter)
         {
-            _docFieldsSettings = docFields;
-            _documents = documents;
+            //_docFieldsSettings = docFields;
+            //_documents = documents;
+            _arrToObjConverter = arrToObjConverter;
         }
 
         public void GetDocObjectList<T>(string[] spreadsheetPathArr, string? exceptedDocsPath = null) where T : Document
         {
             string[][] docArrsTmp;
-            DocConverter<T> docsConverter = new(_docFieldsSettings.DocFielsdIndex,
-                                                _docFieldsSettings.MaxPassedRows,
-                                                _docFieldsSettings.RowLenght,
-                                                _documents);
+            //ArrToObjConverter<T> docsConverter = new(_docFieldsSettings.DocFielsdIndex,
+            //                                    _docFieldsSettings.MaxPassedRows,
+            //                                    _docFieldsSettings.RowLenght,
+            //                                    _documents);
 
             foreach (var spreadsheetPath in spreadsheetPathArr)
             {
                 docArrsTmp = GetDocsFromFile(spreadsheetPath);
-                docsConverter.ConvertArrToObjs(docArrsTmp, exceptedDocsPath);
+                _arrToObjConverter.ConvertArrToObjs(docArrsTmp, exceptedDocsPath);
             }
         }
 

@@ -1,33 +1,32 @@
-﻿using RegComparator.utils.document.loading.arrToObjConverter;
-
-namespace RegComparator
+﻿namespace RegComparator
 {
 
-    internal class DocConverter<T> : IArrToObjConverter where T : Document
+    internal class ArrToObjConverter<T> : IArrToObjConverter where T : Document
     {
-        internal List<string[]>? _passedDocs;
-        private int[] _docFieldsIndex;
-        private int _maxPassedRows;
-        private int _rowLenght;
-
+        private List<string[]>? _passedDocs;
+        //private int[] _docFieldsIndex;
+        //private int _maxPassedRows;
+        //private int _rowLenght;
         private List<Document> _docObjects;
+        private DocFieldsBase _docFieldsSettings;
 
-        internal DocConverter(int[] docFieldsIndex,
-                                 int maxPassedRows,
-                                 int inputRowLength,
+
+        internal ArrToObjConverter(DocFieldsBase docFieldsSettings,
                                  List<Document> docObjects)
         {
-            _docFieldsIndex = docFieldsIndex;
+            _docFieldsSettings = docFieldsSettings;
+
+            //_docFieldsIndex = docFieldsIndex;
             _passedDocs = new List<string[]>();
-            _maxPassedRows = maxPassedRows;
-            _rowLenght = inputRowLength;
+            //_maxPassedRows = maxPassedRows;
+            //_rowLenght = inputRowLength;
             _docObjects = docObjects;
         }
 
-        internal DocConverter(int[] inputDocFileIndex)
-        {
-            _docFieldsIndex = inputDocFileIndex;
-        }
+        //internal ArrToObjConverter(int[] inputDocFileIndex)
+        //{
+        //    _docFieldsIndex = inputDocFileIndex;
+        //}
 
         // Specific documents is exported from 1C:DO or 1C:UPP spreadsheets
         public void ConvertArrToObjs(string[][] docsArr, string? passedDocsReportPath)
@@ -38,12 +37,12 @@ namespace RegComparator
             {
                 try
                 {
-                    _docObjects.Add((T)Activator.CreateInstance(typeof(T), docsArr[i], _docFieldsIndex));   // Adding a document object to the list
+                    _docObjects.Add((T)Activator.CreateInstance(typeof(T), docsArr[i], _docFieldsSettings.DocFielsdIndex));   // Adding a document object to the list
                 }
                 catch
                 {
                     exceptCount++;
-                    if (exceptCount > _maxPassedRows)
+                    if (exceptCount > _docFieldsSettings.MaxPassedRows)
                         _passedDocs?.Add(docsArr[i]);                                                       // Adding document into error list 
                 }
             }

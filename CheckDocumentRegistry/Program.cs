@@ -12,6 +12,7 @@
             DocRepository docRepository = new();
             
             DocLoader _docLoader;
+            IArrToObjConverter arrToObjConverter;
             DocAmountReportData reportDocAmount = new();
             WorkParams workParams = GetWorkParams(args);                    // Getting program parameters
            // WorkAbilityChecker.CheckFiles(workParams);                    // Checkimg for existing files to comparing
@@ -32,7 +33,11 @@
 
             void GetSrcDocs1CDO()
             {
-                _docLoader = new(docFieldsSettingsRepository.DocFieldsDO, docRepository.Src1CDO);
+                arrToObjConverter = new ArrToObjConverter<Document1CDO>(docFieldsSettingsRepository.DocFieldsDO,
+                                                          docRepository.Src1CDO);
+
+                _docLoader = new(arrToObjConverter);
+
                 _docLoader.GetDocObjectList<Document1CDO>(workParams.inputSpreadsheetDocManagePath, workParams.exceptedDocManagePath);
             }
 
