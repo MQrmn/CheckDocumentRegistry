@@ -17,12 +17,12 @@
             string[][] docArrsTmp;
             foreach (var spreadsheetPath in spreadsheetPathArr)
             {
-                docArrsTmp = GetDocsFromFile(spreadsheetPath);
+                docArrsTmp = GetDocsArraysFromFile(spreadsheetPath);
                 _arrToObjConverter.ConvertArrToObjs(docArrsTmp, exceptedDocsPath);
             }
         }
 
-        private string[][] GetDocsFromFile(string spreadsheetPath)
+        private string[][] GetDocsArraysFromFile(string spreadsheetPath)
         {
             Notify?.Invoke(this, $"Чтение электронной таблицы: {spreadsheetPath}");
             return _spreadSheetReader.GetDocumentsFromTable(spreadsheetPath);
