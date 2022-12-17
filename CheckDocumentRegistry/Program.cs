@@ -5,7 +5,8 @@
         static void Main(string[] args)
         {
             IArrToObjConverter arrToObjConverter;
-            
+            IUserReporter userReporter;
+
             DocLoader docLoader;
             DocComparator docComparator;                                    // Class contains results of documents comparing 
             UnmatchedDocCommentSetter unmatchedDocsCommentator;             // Class set comments in unmatched documents
@@ -15,6 +16,7 @@
             DocRepository docRepository = new();
             DocAmountReportData reportDocAmount = new();
             WorkParams workParams = GetWorkParams(args);                    // Getting program parameters
+            userReporter = new ConsoleWriter();
            // WorkAbilityChecker.CheckFiles(workParams);                    // Checkimg for existing files to comparing
 
             GetSrcDocs1CDO();                                               // Getting documents from 1C:DO
@@ -31,12 +33,17 @@
             GenerateOutputSpreadsheets();
             CloseProgram();
 
+
+
+            void PrintMessage(string message) => Console.WriteLine(message);
+
             void GetSrcDocs1CDO()
             {
                 arrToObjConverter = new ArrToObjConverter<Document1CDO>
                     (docFieldsSettingsRepository.DocFieldsDO, docRepository.Src1CDO);
                 
                 docLoader = new(arrToObjConverter);
+                docLoader.Notify += userReporter.ReportInfo;
                 docLoader.GetDocObjectList<Document1CDO>
                     (workParams.inputSpreadsheetDocManagePath, workParams.exceptedDocManagePath);
             }
@@ -54,6 +61,7 @@
                     (docFieldsSettingsRepository.DocFieldsRegUPP, docRepository.SrcRegistry);
                 
                 docLoader = new(arrToObjConverter);
+                docLoader.Notify += userReporter.ReportInfo;
                 docLoader.GetDocObjectList<Document1CUPP>
                     (workParams.inputSpreadsheetDocRegistryPath, workParams.exceptedDocRegistryPath);
             }
@@ -64,6 +72,7 @@
                     (docFieldsSettingsRepository.DocFieldsKA, docRepository.SrcRegistry);
                 
                 docLoader = new(arrToObjConverter);
+                docLoader.Notify += userReporter.ReportInfo;
                 docLoader.GetDocObjectList<Document1CKA>
                     (workParams.inputSpreadsheetDocRegistryPath, workParams.exceptedDocRegistryPath);
             }
@@ -74,11 +83,13 @@
                     (docFieldsSettingsRepository.DocFieldsCmn, docRepository.Pass1CDO);
                 
                 docLoader = new(arrToObjConverter);
+                docLoader.Notify += userReporter.ReportInfo;
                 docLoader.GetDocObjectList<Document>(workParams.passSpreadsheetDocManagePath);
 
                 arrToObjConverter = new ArrToObjConverter<Document>
                     (docFieldsSettingsRepository.DocFieldsCmn, docRepository.PassRegistry);
                 docLoader = new(arrToObjConverter);
+                docLoader.Notify += userReporter.ReportInfo;
                 docLoader.GetDocObjectList<Document>(workParams.passSpreadSheetDocRegistryPath);
             }
 

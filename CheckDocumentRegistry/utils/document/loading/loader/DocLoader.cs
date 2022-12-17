@@ -3,9 +3,10 @@
     public class DocLoader
     {
         private IArrToObjConverter _arrToObjConverter;
-        
 
-        public DocLoader() { }
+        public delegate void DocLoaderEvents(string message);
+        public event DocLoaderEvents? Notify;
+
         public DocLoader( IArrToObjConverter arrToObjConverter)
         {
             _arrToObjConverter = arrToObjConverter;
@@ -23,7 +24,7 @@
 
         private string[][] GetDocsFromFile(string spreadsheetPath)
         {
-            Console.WriteLine($"Чтение электронной таблицы: {spreadsheetPath}");
+            Notify?.Invoke($"Чтение электронной таблицы: {spreadsheetPath}");
             SpreadSheetReaderXLSX spreadSheetReaderXLSX = new SpreadSheetReaderXLSX();
             return spreadSheetReaderXLSX.GetDocumentsFromTable(spreadsheetPath);
         }
