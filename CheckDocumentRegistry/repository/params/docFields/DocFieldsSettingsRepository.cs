@@ -1,23 +1,18 @@
 ﻿namespace RegComparator
 {
-    internal class DocFieldsSettingsRepository
+    internal class DocFieldsSettingsRepository : DocFieldsSettingsRepositoryBase
     {
-        public DocFields1CDO DocFieldsDO;
-        public DocFieldsCommon DocFieldsCmn;
-        public DocFieldsReg1CKA DocFieldsKA;
-        public DocFieldsReg1CUPP DocFieldsRegUPP;
-
-        public DocFieldsSettingsRepository()
+        public DocFieldsSettingsRepository(byte workMode = 1)
         {
-            DocFieldsDO = new();
-            DocFieldsCmn = new();
-            DocFieldsKA = new();
-            DocFieldsRegUPP = new();
+            FieldsDO = new DocFields1CDO();
+            FieldsCmn = new DocFieldsCommon();
 
-            DocFieldsDO.SetDefaults();
-            DocFieldsCmn.SetDefaults();
-            DocFieldsKA.SetDefaults();
-            DocFieldsRegUPP.SetDefaults();
+            if (workMode == 1)
+                FieldsRegistry = new DocFieldsReg1CKA();
+            else
+                FieldsRegistry = new DocFieldsReg1CUPP();
+
+            SetDefaults();
         }
 
     }

@@ -7,13 +7,14 @@
             IArrToObjConverter arrToObjConverter;
             IUserReporter userReporter;
             ISpreadSheetReader spreadSheetReader = new SpreadSheetReaderXLSX();
+            DocFieldsSettingsRepositoryBase docFieldsSettingsRepository = new DocFieldsSettingsRepository();
 
             DocLoader docLoader;
             DocComparator docComparator;                                    // Class contains results of documents comparing 
             UnmatchedDocCommentSetter unmatchedDocsCommentator;             // Class set comments in unmatched documents
             ConfigFilesPath configFilesPath;
 
-            DocFieldsSettingsRepository docFieldsSettingsRepository = new();
+            
             DocRepository docRepository = new();
             DocAmountReportData reportDocAmount = new();
             WorkParams workParams = GetWorkParams(args);                    // Getting program parameters
@@ -37,7 +38,7 @@
             void GetSrcDocs1CDO()
             {
                 arrToObjConverter = new ArrToObjConverter<Document1CDO>
-                    (docFieldsSettingsRepository.DocFieldsDO, docRepository.Src1CDO);
+                    (docFieldsSettingsRepository.FieldsDO, docRepository.Src1CDO);
                 arrToObjConverter.ErrNotify += userReporter.ReportError;
 
                 docLoader = new(arrToObjConverter, spreadSheetReader);
@@ -56,7 +57,7 @@
             void GetSrcDocs1CUPP()
             {
                 arrToObjConverter = new ArrToObjConverter<Document1CUPP>
-                    (docFieldsSettingsRepository.DocFieldsRegUPP, docRepository.SrcRegistry);
+                    (docFieldsSettingsRepository.FieldsRegistry, docRepository.SrcRegistry);
                 arrToObjConverter.ErrNotify += userReporter.ReportError;
 
                 docLoader = new(arrToObjConverter, spreadSheetReader);
@@ -68,7 +69,7 @@
             void GetSrcDocs1CKA()
             {
                 arrToObjConverter = new ArrToObjConverter<Document1CKA>
-                    (docFieldsSettingsRepository.DocFieldsKA, docRepository.SrcRegistry);
+                    (docFieldsSettingsRepository.FieldsRegistry, docRepository.SrcRegistry);
                 arrToObjConverter.ErrNotify += userReporter.ReportError;
 
                 docLoader = new(arrToObjConverter, spreadSheetReader);
@@ -80,7 +81,7 @@
             void GetIgnoreDocList()
             {
                 arrToObjConverter = new ArrToObjConverter<Document>
-                    (docFieldsSettingsRepository.DocFieldsCmn, docRepository.Pass1CDO);
+                    (docFieldsSettingsRepository.FieldsCmn, docRepository.Pass1CDO);
                 arrToObjConverter.ErrNotify += userReporter.ReportError;
 
                 docLoader = new(arrToObjConverter, spreadSheetReader);
@@ -88,7 +89,7 @@
                 docLoader.GetDocObjectList<Document>(workParams.passSpreadsheetDocManagePath);
 
                 arrToObjConverter = new ArrToObjConverter<Document>
-                    (docFieldsSettingsRepository.DocFieldsCmn, docRepository.PassRegistry);
+                    (docFieldsSettingsRepository.FieldsCmn, docRepository.PassRegistry);
                 arrToObjConverter.ErrNotify += userReporter.ReportError;
 
                 docLoader = new(arrToObjConverter, spreadSheetReader);
