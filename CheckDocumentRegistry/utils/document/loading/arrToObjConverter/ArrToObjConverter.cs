@@ -4,29 +4,19 @@
     internal class ArrToObjConverter<T> : IArrToObjConverter where T : Document
     {
         private List<string[]>? _passedDocs;
-        //private int[] _docFieldsIndex;
-        //private int _maxPassedRows;
-        //private int _rowLenght;
         private List<Document> _docObjects;
         private DocFieldsBase _docFieldsSettings;
 
+        //public delegate void ArrToObjConverterEvents(string message);
+        public event EventHandler<string>? ErrNotify;
 
         internal ArrToObjConverter(DocFieldsBase docFieldsSettings,
                                  List<Document> docObjects)
         {
             _docFieldsSettings = docFieldsSettings;
-
-            //_docFieldsIndex = docFieldsIndex;
             _passedDocs = new List<string[]>();
-            //_maxPassedRows = maxPassedRows;
-            //_rowLenght = inputRowLength;
             _docObjects = docObjects;
         }
-
-        //internal ArrToObjConverter(int[] inputDocFileIndex)
-        //{
-        //    _docFieldsIndex = inputDocFileIndex;
-        //}
 
         // Specific documents is exported from 1C:DO or 1C:UPP spreadsheets
         public void ConvertArrToObjs(string[][] docsArr, string? passedDocsReportPath)
@@ -60,22 +50,19 @@
 
         private void PrintConsolePassedDocs(List<string[]> exceptedDocuments)
         {
-            Console.WriteLine();
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("В следующих строках возникли исключения:");
+            ErrNotify?.Invoke(this, "В следующих строках возникли исключения:");
             int rowCount = 1;
             foreach (var exeptDoc in exceptedDocuments)
             {
-                Console.Write(rowCount + ". ");
+                ErrNotify?.Invoke(this, rowCount + ". ");
                 foreach (var docField in exeptDoc)
                 {
-                    Console.Write(docField + " ");
+                    ErrNotify?.Invoke(this, docField + " ");
                 }
                 rowCount++;
                 Console.WriteLine();
             }
             Console.WriteLine();
-            Console.ResetColor();
         }
     }
 }

@@ -4,8 +4,9 @@
     {
         private IArrToObjConverter _arrToObjConverter;
 
-        public delegate void DocLoaderEvents(string message);
-        public event DocLoaderEvents? Notify;
+        //public delegate void DocLoaderEvents(string message);
+        public event EventHandler<string>? Notify;
+        //public event DocLoaderEvents? Notify;
 
         public DocLoader( IArrToObjConverter arrToObjConverter)
         {
@@ -24,7 +25,7 @@
 
         private string[][] GetDocsFromFile(string spreadsheetPath)
         {
-            Notify?.Invoke($"Чтение электронной таблицы: {spreadsheetPath}");
+            Notify?.Invoke(this, $"Чтение электронной таблицы: {spreadsheetPath}");
             SpreadSheetReaderXLSX spreadSheetReaderXLSX = new SpreadSheetReaderXLSX();
             return spreadSheetReaderXLSX.GetDocumentsFromTable(spreadsheetPath);
         }

@@ -2,8 +2,8 @@
 {
     internal interface IUserReporter
     {
-        public void ReportInfo(string message);
-        public void ReportSpecial(string message);
-        public void ReportError(string message);
+        public void ReportInfo(object sender, string message);
+        public void ReportSpecial(object sender, string message);
+        public void ReportError(object sender, string message);
     }
 }

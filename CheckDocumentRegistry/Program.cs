@@ -37,7 +37,8 @@
             {
                 arrToObjConverter = new ArrToObjConverter<Document1CDO>
                     (docFieldsSettingsRepository.DocFieldsDO, docRepository.Src1CDO);
-                
+                arrToObjConverter.ErrNotify += userReporter.ReportError;
+
                 docLoader = new(arrToObjConverter);
                 docLoader.Notify += userReporter.ReportInfo;
                 docLoader.GetDocObjectList<Document1CDO>
@@ -55,7 +56,8 @@
             {
                 arrToObjConverter = new ArrToObjConverter<Document1CUPP>
                     (docFieldsSettingsRepository.DocFieldsRegUPP, docRepository.SrcRegistry);
-                
+                arrToObjConverter.ErrNotify += userReporter.ReportError;
+
                 docLoader = new(arrToObjConverter);
                 docLoader.Notify += userReporter.ReportInfo;
                 docLoader.GetDocObjectList<Document1CUPP>
@@ -64,12 +66,13 @@
 
             void GetSrcDocs1CKA()
             {
-                arrToObjConverter = new ArrToObjConverter<Document1CKA>
+                arrToObjConverter = new ArrToObjConverter<Document1CDO>
                     (docFieldsSettingsRepository.DocFieldsKA, docRepository.SrcRegistry);
-                
+                arrToObjConverter.ErrNotify += userReporter.ReportError;
+
                 docLoader = new(arrToObjConverter);
                 docLoader.Notify += userReporter.ReportInfo;
-                docLoader.GetDocObjectList<Document1CKA>
+                docLoader.GetDocObjectList<Document1CDO>
                     (workParams.inputSpreadsheetDocRegistryPath, workParams.exceptedDocRegistryPath);
             }
 
@@ -77,13 +80,16 @@
             {
                 arrToObjConverter = new ArrToObjConverter<Document>
                     (docFieldsSettingsRepository.DocFieldsCmn, docRepository.Pass1CDO);
-                
+                arrToObjConverter.ErrNotify += userReporter.ReportError;
+
                 docLoader = new(arrToObjConverter);
                 docLoader.Notify += userReporter.ReportInfo;
                 docLoader.GetDocObjectList<Document>(workParams.passSpreadsheetDocManagePath);
 
                 arrToObjConverter = new ArrToObjConverter<Document>
                     (docFieldsSettingsRepository.DocFieldsCmn, docRepository.PassRegistry);
+                arrToObjConverter.ErrNotify += userReporter.ReportError;
+
                 docLoader = new(arrToObjConverter);
                 docLoader.Notify += userReporter.ReportInfo;
                 docLoader.GetDocObjectList<Document>(workParams.passSpreadSheetDocRegistryPath);
