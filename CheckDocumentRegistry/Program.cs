@@ -4,18 +4,18 @@
     {
         static void Main(string[] args)
         {
-
             IArrToObjConverter arrToObjConverter;
             
             DocLoader docLoader;
             DocComparator docComparator;                                    // Class contains results of documents comparing 
             UnmatchedDocCommentSetter unmatchedDocsCommentator;             // Class set comments in unmatched documents
             ConfigFilesPath configFilesPath;
-            
+
             DocFieldsSettingsRepository docFieldsSettingsRepository = new();
             DocRepository docRepository = new();
             DocAmountReportData reportDocAmount = new();
             WorkParams workParams = GetWorkParams(args);                    // Getting program parameters
+           // WorkAbilityChecker.CheckFiles(workParams);                    // Checkimg for existing files to comparing
 
             GetSrcDocs1CDO();                                               // Getting documents from 1C:DO
             GetRegistryDocs();                                              // Getting documents from 1C:RF or UPP registry
