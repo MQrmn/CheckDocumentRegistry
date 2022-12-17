@@ -4,18 +4,18 @@
     {
         static void Main(string[] args)
         {
+
+            IArrToObjConverter arrToObjConverter;
+            
+            DocLoader docLoader;
             DocComparator docComparator;                                    // Class contains results of documents comparing 
             UnmatchedDocCommentSetter unmatchedDocsCommentator;             // Class set comments in unmatched documents
             ConfigFilesPath configFilesPath;
-
+            
             DocFieldsSettingsRepository docFieldsSettingsRepository = new();
             DocRepository docRepository = new();
-            
-            DocLoader _docLoader;
-            IArrToObjConverter arrToObjConverter;
             DocAmountReportData reportDocAmount = new();
             WorkParams workParams = GetWorkParams(args);                    // Getting program parameters
-           // WorkAbilityChecker.CheckFiles(workParams);                    // Checkimg for existing files to comparing
 
             GetSrcDocs1CDO();                                               // Getting documents from 1C:DO
             GetRegistryDocs();                                              // Getting documents from 1C:RF or UPP registry
@@ -33,12 +33,12 @@
 
             void GetSrcDocs1CDO()
             {
-                arrToObjConverter = new ArrToObjConverter<Document1CDO>(docFieldsSettingsRepository.DocFieldsDO,
-                                                          docRepository.Src1CDO);
-
-                _docLoader = new(arrToObjConverter);
-
-                _docLoader.GetDocObjectList<Document1CDO>(workParams.inputSpreadsheetDocManagePath, workParams.exceptedDocManagePath);
+                arrToObjConverter = new ArrToObjConverter<Document1CDO>
+                    (docFieldsSettingsRepository.DocFieldsDO, docRepository.Src1CDO);
+                
+                docLoader = new(arrToObjConverter);
+                docLoader.GetDocObjectList<Document1CDO>
+                    (workParams.inputSpreadsheetDocManagePath, workParams.exceptedDocManagePath);
             }
 
             void GetRegistryDocs(){
@@ -50,28 +50,36 @@
 
             void GetSrcDocs1CUPP()
             {
-                _docLoader = new(docFieldsSettingsRepository.DocFieldsRegUPP, docRepository.SrcRegistry);
-                _docLoader.GetDocObjectList<Document1CUPP>(workParams.inputSpreadsheetDocRegistryPath, 
-                                                           workParams.exceptedDocRegistryPath);
+                arrToObjConverter = new ArrToObjConverter<Document1CUPP>
+                    (docFieldsSettingsRepository.DocFieldsRegUPP, docRepository.SrcRegistry);
+                
+                docLoader = new(arrToObjConverter);
+                docLoader.GetDocObjectList<Document1CUPP>
+                    (workParams.inputSpreadsheetDocRegistryPath, workParams.exceptedDocRegistryPath);
             }
 
             void GetSrcDocs1CKA()
             {
-                _docLoader = new(docFieldsSettingsRepository.DocFieldsKA, docRepository.SrcRegistry);
-                _docLoader.GetDocObjectList<Document1CKA>(workParams.inputSpreadsheetDocRegistryPath, 
-                                                          workParams.exceptedDocRegistryPath);
+                arrToObjConverter = new ArrToObjConverter<Document1CKA>
+                    (docFieldsSettingsRepository.DocFieldsKA, docRepository.SrcRegistry);
+                
+                docLoader = new(arrToObjConverter);
+                docLoader.GetDocObjectList<Document1CKA>
+                    (workParams.inputSpreadsheetDocRegistryPath, workParams.exceptedDocRegistryPath);
             }
 
             void GetIgnoreDocList()
             {
-                _docLoader = new(docFieldsSettingsRepository.DocFieldsCmn, docRepository.Pass1CDO);
-                _docLoader.GetDocObjectList<Document>(workParams.passSpreadsheetDocManagePath);
+                arrToObjConverter = new ArrToObjConverter<Document>
+                    (docFieldsSettingsRepository.DocFieldsCmn, docRepository.Pass1CDO);
+                
+                docLoader = new(arrToObjConverter);
+                docLoader.GetDocObjectList<Document>(workParams.passSpreadsheetDocManagePath);
 
-                _docLoader = new(docFieldsSettingsRepository.DocFieldsCmn, docRepository.PassRegistry);
-                _docLoader.GetDocObjectList<Document>(workParams.passSpreadSheetDocRegistryPath);
-
-                //docRepository.Pass1CDO = docLoader.GetDocsPass(workParams.passSpreadsheetDocManagePath);
-                //docRepository.PassRegistry = docLoader.GetDocsPass(workParams.passSpreadSheetDocRegistryPath);
+                arrToObjConverter = new ArrToObjConverter<Document>
+                    (docFieldsSettingsRepository.DocFieldsCmn, docRepository.PassRegistry);
+                docLoader = new(arrToObjConverter);
+                docLoader.GetDocObjectList<Document>(workParams.passSpreadSheetDocRegistryPath);
             }
 
             void CompareDocuments()
