@@ -4,9 +4,9 @@ using System.Text.RegularExpressions;
 
 namespace RegComparator
 {
-    public class SpreadSheetReaderXLSX
+    public class SpreadSheetReaderXLSX : ISpreadSheetReader
     {
-        internal protected string[][] GetDocumentsFromTable(string filePath)
+        public string[][] GetDocumentsFromTable(string filePath)
         {
             using (SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument.Open(filePath, false))
             {
@@ -29,7 +29,7 @@ namespace RegComparator
         }
 
 
-        string[][] GetDocumentsArray(WorkbookPart workbookPart, SheetData sheetData, int rowNumber)
+        private string[][] GetDocumentsArray(WorkbookPart workbookPart, SheetData sheetData, int rowNumber)
         {
             string[][] allDocuments = new string[rowNumber][];
 
@@ -43,7 +43,7 @@ namespace RegComparator
         }
 
 
-        string[] GetParsedRow(WorkbookPart workbookPart, SheetData sheetData, int rowCount)
+        private string[] GetParsedRow(WorkbookPart workbookPart, SheetData sheetData, int rowCount)
         {
             int cellNumber = sheetData.ElementAt(rowCount).ChildElements.Count();
             string[] parsedRow = new string[cellNumber];

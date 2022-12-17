@@ -3,14 +3,13 @@
     public class DocLoader
     {
         private IArrToObjConverter _arrToObjConverter;
-
-        //public delegate void DocLoaderEvents(string message);
+        private ISpreadSheetReader _spreadSheetReader;
         public event EventHandler<string>? Notify;
-        //public event DocLoaderEvents? Notify;
 
-        public DocLoader( IArrToObjConverter arrToObjConverter)
+        public DocLoader( IArrToObjConverter arrToObjConverter, ISpreadSheetReader spreadSheetReader)
         {
             _arrToObjConverter = arrToObjConverter;
+            _spreadSheetReader = spreadSheetReader;
         }
 
         public void GetDocObjectList<T>(string[] spreadsheetPathArr, string? exceptedDocsPath = null) where T : Document
@@ -26,8 +25,7 @@
         private string[][] GetDocsFromFile(string spreadsheetPath)
         {
             Notify?.Invoke(this, $"Чтение электронной таблицы: {spreadsheetPath}");
-            SpreadSheetReaderXLSX spreadSheetReaderXLSX = new SpreadSheetReaderXLSX();
-            return spreadSheetReaderXLSX.GetDocumentsFromTable(spreadsheetPath);
+            return _spreadSheetReader.GetDocumentsFromTable(spreadsheetPath);
         }
     }
 }

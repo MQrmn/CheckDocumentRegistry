@@ -6,6 +6,7 @@
         {
             IArrToObjConverter arrToObjConverter;
             IUserReporter userReporter;
+            ISpreadSheetReader spreadSheetReader = new SpreadSheetReaderXLSX();
 
             DocLoader docLoader;
             DocComparator docComparator;                                    // Class contains results of documents comparing 
@@ -39,7 +40,7 @@
                     (docFieldsSettingsRepository.DocFieldsDO, docRepository.Src1CDO);
                 arrToObjConverter.ErrNotify += userReporter.ReportError;
 
-                docLoader = new(arrToObjConverter);
+                docLoader = new(arrToObjConverter, spreadSheetReader);
                 docLoader.Notify += userReporter.ReportInfo;
                 docLoader.GetDocObjectList<Document1CDO>
                     (workParams.inputSpreadsheetDocManagePath, workParams.exceptedDocManagePath);
@@ -58,7 +59,7 @@
                     (docFieldsSettingsRepository.DocFieldsRegUPP, docRepository.SrcRegistry);
                 arrToObjConverter.ErrNotify += userReporter.ReportError;
 
-                docLoader = new(arrToObjConverter);
+                docLoader = new(arrToObjConverter, spreadSheetReader);
                 docLoader.Notify += userReporter.ReportInfo;
                 docLoader.GetDocObjectList<Document1CUPP>
                     (workParams.inputSpreadsheetDocRegistryPath, workParams.exceptedDocRegistryPath);
@@ -66,13 +67,13 @@
 
             void GetSrcDocs1CKA()
             {
-                arrToObjConverter = new ArrToObjConverter<Document1CDO>
+                arrToObjConverter = new ArrToObjConverter<Document1CKA>
                     (docFieldsSettingsRepository.DocFieldsKA, docRepository.SrcRegistry);
                 arrToObjConverter.ErrNotify += userReporter.ReportError;
 
-                docLoader = new(arrToObjConverter);
+                docLoader = new(arrToObjConverter, spreadSheetReader);
                 docLoader.Notify += userReporter.ReportInfo;
-                docLoader.GetDocObjectList<Document1CDO>
+                docLoader.GetDocObjectList<Document1CKA>
                     (workParams.inputSpreadsheetDocRegistryPath, workParams.exceptedDocRegistryPath);
             }
 
@@ -82,7 +83,7 @@
                     (docFieldsSettingsRepository.DocFieldsCmn, docRepository.Pass1CDO);
                 arrToObjConverter.ErrNotify += userReporter.ReportError;
 
-                docLoader = new(arrToObjConverter);
+                docLoader = new(arrToObjConverter, spreadSheetReader);
                 docLoader.Notify += userReporter.ReportInfo;
                 docLoader.GetDocObjectList<Document>(workParams.passSpreadsheetDocManagePath);
 
@@ -90,7 +91,7 @@
                     (docFieldsSettingsRepository.DocFieldsCmn, docRepository.PassRegistry);
                 arrToObjConverter.ErrNotify += userReporter.ReportError;
 
-                docLoader = new(arrToObjConverter);
+                docLoader = new(arrToObjConverter, spreadSheetReader);
                 docLoader.Notify += userReporter.ReportInfo;
                 docLoader.GetDocObjectList<Document>(workParams.passSpreadSheetDocRegistryPath);
             }
