@@ -33,10 +33,6 @@
             GenerateOutputSpreadsheets();
             CloseProgram();
 
-
-
-            void PrintMessage(string message) => Console.WriteLine(message);
-
             void GetSrcDocs1CDO()
             {
                 arrToObjConverter = new ArrToObjConverter<Document1CDO>
