@@ -19,11 +19,29 @@
             DocAmountReportData reportDocAmount = new();
             WorkParams workParams = GetWorkParams(args);                    // Getting program parameters
             userReporter = new ConsoleWriter();
-           // WorkAbilityChecker.CheckFiles(workParams);                    // Checkimg for existing files to comparing
+            // WorkAbilityChecker.CheckFiles(workParams);                    // Checkimg for existing files to comparing
+            
+            // Getting documents from 1C:DO
+            GetSrcDocs<Document1CDO>(docFieldsSettingsRepository.FieldsDO, 
+                                        docRepository.Src1CDO, 
+                                        workParams.inputSpreadsheetDocManagePath, 
+                                        workParams.exceptedDocManagePath);
+            // Getting documents from 1C:KA or UPP registry
+            GetRegistrySrcDocuments();
 
-            GetSrcDocs1CDO();                                               // Getting documents from 1C:DO
-            GetRegistryDocs();                                              // Getting documents from 1C:RF or UPP registry
-            GetIgnoreDocList();                                             // Getting ignored documents from spreadsheets
+            // Getting ignored 1C:DO documents 
+            GetSrcDocs<Document>(docFieldsSettingsRepository.FieldsCmn, 
+                                    docRepository.Pass1CDO, 
+                                    workParams.passSpreadsheetDocManagePath);
+
+            // Getting ignored 1C:KA or 1C:UPP documents 
+            GetSrcDocs<Document>(docFieldsSettingsRepository.FieldsCmn,
+                                    docRepository.PassRegistry,
+                                    workParams.passSpreadSheetDocRegistryPath);
+
+
+
+            //GetIgnoreDocList();                                             
             FillSrcDocAmount();
             CompareDocuments();                                             // Comparing
             FillResultDocAmount();
@@ -35,67 +53,33 @@
             GenerateOutputSpreadsheets();
             CloseProgram();
 
-            void GetSrcDocs1CDO()
-            {
-                arrToObjConverter = new ArrToObjConverter<Document1CDO>
-                    (docFieldsSettingsRepository.FieldsDO, docRepository.Src1CDO);
-                arrToObjConverter.ErrNotify += userReporter.ReportError;
 
-                docLoader = new(arrToObjConverter, spreadSheetReader);
-                docLoader.Notify += userReporter.ReportInfo;
-                docLoader.GetDocObjectList<Document1CDO>
-                    (workParams.inputSpreadsheetDocManagePath, workParams.exceptedDocManagePath);
-            }
 
-            void GetRegistryDocs(){
-                if (workParams.programMode == "UPP")
-                    GetSrcDocs1CUPP();
+            void GetRegistrySrcDocuments(){
+                if (workParams.programMode == "KA")
+                    GetSrcDocs<Document1CKA>(docFieldsSettingsRepository.FieldsRegistry, 
+                                                docRepository.SrcRegistry,
+                                                workParams.inputSpreadsheetDocRegistryPath, 
+                                                workParams.exceptedDocRegistryPath);
                 else
-                    GetSrcDocs1CKA();
+                    GetSrcDocs<Document1CUPP>(docFieldsSettingsRepository.FieldsRegistry, 
+                                                docRepository.SrcRegistry,
+                                                workParams.inputSpreadsheetDocRegistryPath, 
+                                                workParams.exceptedDocRegistryPath);
             }
 
-            void GetSrcDocs1CUPP()
+            // Getting documents from spreadsheets
+            void GetSrcDocs<T>(DocFieldsBase fieldsSettings, List<Document> documents, 
+                               string[] spreadSheetsPath, string? exceptedDocsPath = null) 
+                               where T : Document
             {
-                arrToObjConverter = new ArrToObjConverter<Document1CUPP>
-                    (docFieldsSettingsRepository.FieldsRegistry, docRepository.SrcRegistry);
+                arrToObjConverter = new ArrToObjConverter<T>(fieldsSettings, documents);
                 arrToObjConverter.ErrNotify += userReporter.ReportError;
 
                 docLoader = new(arrToObjConverter, spreadSheetReader);
                 docLoader.Notify += userReporter.ReportInfo;
-                docLoader.GetDocObjectList<Document1CUPP>
-                    (workParams.inputSpreadsheetDocRegistryPath, workParams.exceptedDocRegistryPath);
-            }
-
-            void GetSrcDocs1CKA()
-            {
-                arrToObjConverter = new ArrToObjConverter<Document1CKA>
-                    (docFieldsSettingsRepository.FieldsRegistry, docRepository.SrcRegistry);
-                arrToObjConverter.ErrNotify += userReporter.ReportError;
-
-                docLoader = new(arrToObjConverter, spreadSheetReader);
-                docLoader.Notify += userReporter.ReportInfo;
-                docLoader.GetDocObjectList<Document1CKA>
-                    (workParams.inputSpreadsheetDocRegistryPath, workParams.exceptedDocRegistryPath);
-            }
-
-            void GetIgnoreDocList()
-            {
-                arrToObjConverter = new ArrToObjConverter<Document>
-                    (docFieldsSettingsRepository.FieldsCmn, docRepository.Pass1CDO);
-                arrToObjConverter.ErrNotify += userReporter.ReportError;
-
-                docLoader = new(arrToObjConverter, spreadSheetReader);
-                docLoader.Notify += userReporter.ReportInfo;
-                docLoader.GetDocObjectList<Document>(workParams.passSpreadsheetDocManagePath);
-
-                arrToObjConverter = new ArrToObjConverter<Document>
-                    (docFieldsSettingsRepository.FieldsCmn, docRepository.PassRegistry);
-                arrToObjConverter.ErrNotify += userReporter.ReportError;
-
-                docLoader = new(arrToObjConverter, spreadSheetReader);
-                docLoader.Notify += userReporter.ReportInfo;
-                docLoader.GetDocObjectList<Document>(workParams.passSpreadSheetDocRegistryPath);
-            }
+                docLoader.GetDocObjectList<T>(spreadSheetsPath, exceptedDocsPath);
+            } 
 
             void CompareDocuments()
             {
