@@ -2,10 +2,13 @@
 {
     public class FieldsSettingsRegistryRepository : FieldsSettingsRepositoryBase
     {
-        public FieldsSettingsRegistryRepository() 
+        public FieldsSettingsRegistryRepository(byte workMode = 1) 
         {
             CommonDocFieldsSettings = new DocFieldsCommon();
-            SpecDocFieldsSettings = new DocFields1CDO();
+            if (workMode == 1)
+                SpecDocFieldsSettings = new DocFields1CKA();
+            else
+                SpecDocFieldsSettings = new DocFields1CUPP();
             SetDefaults();
         }
     }

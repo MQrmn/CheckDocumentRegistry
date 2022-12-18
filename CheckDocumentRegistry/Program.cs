@@ -23,41 +23,41 @@
             fieldsSettingsRegistry = new FieldsSettingsRegistryRepository();
 
             fieldsSettings = new FieldsSettingsRepository();
-            //DocRepository docRepository = new();
             DocAmountReportData reportDocAmount = new();
             WorkParams workParams = GetWorkParams(args);                    // Getting program parameters
             userReporter = new ConsoleWriter();
             // WorkAbilityChecker.CheckFiles(workParams);                    // Checkimg for existing files to comparing
             
             // Getting documents from 1C:DO
-            GetSrcDocs<Document1CDO>(fieldsSettings.FieldsDO,
+            GetSrcDocs<Document1CDO>(
+                                        fieldsSettings1CDO.SpecDocFieldsSettings,
                                         doc1CDORepository.SourceDocs,
-                                        //docRepository.Src1CDO,
                                         workParams.inputSpreadsheetDocManagePath,
-                                        workParams.exceptedDocManagePath);
+                                        workParams.exceptedDocManagePath
+                                        );
             // Getting documents from 1C:KA or UPP registry
             GetRegistrySrcDocuments();
 
             // Getting ignored 1C:DO documents 
-            GetSrcDocs<Document>(fieldsSettings.FieldsCmn,
+            GetSrcDocs<Document>(
+                                    fieldsSettings1CDO.CommonDocFieldsSettings,
                                     doc1CDORepository.SkippedDocs,
-                                    //docRepository.Pass1CDO,
-                                    workParams.passSpreadsheetDocManagePath);
+                                    workParams.passSpreadsheetDocManagePath
+                                    );
 
             // Getting ignored 1C:KA or 1C:UPP documents 
-            GetSrcDocs<Document>(fieldsSettings.FieldsCmn,
+            GetSrcDocs<Document>(
+                                    fieldsSettings1CDO.CommonDocFieldsSettings,
                                     docRegistryRepository.SkippedDocs,
-                                    //docRepository.PassRegistry,
-                                    workParams.passSpreadSheetDocRegistryPath);
+                                    workParams.passSpreadSheetDocRegistryPath
+                                    );
 
-            //GetIgnoreDocList();                                             
             FillSrcDocAmount();
             CompareDocuments();                                             // Comparing
             FillResultDocAmount();
 
             DocumentAmountReporter documentsAmountReporter = new(workParams.programReportFilePath);
             documentsAmountReporter.CreateAllReports(
-                                                    //docRepository.SrcRegistry, 
                                                     docRegistryRepository.SourceDocs,
                                                     reportDocAmount
                                                     );
@@ -68,17 +68,19 @@
 
             void GetRegistrySrcDocuments(){
                 if (workParams.programMode == "KA")
-                    GetSrcDocs<Document1CKA>(fieldsSettings.FieldsRegistry,
+                    GetSrcDocs<Document1CKA>(
+                                                fieldsSettingsRegistry.SpecDocFieldsSettings,
                                                 docRegistryRepository.SourceDocs,
-                                                //docRepository.SrcRegistry,
                                                 workParams.inputSpreadsheetDocRegistryPath, 
-                                                workParams.exceptedDocRegistryPath);
+                                                workParams.exceptedDocRegistryPath
+                                                );
                 else
-                    GetSrcDocs<Document1CUPP>(fieldsSettings.FieldsRegistry,
+                    GetSrcDocs<Document1CUPP>(
+                                                fieldsSettingsRegistry.SpecDocFieldsSettings,
                                                 docRegistryRepository.SourceDocs,
-                                                //docRepository.SrcRegistry,
                                                 workParams.inputSpreadsheetDocRegistryPath, 
-                                                workParams.exceptedDocRegistryPath);
+                                                workParams.exceptedDocRegistryPath
+                                                );
             }
 
             // Getting documents from spreadsheets
@@ -97,13 +99,9 @@
             void CompareDocuments()
             {
                 docComparator = new(
-                                    //docRepository.Src1CDO,
                                     doc1CDORepository.SourceDocs,
-                                    //docRepository.SrcRegistry, 
                                     docRegistryRepository.SourceDocs,
-                                    //docRepository.Pass1CDO,
                                     docRegistryRepository.SkippedDocs,
-                                    //docRepository.PassRegistry
                                     docRegistryRepository.SkippedDocs
                                     );
                 unmatchedDocsCommentator = new(docComparator.UnmatchedDocs1CDO,
@@ -155,13 +153,9 @@
 
             void FillSrcDocAmount()
             {
-                //reportDocAmount.doDocumentsCount = docRepository.Src1CDO.Count;
                 reportDocAmount.doDocumentsCount = doc1CDORepository.SourceDocs.Count;
-                //reportDocAmount.uppDocumentsCount = docRepository.SrcRegistry.Count;
                 reportDocAmount.uppDocumentsCount = docRegistryRepository.SourceDocs.Count;
-                //reportDocAmount.ignoreDoDocumentsCount = docRepository.Pass1CDO.Count;
                 reportDocAmount.ignoreDoDocumentsCount = doc1CDORepository.SkippedDocs.Count;
-                //reportDocAmount.ignoreUppDocumentsCount = docRepository.PassRegistry.Count;
                 reportDocAmount.ignoreUppDocumentsCount = docRegistryRepository.SkippedDocs.Count;
             }
 
