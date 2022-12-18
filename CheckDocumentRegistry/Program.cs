@@ -10,6 +10,8 @@
             FieldsSettingsRepositoryBase fieldsSettings;
             DocRepositoryBase doc1CDORepository, docRegistryRepository;
             FieldsSettingsRepositoryBase fieldsSettings1CDO, fieldsSettingsRegistry;
+            DocRepositoryFiller docRepoFiller1CDO, docRepoFillerRegidtry;
+
 
             DocLoader docLoader;
             DocComparator docComparator;                                    // Class contains results of documents comparing 
@@ -21,12 +23,37 @@
             fieldsSettings1CDO = new FieldsSettings1CDORepository();
             fieldsSettingsRegistry = new FieldsSettingsRegistryRepository();
 
-            fieldsSettings = new FieldsSettingsRepository();
+            //fieldsSettings = new FieldsSettingsRepository();
             DocAmountReportData reportDocAmount = new();
             WorkParams workParams = GetWorkParams(args);                    // Getting program parameters
             userReporter = new ConsoleWriter();
             // WorkAbilityChecker.CheckFiles(workParams);                    // Checkimg for existing files to comparing
-            
+
+
+
+            ArrToObjConverter_new srrToObjConverter_new = new ArrToObjConverter_new();
+
+            srrToObjConverter_new.ErrNotify += userReporter.ReportError;
+
+            DocLoader_new docLoader_New = new(srrToObjConverter_new, spreadSheetReader);
+            docLoader_New.Notify += userReporter.ReportInfo;
+
+            docRepoFiller1CDO = new(    docLoader_New, 
+                                        fieldsSettings1CDO, 
+                                        doc1CDORepository,
+                                        workParams.inputSpreadsheetDocManagePath,
+                                        workParams.passSpreadsheetDocManagePath
+                                        );
+            docRepoFillerRegidtry = new(docLoader_New,
+                                        fieldsSettingsRegistry,
+                                        docRegistryRepository,
+                                        workParams.inputSpreadsheetDocRegistryPath,
+                                        workParams.passSpreadSheetDocRegistryPath
+                                        );
+
+            docRepoFiller1CDO.FillRepository();
+            docRepoFillerRegidtry.FillRepository();
+
             // Getting documents from 1C:DO
             GetSrcDocs<Document1CDO>(
                                         fieldsSettings1CDO.SpecDocFieldsSettings,
@@ -87,12 +114,12 @@
                                string[] spreadSheetsPath, string? exceptedDocsPath = null) 
                                where T : Document
             {
-                arrToObjConverter = new ArrToObjConverter<T>(fieldsSettings, documents);
-                arrToObjConverter.ErrNotify += userReporter.ReportError;
+                //arrToObjConverter = new ArrToObjConverter<T>(fieldsSettings, documents);
+                //arrToObjConverter.ErrNotify += userReporter.ReportError;
 
-                docLoader = new(arrToObjConverter, spreadSheetReader);
-                docLoader.Notify += userReporter.ReportInfo;
-                docLoader.GetDocObjectList<T>(spreadSheetsPath, exceptedDocsPath);
+                //docLoader = new(arrToObjConverter, spreadSheetReader);
+                //docLoader.Notify += userReporter.ReportInfo;
+                //docLoader.GetDocObjectList<T>(spreadSheetsPath, exceptedDocsPath);
             } 
 
             void CompareDocuments()

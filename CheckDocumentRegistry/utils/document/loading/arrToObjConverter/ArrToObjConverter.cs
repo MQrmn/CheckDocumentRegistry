@@ -64,5 +64,10 @@
             }
             Console.WriteLine();
         }
+
+        public void ConvertArrToObjs(string[][] docsArr, Action<string[], int[]> addDocument, DocFieldsBase fieldsSettings)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
