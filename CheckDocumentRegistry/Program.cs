@@ -11,7 +11,6 @@
             DocRepositoryBase doc1CDORepository, docRegistryRepository;
             FieldsSettingsRepositoryBase fieldsSettings1CDO, fieldsSettingsRegistry;
 
-
             DocLoader docLoader;
             DocComparator docComparator;                                    // Class contains results of documents comparing 
             UnmatchedDocCommentSetter unmatchedDocsCommentator;             // Class set comments in unmatched documents
