@@ -4,21 +4,27 @@
     {
         private IArrToObjConverter _arrToObjConverter;
         private ISpreadSheetReader _spreadSheetReader;
+        private DocRepositoryBase _docRepository;
         public event EventHandler<string>? Notify;
-
+          
         public DocLoader( IArrToObjConverter arrToObjConverter, ISpreadSheetReader spreadSheetReader)
         {
             _arrToObjConverter = arrToObjConverter;
             _spreadSheetReader = spreadSheetReader;
         }
 
+        public void FillReposotory()
+        {
+
+        }
+
         public void GetDocObjectList<T>(string[] spreadsheetPathArr, string? exceptedDocsPath = null) where T : Document
         {
-            string[][] docArrsTmp;
+            string[][] docArrs;
             foreach (var spreadsheetPath in spreadsheetPathArr)
             {
-                docArrsTmp = GetDocsArraysFromFile(spreadsheetPath);
-                _arrToObjConverter.ConvertArrToObjs(docArrsTmp, exceptedDocsPath);
+                docArrs = GetDocsArraysFromFile(spreadsheetPath);
+                _arrToObjConverter.ConvertArrToObjs(docArrs, exceptedDocsPath);
             }
         }
 

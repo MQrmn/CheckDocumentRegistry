@@ -1,6 +1,6 @@
 ﻿namespace RegComparator
 {
-    internal class DocRepository : DocRepositoryBase
+    internal class DocRepository 
     {
     }
 }

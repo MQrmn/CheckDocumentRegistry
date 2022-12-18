@@ -3,18 +3,18 @@
 
     internal class ArrToObjConverter<T> : IArrToObjConverter where T : Document
     {
-        private List<string[]>? _passedDocs;
+        private List<string[]>? _exceptedDocs;
         private List<Document> _docObjects;
-        private DocFieldsBase _docFieldsSettings;
+        private DocFieldsBase _fieldsSettings;
 
         //public delegate void ArrToObjConverterEvents(string message);
         public event EventHandler<string>? ErrNotify;
 
-        internal ArrToObjConverter(DocFieldsBase docFieldsSettings,
+        internal ArrToObjConverter(DocFieldsBase fieldsSettings,
                                  List<Document> docObjects)
         {
-            _docFieldsSettings = docFieldsSettings;
-            _passedDocs = new List<string[]>();
+            _fieldsSettings = fieldsSettings;
+            _exceptedDocs = new List<string[]>();
             _docObjects = docObjects;
         }
 
@@ -27,25 +27,25 @@
             {
                 try
                 {
-                    _docObjects.Add((T)Activator.CreateInstance(typeof(T), docsArr[i], _docFieldsSettings.DocFielsdIndex));   // Adding a document object to the list
+                    _docObjects.Add((T)Activator.CreateInstance(typeof(T), docsArr[i], _fieldsSettings.DocFielsdIndex));   // Adding a document object to the list
                 }
                 catch
                 {
                     exceptCount++;
-                    if (exceptCount > _docFieldsSettings.MaxPassedRows)
-                        _passedDocs?.Add(docsArr[i]);                                                       // Adding document into error list 
+                    if (exceptCount > _fieldsSettings.MaxPassedRows)
+                        _exceptedDocs?.Add(docsArr[i]);                                                       // Adding document into error list 
                 }
             }
 
-            if (passedDocsReportPath is not null && _passedDocs?.Count > 0)
+            if (passedDocsReportPath is not null && _exceptedDocs?.Count > 0)
                 CreateReportPassedDocs(passedDocsReportPath);
         }
 
         private void CreateReportPassedDocs(string exceptedUppPath)
         {
-            PrintConsolePassedDocs(_passedDocs);
+            PrintConsolePassedDocs(_exceptedDocs);
             SpreadSheetWriterXLSX spreadSheetWriterXLSX = new SpreadSheetWriterXLSX(exceptedUppPath);
-            spreadSheetWriterXLSX.CreateSpreadsheet(_passedDocs);
+            spreadSheetWriterXLSX.CreateSpreadsheet(_exceptedDocs);
         }
 
         private void PrintConsolePassedDocs(List<string[]> exceptedDocuments)

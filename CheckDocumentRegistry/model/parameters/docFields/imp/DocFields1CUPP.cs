@@ -1,6 +1,6 @@
 ﻿namespace RegComparator
 {
-    public class DocFieldsReg1CUPP : DocFieldsBase
+    public class DocFields1CUPP : DocFieldsBase
     {
         public override void SetDefaults()
         {

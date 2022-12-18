@@ -7,39 +7,48 @@
             IArrToObjConverter arrToObjConverter;
             IUserReporter userReporter;
             ISpreadSheetReader spreadSheetReader = new SpreadSheetReaderXLSX();
-            DocFieldsSettingsRepositoryBase docFieldsSettingsRepository = new DocFieldsSettingsRepository();
+            FieldsSettingsRepositoryBase fieldsSettings;
+            DocRepositoryBase doc1CDORepository, docRegistryRepository;
+            FieldsSettingsRepositoryBase fieldsSettings1CDO, fieldsSettingsRegistry;
+
 
             DocLoader docLoader;
             DocComparator docComparator;                                    // Class contains results of documents comparing 
             UnmatchedDocCommentSetter unmatchedDocsCommentator;             // Class set comments in unmatched documents
             ConfigFilesPath configFilesPath;
 
-            
-            DocRepository docRepository = new();
+            doc1CDORepository = new DocRepository1CDO();
+            docRegistryRepository = new DocRepositoryRegistry();
+            fieldsSettings1CDO = new FieldsSettings1CDORepository();
+            fieldsSettingsRegistry = new FieldsSettingsRegistryRepository();
+
+            fieldsSettings = new FieldsSettingsRepository();
+            //DocRepository docRepository = new();
             DocAmountReportData reportDocAmount = new();
             WorkParams workParams = GetWorkParams(args);                    // Getting program parameters
             userReporter = new ConsoleWriter();
             // WorkAbilityChecker.CheckFiles(workParams);                    // Checkimg for existing files to comparing
             
             // Getting documents from 1C:DO
-            GetSrcDocs<Document1CDO>(docFieldsSettingsRepository.FieldsDO, 
-                                        docRepository.Src1CDO, 
-                                        workParams.inputSpreadsheetDocManagePath, 
+            GetSrcDocs<Document1CDO>(fieldsSettings.FieldsDO,
+                                        doc1CDORepository.SourceDocs,
+                                        //docRepository.Src1CDO,
+                                        workParams.inputSpreadsheetDocManagePath,
                                         workParams.exceptedDocManagePath);
             // Getting documents from 1C:KA or UPP registry
             GetRegistrySrcDocuments();
 
             // Getting ignored 1C:DO documents 
-            GetSrcDocs<Document>(docFieldsSettingsRepository.FieldsCmn, 
-                                    docRepository.Pass1CDO, 
+            GetSrcDocs<Document>(fieldsSettings.FieldsCmn,
+                                    doc1CDORepository.SkippedDocs,
+                                    //docRepository.Pass1CDO,
                                     workParams.passSpreadsheetDocManagePath);
 
             // Getting ignored 1C:KA or 1C:UPP documents 
-            GetSrcDocs<Document>(docFieldsSettingsRepository.FieldsCmn,
-                                    docRepository.PassRegistry,
+            GetSrcDocs<Document>(fieldsSettings.FieldsCmn,
+                                    docRegistryRepository.SkippedDocs,
+                                    //docRepository.PassRegistry,
                                     workParams.passSpreadSheetDocRegistryPath);
-
-
 
             //GetIgnoreDocList();                                             
             FillSrcDocAmount();
@@ -47,23 +56,27 @@
             FillResultDocAmount();
 
             DocumentAmountReporter documentsAmountReporter = new(workParams.programReportFilePath);
-            documentsAmountReporter.CreateAllReports(docRepository.SrcRegistry, reportDocAmount);
+            documentsAmountReporter.CreateAllReports(
+                                                    //docRepository.SrcRegistry, 
+                                                    docRegistryRepository.SourceDocs,
+                                                    reportDocAmount
+                                                    );
 
             // Result spreadsheets generating
             GenerateOutputSpreadsheets();
             CloseProgram();
 
-
-
             void GetRegistrySrcDocuments(){
                 if (workParams.programMode == "KA")
-                    GetSrcDocs<Document1CKA>(docFieldsSettingsRepository.FieldsRegistry, 
-                                                docRepository.SrcRegistry,
+                    GetSrcDocs<Document1CKA>(fieldsSettings.FieldsRegistry,
+                                                docRegistryRepository.SourceDocs,
+                                                //docRepository.SrcRegistry,
                                                 workParams.inputSpreadsheetDocRegistryPath, 
                                                 workParams.exceptedDocRegistryPath);
                 else
-                    GetSrcDocs<Document1CUPP>(docFieldsSettingsRepository.FieldsRegistry, 
-                                                docRepository.SrcRegistry,
+                    GetSrcDocs<Document1CUPP>(fieldsSettings.FieldsRegistry,
+                                                docRegistryRepository.SourceDocs,
+                                                //docRepository.SrcRegistry,
                                                 workParams.inputSpreadsheetDocRegistryPath, 
                                                 workParams.exceptedDocRegistryPath);
             }
@@ -83,8 +96,16 @@
 
             void CompareDocuments()
             {
-                docComparator = new(docRepository.Src1CDO, docRepository.SrcRegistry, 
-                                    docRepository.Pass1CDO, docRepository.PassRegistry);
+                docComparator = new(
+                                    //docRepository.Src1CDO,
+                                    doc1CDORepository.SourceDocs,
+                                    //docRepository.SrcRegistry, 
+                                    docRegistryRepository.SourceDocs,
+                                    //docRepository.Pass1CDO,
+                                    docRegistryRepository.SkippedDocs,
+                                    //docRepository.PassRegistry
+                                    docRegistryRepository.SkippedDocs
+                                    );
                 unmatchedDocsCommentator = new(docComparator.UnmatchedDocs1CDO,
                                                docComparator.UnmatchedDocs1CUPP);
                 unmatchedDocsCommentator.CommentUnmatchedDocuments();
@@ -134,10 +155,14 @@
 
             void FillSrcDocAmount()
             {
-                reportDocAmount.doDocumentsCount = docRepository.Src1CDO.Count;
-                reportDocAmount.uppDocumentsCount = docRepository.SrcRegistry.Count;
-                reportDocAmount.ignoreDoDocumentsCount = docRepository.Pass1CDO.Count;
-                reportDocAmount.ignoreUppDocumentsCount = docRepository.PassRegistry.Count;
+                //reportDocAmount.doDocumentsCount = docRepository.Src1CDO.Count;
+                reportDocAmount.doDocumentsCount = doc1CDORepository.SourceDocs.Count;
+                //reportDocAmount.uppDocumentsCount = docRepository.SrcRegistry.Count;
+                reportDocAmount.uppDocumentsCount = docRegistryRepository.SourceDocs.Count;
+                //reportDocAmount.ignoreDoDocumentsCount = docRepository.Pass1CDO.Count;
+                reportDocAmount.ignoreDoDocumentsCount = doc1CDORepository.SkippedDocs.Count;
+                //reportDocAmount.ignoreUppDocumentsCount = docRepository.PassRegistry.Count;
+                reportDocAmount.ignoreUppDocumentsCount = docRegistryRepository.SkippedDocs.Count;
             }
 
             void FillResultDocAmount()
