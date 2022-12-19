@@ -7,8 +7,6 @@
             CommonDocFieldsSettings = new DocFieldsCommon();
             SpecDocFieldsSettings = new DocFields1CDO();
             SetDefaults();
-
-            
         }
     }
 }

@@ -11,6 +11,7 @@ namespace RegComparator
         public string RegistryMode;
         public void SetDefaults()
         {
+            Console.WriteLine(this.GetType());
             SpreadsheetParams1CDO = "SpreadsheetParams1CDO.json";
             SpreadsheetParamsRegistry = "SpreadsheetParamsRegistry.json";
             ProgramReportFilePath = "C:\\1C\\АРХИВНЫЕ ДОКУМЕНТЫ\\РЕЗУЛЬТАТЫ СРАВНЕНИЯ\\report.txt";

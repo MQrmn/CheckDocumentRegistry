@@ -1,6 +1,6 @@
 ﻿namespace RegComparator
 {
-    internal class SpreadsheetsPathsRegistry : SpreadsheetsPathsBase
+    public class SpreadsheetsPathsRegistry : SpreadsheetsPathsBase
     {
         public override void SetDefaults()
         {

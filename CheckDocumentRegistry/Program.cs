@@ -7,6 +7,8 @@
             IArrToObjConverter arrToObjConverter;
             IUserReporter userReporter;
             ISpreadSheetReader spreadSheetReader;
+            IObjsSerialiser objectSerialiser;
+            ProgramParamsRepositoryBase programParamsRepository;
             SpreadsheetsPathsBase spreadsheetsPaths1CDO, spreadsheetsPathsRegistry;
             FieldsSettingsRepositoryBase fieldsSettings;
             DocRepositoryBase doc1CDORepository, docRegistryRepository;
@@ -17,14 +19,12 @@
             UnmatchedDocCommentSetter unmatchedDocsCommentator;
             RootConfigFilePath configFilesPath;
 
+            ReadWriteJSON readerJSON = new();
+
             // Get parameters
             RootConfigFilePath rootConfigFilePath = new();
-            CommonParams commonParams = new();
-            spreadsheetsPaths1CDO = new SpreadsheetsPaths1CDO();
-            spreadsheetsPathsRegistry = new SpreadsheetsPathsRegistry();
-            commonParams.SetDefaults();
-            spreadsheetsPaths1CDO.SetDefaults();
-            spreadsheetsPathsRegistry.SetDefaults();
+
+            programParamsRepository = new ProgramParamsRepository(readerJSON, rootConfigFilePath);
 
             // Create Instances
             spreadSheetReader = new SpreadSheetReaderXLSX();
@@ -48,11 +48,15 @@
             docRepoFiller1CDO = new(    docLoader, 
                                         fieldsSettings1CDO, 
                                         doc1CDORepository,
-                                        spreadsheetsPaths1CDO);
+                                        programParamsRepository.Spreadsheets1CDO
+                                        //spreadsheetsPaths1CDO
+                                        );
             docRepoFillerRegidtry = new(docLoader,
                                         fieldsSettingsRegistry,
                                         docRegistryRepository,
-                                        spreadsheetsPathsRegistry);
+                                        programParamsRepository.SpreadsheetsRegistry
+                                        //spreadsheetsPathsRegistry
+                                        );
 
             docRepoFiller1CDO.FillRepository();
             docRepoFillerRegidtry.FillRepository();
@@ -61,8 +65,8 @@
             // Comparing
             CompareDocuments();
             FillResultDocAmount();
-
-            DocumentAmountReporter documentsAmountReporter = new(commonParams.ProgramReportFilePath);
+            
+            DocumentAmountReporter documentsAmountReporter = new(programParamsRepository.Common.ProgramReportFilePath);
             documentsAmountReporter.CreateAllReports(
                                                     docRegistryRepository.SourceDocs,
                                                     reportDocAmount
@@ -95,34 +99,34 @@
                 }
             }
 
-            CommonParams GetWorkParams(string[] args)
-            {
-                configFilesPath = new();
-                ArgsHandler(args);
-                WorkParametersReadWrite workParametersReadWrite = new(configFilesPath.CommonParamsFilePath);
-                return workParametersReadWrite.GetProgramParameters();
-            }
+            //CommonParams GetWorkParams(string[] args)
+            //{
+            //    configFilesPath = new();
+            //    ArgsHandler(args);
+            //    WorkParametersReadWrite workParametersReadWrite = new(configFilesPath.CommonParamsFilePath);
+            //    return workParametersReadWrite.GetProgramParameters();
+            //}
 
             void GenerateOutputSpreadsheets()
             {
                 SpreadSheetWriterXLSX spreadsheetWriterPassedDo;                
                 SpreadSheetWriterXLSX spreadSheetWriterPassedUpp;               
 
-                spreadsheetWriterPassedDo = new(spreadsheetsPaths1CDO.Unmatched);
+                spreadsheetWriterPassedDo = new(programParamsRepository.Spreadsheets1CDO.Unmatched);
                 spreadsheetWriterPassedDo.CreateSpreadsheet(docComparator.UnmatchedDocs1CDO);
 
-                spreadSheetWriterPassedUpp = new(spreadsheetsPathsRegistry.Unmatched);
+                spreadSheetWriterPassedUpp = new(programParamsRepository.SpreadsheetsRegistry.Unmatched);
                 spreadSheetWriterPassedUpp.CreateSpreadsheet(docComparator.UnmatchedDocs1CUPP, false);
 
-                if (commonParams.IsPrintMatchedDocuments)
+                if (programParamsRepository.Common.IsPrintMatchedDocuments)
                 {
                     SpreadSheetWriterXLSX spreadSheetWriterMatchedDo;               
                     SpreadSheetWriterXLSX spreadSheetWriterMatcheUpp;               
 
-                    spreadSheetWriterMatchedDo = new(spreadsheetsPaths1CDO.Matched);
+                    spreadSheetWriterMatchedDo = new(programParamsRepository.Spreadsheets1CDO.Matched);
                     spreadSheetWriterMatchedDo.CreateSpreadsheet(docComparator.MatchedDocs1CDO, false);
 
-                    spreadSheetWriterMatcheUpp = new(spreadsheetsPathsRegistry.Matched);
+                    spreadSheetWriterMatcheUpp = new(programParamsRepository.SpreadsheetsRegistry.Matched);
                     spreadSheetWriterMatcheUpp.CreateSpreadsheet(docComparator.MatchedDocs1CUPP, false);
                 }
             }
@@ -145,7 +149,7 @@
 
             void CloseProgram()
             {
-                if (commonParams.IsAskAboutCloseProgram)
+                if (programParamsRepository.Common.IsAskAboutCloseProgram)
                 {
                     Console.WriteLine("Для завершения программы нажмите любую клавишу.");
                     Console.ReadKey();

@@ -2,9 +2,9 @@
 
 namespace RegComparator
 {
-    public class ReaderJSON<T>
+    public class ReadWriteJSON : IObjsSerialiser
     {
-        internal protected T? GetJSON(string filePathParams)
+        public T? GetObj<T>(string filePathParams)
         {
             T? deserialisedJsonData;
 
@@ -15,10 +15,10 @@ namespace RegComparator
             }
             catch
             {
-                deserialisedJsonData = default(T);
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Не удалось прочитать файл " + filePathParams );
                 Console.ResetColor();
+                throw new Exception();
             }
             return deserialisedJsonData;
         }
