@@ -12,13 +12,17 @@
             FieldsSettingsRepositoryBase fieldsSettings1CDO, fieldsSettingsRegistry;
             DocRepositoryFiller docRepoFiller1CDO, docRepoFillerRegidtry;
 
-            DocComparator docComparator;                                    // Class contains results of documents comparing 
-            UnmatchedDocCommentSetter unmatchedDocsCommentator;             // Class set comments in unmatched documents
+
+            DocComparator docComparator;
+            UnmatchedDocCommentSetter unmatchedDocsCommentator;
             ConfigFilesPath configFilesPath;
 
+            // Create Instances
             spreadSheetReader = new SpreadSheetReaderXLSX();
+            // Create document repositories
             doc1CDORepository = new DocRepository1CDO();
             docRegistryRepository = new DocRepositoryRegistry();
+            // Create document fields settings repositories
             fieldsSettings1CDO = new FieldsSettings1CDORepository();
             fieldsSettingsRegistry = new FieldsSettingsRegistryRepository();
 
@@ -33,7 +37,7 @@
 
             DocLoader docLoader = new(srrToObjConverter, spreadSheetReader);
             docLoader.Notify += userReporter.ReportInfo;
-            // Filling 1C:DO repository
+            // Filling repositories
             docRepoFiller1CDO = new(    docLoader, 
                                         fieldsSettings1CDO, 
                                         doc1CDORepository,
@@ -51,7 +55,8 @@
             docRepoFillerRegidtry.FillRepository();
 
             FillSrcDocAmount();
-            CompareDocuments();                                             // Comparing
+            // Comparing
+            CompareDocuments();
             FillResultDocAmount();
 
             DocumentAmountReporter documentsAmountReporter = new(workParams.programReportFilePath);
