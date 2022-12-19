@@ -7,6 +7,7 @@
             IArrToObjConverter arrToObjConverter;
             IUserReporter userReporter;
             ISpreadSheetReader spreadSheetReader;
+            SpreadsheetsPathsBase spreadsheetsPaths1CDO, spreadsheetsPathsRegistry;
             FieldsSettingsRepositoryBase fieldsSettings;
             DocRepositoryBase doc1CDORepository, docRegistryRepository;
             FieldsSettingsRepositoryBase fieldsSettings1CDO, fieldsSettingsRegistry;
@@ -15,7 +16,16 @@
 
             DocComparator docComparator;
             UnmatchedDocCommentSetter unmatchedDocsCommentator;
-            ConfigFilesPath configFilesPath;
+            RootConfigFilePath configFilesPath;
+
+            // Get parameters
+            RootConfigFilePath rootConfigFilePath = new();
+            CommonParams commonParams = new();
+            spreadsheetsPaths1CDO = new SpreadsheetsPaths1CDO();
+            spreadsheetsPathsRegistry = new SpreadsheetsPathsRegistry();
+            commonParams.SetDefaults();
+            spreadsheetsPaths1CDO.SetDefaults();
+            spreadsheetsPathsRegistry.SetDefaults();
 
             // Create Instances
             spreadSheetReader = new SpreadSheetReaderXLSX();
@@ -28,7 +38,7 @@
 
             //fieldsSettings = new FieldsSettingsRepository();
             DocAmountReportData reportDocAmount = new();
-            WorkParams workParams = GetWorkParams(args);                    // Getting program parameters
+            //CommonParams workParams = GetWorkParams(args);                    // Getting program parameters
             userReporter = new ConsoleWriter();
             // WorkAbilityChecker.CheckFiles(workParams);                    // Checkimg for existing files to comparing
 
@@ -41,14 +51,18 @@
             docRepoFiller1CDO = new(    docLoader, 
                                         fieldsSettings1CDO, 
                                         doc1CDORepository,
-                                        workParams.inputSpreadsheetDocManagePath,
-                                        workParams.passSpreadsheetDocManagePath
+                                        //workParams.inputSpreadsheetDocManagePath,
+                                        spreadsheetsPaths1CDO.Source,
+                                        //workParams.passSpreadsheetDocManagePath
+                                        spreadsheetsPaths1CDO.Skipped
                                         );
             docRepoFillerRegidtry = new(docLoader,
                                         fieldsSettingsRegistry,
                                         docRegistryRepository,
-                                        workParams.inputSpreadsheetDocRegistryPath,
-                                        workParams.passSpreadSheetDocRegistryPath
+                                        //workParams.inputSpreadsheetDocRegistryPath,
+                                        spreadsheetsPathsRegistry.Source,
+                                        //workParams.passSpreadSheetDocRegistryPath
+                                        spreadsheetsPathsRegistry.Skipped
                                         );
 
             docRepoFiller1CDO.FillRepository();
@@ -59,7 +73,7 @@
             CompareDocuments();
             FillResultDocAmount();
 
-            DocumentAmountReporter documentsAmountReporter = new(workParams.programReportFilePath);
+            DocumentAmountReporter documentsAmountReporter = new(commonParams.ProgramReportFilePath);
             documentsAmountReporter.CreateAllReports(
                                                     docRegistryRepository.SourceDocs,
                                                     reportDocAmount
@@ -88,15 +102,15 @@
                     return;
                 if (args[0] == "-c")
                 {
-                    configFilesPath.ProgramParametersFilePath = args[1];
+                    configFilesPath.CommonParamsFilePath = args[1];
                 }
             }
 
-            WorkParams GetWorkParams(string[] args)
+            CommonParams GetWorkParams(string[] args)
             {
                 configFilesPath = new();
                 ArgsHandler(args);
-                WorkParametersReadWrite workParametersReadWrite = new(configFilesPath.ProgramParametersFilePath);
+                WorkParametersReadWrite workParametersReadWrite = new(configFilesPath.CommonParamsFilePath);
                 return workParametersReadWrite.GetProgramParameters();
             }
 
@@ -105,21 +119,21 @@
                 SpreadSheetWriterXLSX spreadsheetWriterPassedDo;                
                 SpreadSheetWriterXLSX spreadSheetWriterPassedUpp;               
 
-                spreadsheetWriterPassedDo = new(workParams.outputUnmatchDocManagePath);
+                spreadsheetWriterPassedDo = new(spreadsheetsPaths1CDO.Unmatched);
                 spreadsheetWriterPassedDo.CreateSpreadsheet(docComparator.UnmatchedDocs1CDO);
 
-                spreadSheetWriterPassedUpp = new(workParams.outputUnmatchedDocRegistryPath);
+                spreadSheetWriterPassedUpp = new(spreadsheetsPathsRegistry.Unmatched);
                 spreadSheetWriterPassedUpp.CreateSpreadsheet(docComparator.UnmatchedDocs1CUPP, false);
 
-                if (workParams.isPrintMatchedDocuments)
+                if (commonParams.IsPrintMatchedDocuments)
                 {
                     SpreadSheetWriterXLSX spreadSheetWriterMatchedDo;               
                     SpreadSheetWriterXLSX spreadSheetWriterMatcheUpp;               
 
-                    spreadSheetWriterMatchedDo = new(workParams.outputMatchedDocManagePath);
+                    spreadSheetWriterMatchedDo = new(spreadsheetsPaths1CDO.Matched);
                     spreadSheetWriterMatchedDo.CreateSpreadsheet(docComparator.MatchedDocs1CDO, false);
 
-                    spreadSheetWriterMatcheUpp = new(workParams.outputMatchedDocRestryPath);
+                    spreadSheetWriterMatcheUpp = new(spreadsheetsPathsRegistry.Matched);
                     spreadSheetWriterMatcheUpp.CreateSpreadsheet(docComparator.MatchedDocs1CUPP, false);
                 }
             }
@@ -142,7 +156,7 @@
 
             void CloseProgram()
             {
-                if (workParams.isAskAboutCloseProgram)
+                if (commonParams.IsAskAboutCloseProgram)
                 {
                     Console.WriteLine("Для завершения программы нажмите любую клавишу.");
                     Console.ReadKey();
