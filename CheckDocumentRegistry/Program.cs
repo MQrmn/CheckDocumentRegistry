@@ -31,11 +31,11 @@
 
 
 
-            ArrToObjConverter_new srrToObjConverter_new = new ArrToObjConverter_new();
+            ArrToObjConverter srrToObjConverter_new = new ArrToObjConverter();
 
             srrToObjConverter_new.ErrNotify += userReporter.ReportError;
 
-            DocLoader_new docLoader_New = new(srrToObjConverter_new, spreadSheetReader);
+            DocLoader docLoader_New = new(srrToObjConverter_new, spreadSheetReader);
             docLoader_New.Notify += userReporter.ReportInfo;
 
             docRepoFiller1CDO = new(    docLoader_New, 
@@ -54,30 +54,6 @@
             docRepoFiller1CDO.FillRepository();
             docRepoFillerRegidtry.FillRepository();
 
-            // Getting documents from 1C:DO
-            GetSrcDocs<Document1CDO>(
-                                        fieldsSettings1CDO.SpecDocFieldsSettings,
-                                        doc1CDORepository.SourceDocs,
-                                        workParams.inputSpreadsheetDocManagePath,
-                                        workParams.exceptedDocManagePath
-                                        );
-            // Getting documents from 1C:KA or UPP registry
-            GetRegistrySrcDocuments();
-
-            // Getting ignored 1C:DO documents 
-            GetSrcDocs<Document>(
-                                    fieldsSettings1CDO.CommonDocFieldsSettings,
-                                    doc1CDORepository.SkippedDocs,
-                                    workParams.passSpreadsheetDocManagePath
-                                    );
-
-            // Getting ignored 1C:KA or 1C:UPP documents 
-            GetSrcDocs<Document>(
-                                    fieldsSettings1CDO.CommonDocFieldsSettings,
-                                    docRegistryRepository.SkippedDocs,
-                                    workParams.passSpreadSheetDocRegistryPath
-                                    );
-
             FillSrcDocAmount();
             CompareDocuments();                                             // Comparing
             FillResultDocAmount();
@@ -92,35 +68,9 @@
             GenerateOutputSpreadsheets();
             CloseProgram();
 
-            void GetRegistrySrcDocuments(){
-                if (workParams.programMode == "KA")
-                    GetSrcDocs<Document1CKA>(
-                                                fieldsSettingsRegistry.SpecDocFieldsSettings,
-                                                docRegistryRepository.SourceDocs,
-                                                workParams.inputSpreadsheetDocRegistryPath, 
-                                                workParams.exceptedDocRegistryPath
-                                                );
-                else
-                    GetSrcDocs<Document1CUPP>(
-                                                fieldsSettingsRegistry.SpecDocFieldsSettings,
-                                                docRegistryRepository.SourceDocs,
-                                                workParams.inputSpreadsheetDocRegistryPath, 
-                                                workParams.exceptedDocRegistryPath
-                                                );
-            }
 
-            // Getting documents from spreadsheets
-            void GetSrcDocs<T>(DocFieldsBase fieldsSettings, List<Document> documents, 
-                               string[] spreadSheetsPath, string? exceptedDocsPath = null) 
-                               where T : Document
-            {
-                //arrToObjConverter = new ArrToObjConverter<T>(fieldsSettings, documents);
-                //arrToObjConverter.ErrNotify += userReporter.ReportError;
 
-                //docLoader = new(arrToObjConverter, spreadSheetReader);
-                //docLoader.Notify += userReporter.ReportInfo;
-                //docLoader.GetDocObjectList<T>(spreadSheetsPath, exceptedDocsPath);
-            } 
+
 
             void CompareDocuments()
             {

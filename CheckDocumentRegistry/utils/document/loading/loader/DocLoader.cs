@@ -12,13 +12,17 @@
             _spreadSheetReader = spreadSheetReader;
         }
 
-        public void GetDocObjectList<T>(string[] spreadsheetPathArr, string? exceptedDocsPath = null) where T : Document
+        public void GetDocObjectList(
+                                        string[] spreadsheetPathArr,
+                                        Action<string[], int[]> addDocumentAction,
+                                        DocFieldsBase fieldsSettings
+                                        )
         {
             string[][] docArrsTmp;
             foreach (var spreadsheetPath in spreadsheetPathArr)
             {
                 docArrsTmp = GetDocsArraysFromFile(spreadsheetPath);
-                _arrToObjConverter.ConvertArrToObjs(docArrsTmp, exceptedDocsPath);
+                _arrToObjConverter.ConvertArrToObjs(docArrsTmp, addDocumentAction, fieldsSettings);
             }
         }
 

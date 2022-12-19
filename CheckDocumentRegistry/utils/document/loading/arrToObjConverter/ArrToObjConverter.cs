@@ -1,25 +1,20 @@
 ﻿namespace RegComparator
 {
 
-    internal class ArrToObjConverter<T> : IArrToObjConverter where T : Document
+    internal class ArrToObjConverter : IArrToObjConverter
     {
         private List<string[]>? _exceptedDocs;
-        private List<Document> _docObjects;
-        private DocFieldsBase _fieldsSettings;
-
-        //public delegate void ArrToObjConverterEvents(string message);
         public event EventHandler<string>? ErrNotify;
 
-        internal ArrToObjConverter(DocFieldsBase fieldsSettings,
-                                 List<Document> docObjects)
-        {
-            _fieldsSettings = fieldsSettings;
-            _exceptedDocs = new List<string[]>();
-            _docObjects = docObjects;
-        }
+        public void ConvertArrToObjs(string[][] docsArr, string? passedDocsReportPath) => 
+            throw new NotImplementedException();
 
         // Specific documents is exported from 1C:DO or 1C:UPP spreadsheets
-        public void ConvertArrToObjs(string[][] docsArr, string? passedDocsReportPath)
+        public void ConvertArrToObjs(
+                                        string[][] docsArr,
+                                        Action<string[], int[]> addDocument,
+                                        DocFieldsBase fieldsSettings
+                                        )
         {
             int exceptCount = 0;
 
@@ -27,32 +22,25 @@
             {
                 try
                 {
-                    _docObjects.Add((T)Activator.CreateInstance(typeof(T), docsArr[i], _fieldsSettings.DocFielsdIndex));   // Adding a document object to the list
+                    addDocument(docsArr[i], fieldsSettings.DocFielsdIndex);
                 }
                 catch
                 {
                     exceptCount++;
-                    if (exceptCount > _fieldsSettings.MaxPassedRows)
+                    if (exceptCount > fieldsSettings.MaxPassedRows)
                         _exceptedDocs?.Add(docsArr[i]);                                                       // Adding document into error list 
                 }
             }
 
-            if (passedDocsReportPath is not null && _exceptedDocs?.Count > 0)
-                CreateReportPassedDocs(passedDocsReportPath);
+            if (_exceptedDocs?.Count > 0)
+                PrintConsolePassedDocs();
         }
 
-        private void CreateReportPassedDocs(string exceptedUppPath)
-        {
-            PrintConsolePassedDocs(_exceptedDocs);
-            SpreadSheetWriterXLSX spreadSheetWriterXLSX = new SpreadSheetWriterXLSX(exceptedUppPath);
-            spreadSheetWriterXLSX.CreateSpreadsheet(_exceptedDocs);
-        }
-
-        private void PrintConsolePassedDocs(List<string[]> exceptedDocuments)
+        private void PrintConsolePassedDocs()
         {
             ErrNotify?.Invoke(this, "В следующих строках возникли исключения:");
             int rowCount = 1;
-            foreach (var exeptDoc in exceptedDocuments)
+            foreach (var exeptDoc in _exceptedDocs)
             {
                 ErrNotify?.Invoke(this, rowCount + ". ");
                 foreach (var docField in exeptDoc)
@@ -63,11 +51,6 @@
                 Console.WriteLine();
             }
             Console.WriteLine();
-        }
-
-        public void ConvertArrToObjs(string[][] docsArr, Action<string[], int[]> addDocument, DocFieldsBase fieldsSettings)
-        {
-            throw new NotImplementedException();
         }
     }
 }

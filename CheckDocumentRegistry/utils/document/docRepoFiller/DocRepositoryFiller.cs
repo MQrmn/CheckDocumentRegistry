@@ -2,14 +2,14 @@
 {
     public class DocRepositoryFiller
     {
-        private DocLoader_new _loader;
+        private DocLoader _loader;
         private FieldsSettingsRepositoryBase _fieldsSetRepo;
         private DocRepositoryBase _docRepo;
         private string[] _sourceDocSpreadsheetPath;
         private string[] _skipDocSpreadsheetPath;
 
         public DocRepositoryFiller(
-                                    DocLoader_new loader,
+                                    DocLoader loader,
                                     FieldsSettingsRepositoryBase fieldsSetRepo,
                                     DocRepositoryBase docRepo,
                                     string[] sourceDocSpreadsheetPath,
@@ -38,7 +38,7 @@
                                         );
         }
 
-        private void FillSkipDocs( )
+        private void FillSkipDocs()
         {
             _loader.GetDocObjectList(   _skipDocSpreadsheetPath, 
                                         _docRepo.AddSkippedDoc, 
