@@ -12,8 +12,6 @@
             FieldsSettingsRepositoryBase fieldsSettings1CDO, fieldsSettingsRegistry;
             DocRepositoryFiller docRepoFiller1CDO, docRepoFillerRegidtry;
 
-
-            DocLoader docLoader;
             DocComparator docComparator;                                    // Class contains results of documents comparing 
             UnmatchedDocCommentSetter unmatchedDocsCommentator;             // Class set comments in unmatched documents
             ConfigFilesPath configFilesPath;
@@ -29,22 +27,19 @@
             userReporter = new ConsoleWriter();
             // WorkAbilityChecker.CheckFiles(workParams);                    // Checkimg for existing files to comparing
 
+            ArrToObjConverter srrToObjConverter = new ArrToObjConverter();
+            srrToObjConverter.ErrNotify += userReporter.ReportError;
 
-
-            ArrToObjConverter srrToObjConverter_new = new ArrToObjConverter();
-
-            srrToObjConverter_new.ErrNotify += userReporter.ReportError;
-
-            DocLoader docLoader_New = new(srrToObjConverter_new, spreadSheetReader);
-            docLoader_New.Notify += userReporter.ReportInfo;
-
-            docRepoFiller1CDO = new(    docLoader_New, 
+            DocLoader docLoader = new(srrToObjConverter, spreadSheetReader);
+            docLoader.Notify += userReporter.ReportInfo;
+            // Filling 1C:DO repository
+            docRepoFiller1CDO = new(    docLoader, 
                                         fieldsSettings1CDO, 
                                         doc1CDORepository,
                                         workParams.inputSpreadsheetDocManagePath,
                                         workParams.passSpreadsheetDocManagePath
                                         );
-            docRepoFillerRegidtry = new(docLoader_New,
+            docRepoFillerRegidtry = new(docLoader,
                                         fieldsSettingsRegistry,
                                         docRegistryRepository,
                                         workParams.inputSpreadsheetDocRegistryPath,
@@ -67,10 +62,6 @@
             // Result spreadsheets generating
             GenerateOutputSpreadsheets();
             CloseProgram();
-
-
-
-
 
             void CompareDocuments()
             {
