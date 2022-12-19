@@ -13,7 +13,6 @@
             FieldsSettingsRepositoryBase fieldsSettings1CDO, fieldsSettingsRegistry;
             DocRepositoryFiller docRepoFiller1CDO, docRepoFillerRegidtry;
 
-
             DocComparator docComparator;
             UnmatchedDocCommentSetter unmatchedDocsCommentator;
             RootConfigFilePath configFilesPath;
@@ -36,9 +35,7 @@
             fieldsSettings1CDO = new FieldsSettings1CDORepository();
             fieldsSettingsRegistry = new FieldsSettingsRegistryRepository();
 
-            //fieldsSettings = new FieldsSettingsRepository();
             DocAmountReportData reportDocAmount = new();
-            //CommonParams workParams = GetWorkParams(args);                    // Getting program parameters
             userReporter = new ConsoleWriter();
             // WorkAbilityChecker.CheckFiles(workParams);                    // Checkimg for existing files to comparing
 
@@ -51,19 +48,11 @@
             docRepoFiller1CDO = new(    docLoader, 
                                         fieldsSettings1CDO, 
                                         doc1CDORepository,
-                                        //workParams.inputSpreadsheetDocManagePath,
-                                        spreadsheetsPaths1CDO.Source,
-                                        //workParams.passSpreadsheetDocManagePath
-                                        spreadsheetsPaths1CDO.Skipped
-                                        );
+                                        spreadsheetsPaths1CDO);
             docRepoFillerRegidtry = new(docLoader,
                                         fieldsSettingsRegistry,
                                         docRegistryRepository,
-                                        //workParams.inputSpreadsheetDocRegistryPath,
-                                        spreadsheetsPathsRegistry.Source,
-                                        //workParams.passSpreadSheetDocRegistryPath
-                                        spreadsheetsPathsRegistry.Skipped
-                                        );
+                                        spreadsheetsPathsRegistry);
 
             docRepoFiller1CDO.FillRepository();
             docRepoFillerRegidtry.FillRepository();
