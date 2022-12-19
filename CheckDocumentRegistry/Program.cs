@@ -6,7 +6,7 @@
         {
             IArrToObjConverter arrToObjConverter;
             IUserReporter userReporter;
-            ISpreadSheetReader spreadSheetReader = new SpreadSheetReaderXLSX();
+            ISpreadSheetReader spreadSheetReader;
             FieldsSettingsRepositoryBase fieldsSettings;
             DocRepositoryBase doc1CDORepository, docRegistryRepository;
             FieldsSettingsRepositoryBase fieldsSettings1CDO, fieldsSettingsRegistry;
@@ -16,6 +16,7 @@
             UnmatchedDocCommentSetter unmatchedDocsCommentator;             // Class set comments in unmatched documents
             ConfigFilesPath configFilesPath;
 
+            spreadSheetReader = new SpreadSheetReaderXLSX();
             doc1CDORepository = new DocRepository1CDO();
             docRegistryRepository = new DocRepositoryRegistry();
             fieldsSettings1CDO = new FieldsSettings1CDORepository();
