@@ -1,7 +1,7 @@
 ﻿
 namespace RegComparator
 {
-    public class CommonParams
+    public class CommonParams : IParameters
     {
         public string SpreadsheetParams1CDO;
         public string SpreadsheetParamsRegistry;
@@ -18,6 +18,18 @@ namespace RegComparator
             IsPrintMatchedDocuments = false;
             IsAskAboutCloseProgram = true;
             RegistryMode = "KA";
+        }
+
+        public void VerifyFields()
+        {
+            if (SpreadsheetParams1CDO == string.Empty || SpreadsheetParams1CDO is null)
+                throw new Exception();
+            if (SpreadsheetParamsRegistry == string.Empty || SpreadsheetParamsRegistry is null)
+                throw new Exception();
+            if (ProgramReportFilePath == string.Empty || ProgramReportFilePath is null)
+                throw new Exception();
+            if (RegistryMode == string.Empty || RegistryMode is null)
+                throw new Exception();
         }
     }
 }

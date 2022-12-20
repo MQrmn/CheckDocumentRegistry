@@ -11,21 +11,28 @@
             SpreadsheetsRegistry = new SpreadsheetsPathsRegistry();
 
             GetObj<CommonParams>
-                (Common, _rootConfig.CommonParamsFilePath, Common.SetDefaults);
+                (   Common, _rootConfig.CommonParamsFilePath, Common.VerifyFields, Common.SetDefaults);
             
             GetObj<SpreadsheetsPaths1CDO>
-                (Spreadsheets1CDO, _rootConfig.CommonParamsFilePath, Spreadsheets1CDO.SetDefaults);
+                (   Spreadsheets1CDO, _rootConfig.CommonParamsFilePath, 
+                    Spreadsheets1CDO.VerifyFields, Spreadsheets1CDO.SetDefaults);
             
             GetObj<SpreadsheetsPathsRegistry>
-                (SpreadsheetsRegistry, _rootConfig.CommonParamsFilePath, SpreadsheetsRegistry.SetDefaults);
+                (   SpreadsheetsRegistry, _rootConfig.CommonParamsFilePath, 
+                    SpreadsheetsRegistry.VerifyFields, SpreadsheetsRegistry.SetDefaults);
         }
 
+        private protected override void SetField<T>(IParameters field)
+        {
+            throw new NotImplementedException();
+        }
 
-        private protected override void GetObj<T>(T field, string path, Action setDefaults)
+        private protected override void GetObj<T>(T field, string path, Action verify, Action setDefaults)
         {
             try
             {
                 field = _readWriteJSON.GetObj<T>(path);
+                verify();
             }
             catch
             {
@@ -33,5 +40,7 @@
             }           
 
         }
+
+
     }
 }
