@@ -4,34 +4,33 @@
     {
         static void Main(string[] args)
         {
+            // Reporter
             IUserReporter userReporter = new ConsoleWriter();
-            IArrToObjConverter arrToObjConverter = new ArrToObjConverter();
-            arrToObjConverter.ErrNotify += userReporter.ReportError;
+            // Objects Reader-Writer in/to file
+            IObjsSerialiser objectSerialiser = new ReadWriteJSON();
+
+            // Program parameters
+            RootConfigFilePath rootConfigFilePath = new();
+
+            ProgramParamsRepositoryBase programParamsRepository = 
+                new ProgramParamsRepository(objectSerialiser, rootConfigFilePath);
 
             ISpreadSheetReader spreadSheetReader = new SpreadSheetReaderXLSX();
-            IObjsSerialiser objectSerialiser;
-
-            ProgramParamsRepositoryBase programParamsRepository;
+            IArrToObjConverter arrToObjConverter = new ArrToObjConverter();
+            arrToObjConverter.ErrNotify += userReporter.ReportError;
+            
             SpreadsheetsPathsBase spreadsheetsPaths1CDO, spreadsheetsPathsRegistry;
             FieldsSettingsRepositoryBase fieldsSettings;
-            DocRepositoryBase doc1CDORepository, docRegistryRepository;
-            FieldsSettingsRepositoryBase fieldsSettings1CDO, fieldsSettingsRegistry;
-            DocRepositoryFiller docRepoFiller1CDO, docRepoFillerRegidtry;
-
             DocComparator docComparator;
             UnmatchedDocCommentSetter unmatchedDocsCommentator;
             RootConfigFilePath configFilesPath;
 
-            ReadWriteJSON readerJSON = new();
+            // Documents repository, DocSettings repository, repository filler
+            DocRepositoryBase doc1CDORepository, docRegistryRepository;
+            FieldsSettingsRepositoryBase fieldsSettings1CDO, fieldsSettingsRegistry;
+            DocRepositoryFiller docRepoFiller1CDO, docRepoFillerRegidtry;
 
-            // Get parameters
-            RootConfigFilePath rootConfigFilePath = new();
-
-            programParamsRepository = new ProgramParamsRepository(readerJSON, rootConfigFilePath);
-
-            // Create Instances
-            //spreadSheetReader = new SpreadSheetReaderXLSX();
-            // Create document repositories
+            // Documents repository
             doc1CDORepository = new DocRepository1CDO();
             docRegistryRepository = new DocRepositoryRegistry();
             // Create document fields settings repositories
