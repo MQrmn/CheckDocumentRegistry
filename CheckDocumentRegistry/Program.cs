@@ -4,10 +4,13 @@
     {
         static void Main(string[] args)
         {
-            IArrToObjConverter arrToObjConverter;
-            IUserReporter userReporter;
-            ISpreadSheetReader spreadSheetReader;
+            IUserReporter userReporter = new ConsoleWriter();
+            IArrToObjConverter arrToObjConverter = new ArrToObjConverter();
+            arrToObjConverter.ErrNotify += userReporter.ReportError;
+
+            ISpreadSheetReader spreadSheetReader = new SpreadSheetReaderXLSX();
             IObjsSerialiser objectSerialiser;
+
             ProgramParamsRepositoryBase programParamsRepository;
             SpreadsheetsPathsBase spreadsheetsPaths1CDO, spreadsheetsPathsRegistry;
             FieldsSettingsRepositoryBase fieldsSettings;
@@ -27,7 +30,7 @@
             programParamsRepository = new ProgramParamsRepository(readerJSON, rootConfigFilePath);
 
             // Create Instances
-            spreadSheetReader = new SpreadSheetReaderXLSX();
+            //spreadSheetReader = new SpreadSheetReaderXLSX();
             // Create document repositories
             doc1CDORepository = new DocRepository1CDO();
             docRegistryRepository = new DocRepositoryRegistry();
@@ -36,14 +39,17 @@
             fieldsSettingsRegistry = new FieldsSettingsRegistryRepository();
 
             DocAmountReportData reportDocAmount = new();
-            userReporter = new ConsoleWriter();
+            //userReporter = new ConsoleWriter();
             // WorkAbilityChecker.CheckFiles(workParams);                    // Checkimg for existing files to comparing
 
-            ArrToObjConverter srrToObjConverter = new ArrToObjConverter();
-            srrToObjConverter.ErrNotify += userReporter.ReportError;
+            //arrToObjConverter = new ArrToObjConverter();
+            
 
-            DocLoader docLoader = new(srrToObjConverter, spreadSheetReader);
+            DocLoader docLoader = new(arrToObjConverter, spreadSheetReader);
+
             docLoader.Notify += userReporter.ReportInfo;
+
+
             // Filling repositories
             docRepoFiller1CDO = new(    docLoader, 
                                         fieldsSettings1CDO, 
