@@ -4,79 +4,77 @@
     {
         static void Main(string[] args)
         {
-            // Reporter
-            IUserReporter userReporter = new ConsoleWriter();
-            // Objects Reader-Writer in/to file
-            IObjsSerialiser objectSerialiser = new ReadWriteJSON();
-
-            // Program parameters
-            RootConfigFilePath rootConfigFilePath = new();
-
-            ProgramParamsRepositoryBase programParamsRepository = 
-                new ProgramParamsRepository(objectSerialiser, rootConfigFilePath);
-
-            ISpreadSheetReader spreadSheetReader = new SpreadSheetReaderXLSX();
-            IArrToObjConverter arrToObjConverter = new ArrToObjConverter();
-            arrToObjConverter.ErrNotify += userReporter.ReportError;
+            IUserReporter userReporter;                                             // Reports providing
+            IObjsSerialiser objectSerialiser;                                       // Objects Reader-Writer in/to file
+            ISpreadSheetReader spreadSheetReader;                                   // Getting data from spreadsheetd
+            IArrToObjConverter arrToObjConverter;                                   // Getting objs from file, putting objs to file
             
-            SpreadsheetsPathsBase spreadsheetsPaths1CDO, spreadsheetsPathsRegistry;
-            FieldsSettingsRepositoryBase fieldsSettings;
-            DocComparator docComparator;
-            UnmatchedDocCommentSetter unmatchedDocsCommentator;
-            RootConfigFilePath configFilesPath;
-
-            // Documents repository, DocSettings repository, repository filler
-            DocRepositoryBase doc1CDORepository, docRegistryRepository;
+            // Parameters
+            RootConfigFilePath rootConfigFilePath;                                  // Contains main config file path
+            ProgramParamsRepositoryBase progParamsRepo;                    // Contains programs parameters
+            //FieldsSettingsRepositoryBase fieldsSettings;                            // Contains settings of document fields
+            SpreadsheetsPathsBase spreadsheetsPaths1CDO, spreadsheetsPathsRegistry; // Contains spreadsheets paths in file system
             FieldsSettingsRepositoryBase fieldsSettings1CDO, fieldsSettingsRegistry;
+            // Documents
+            DocRepositoryBase doc1CDORepository, docRegistryRepository;
             DocRepositoryFiller docRepoFiller1CDO, docRepoFillerRegidtry;
 
-            // Documents repository
-            doc1CDORepository = new DocRepository1CDO();
-            docRegistryRepository = new DocRepositoryRegistry();
-            // Create document fields settings repositories
+            // NOT REFACTORED
+            UnmatchedDocCommentSetter unmatchedDocsCommentator;
+            DocComparator docComparator;
+
+            // CRETING INSTANCES
+            userReporter = new ConsoleWriter();
+            objectSerialiser = new ReadWriteJSON();
+            // Set program patameters
+            rootConfigFilePath = new RootConfigFilePath();
+            progParamsRepo = new ProgramParamsRepository(objectSerialiser, rootConfigFilePath);
+            // Creating documents processors
+            spreadSheetReader = new SpreadSheetReaderXLSX();
+            arrToObjConverter = new ArrToObjConverter();
+            arrToObjConverter.ErrNotify += userReporter.ReportError;
+            DocLoader docLoader = new(arrToObjConverter, spreadSheetReader);
+            docLoader.Notify += userReporter.ReportInfo;
+            // Creating document fields settings repositories
             fieldsSettings1CDO = new FieldsSettings1CDORepository();
             fieldsSettingsRegistry = new FieldsSettingsRegistryRepository();
+            // Creating Documents repositories
+            doc1CDORepository = new DocRepository1CDO();
+            docRegistryRepository = new DocRepositoryRegistry();
+            
 
             DocAmountReportData reportDocAmount = new();
             //userReporter = new ConsoleWriter();
             // WorkAbilityChecker.CheckFiles(workParams);                    // Checkimg for existing files to comparing
-
             //arrToObjConverter = new ArrToObjConverter();
             
 
-            DocLoader docLoader = new(arrToObjConverter, spreadSheetReader);
 
-            docLoader.Notify += userReporter.ReportInfo;
-
-
-            // Filling repositories
+            // Creating dovuments repositories fillers
             docRepoFiller1CDO = new(    docLoader, 
                                         fieldsSettings1CDO, 
                                         doc1CDORepository,
-                                        programParamsRepository.Spreadsheets1CDO
-                                        //spreadsheetsPaths1CDO
+                                        progParamsRepo.Spreadsheets1CDO
                                         );
             docRepoFillerRegidtry = new(docLoader,
                                         fieldsSettingsRegistry,
                                         docRegistryRepository,
-                                        programParamsRepository.SpreadsheetsRegistry
-                                        //spreadsheetsPathsRegistry
+                                        progParamsRepo.SpreadsheetsRegistry
                                         );
-
+            // Filling doc repositories 
             docRepoFiller1CDO.FillRepository();
             docRepoFillerRegidtry.FillRepository();
 
             FillSrcDocAmount();
-            // Comparing
+            // Comparing documents
             CompareDocuments();
             FillResultDocAmount();
             
-            DocumentAmountReporter documentsAmountReporter = new(programParamsRepository.Common.ProgramReportFilePath);
+            DocumentAmountReporter documentsAmountReporter = new(progParamsRepo.Common.ProgramReportFilePath);
             documentsAmountReporter.CreateAllReports(
                                                     docRegistryRepository.SourceDocs,
                                                     reportDocAmount
                                                     );
-
             // Result spreadsheets generating
             GenerateOutputSpreadsheets();
             CloseProgram();
@@ -94,15 +92,15 @@
                 unmatchedDocsCommentator.CommentUnmatchedDocuments();
             }
 
-            void ArgsHandler(string[] args)
-            { 
-                if(args.Length < 2)
-                    return;
-                if (args[0] == "-c")
-                {
-                    configFilesPath.CommonParamsFilePath = args[1];
-                }
-            }
+            //void ArgsHandler(string[] args)
+            //{ 
+            //    if(args.Length < 2)
+            //        return;
+            //    if (args[0] == "-c")
+            //    {
+            //        configFilesPath.CommonParamsFilePath = args[1];
+            //    }
+            //}
 
             //CommonParams GetWorkParams(string[] args)
             //{
@@ -117,21 +115,21 @@
                 SpreadSheetWriterXLSX spreadsheetWriterPassedDo;                
                 SpreadSheetWriterXLSX spreadSheetWriterPassedUpp;               
 
-                spreadsheetWriterPassedDo = new(programParamsRepository.Spreadsheets1CDO.Unmatched);
+                spreadsheetWriterPassedDo = new(progParamsRepo.Spreadsheets1CDO.Unmatched);
                 spreadsheetWriterPassedDo.CreateSpreadsheet(docComparator.UnmatchedDocs1CDO);
 
-                spreadSheetWriterPassedUpp = new(programParamsRepository.SpreadsheetsRegistry.Unmatched);
+                spreadSheetWriterPassedUpp = new(progParamsRepo.SpreadsheetsRegistry.Unmatched);
                 spreadSheetWriterPassedUpp.CreateSpreadsheet(docComparator.UnmatchedDocs1CUPP, false);
 
-                if (programParamsRepository.Common.IsPrintMatchedDocuments)
+                if (progParamsRepo.Common.IsPrintMatchedDocuments)
                 {
                     SpreadSheetWriterXLSX spreadSheetWriterMatchedDo;               
                     SpreadSheetWriterXLSX spreadSheetWriterMatcheUpp;               
 
-                    spreadSheetWriterMatchedDo = new(programParamsRepository.Spreadsheets1CDO.Matched);
+                    spreadSheetWriterMatchedDo = new(progParamsRepo.Spreadsheets1CDO.Matched);
                     spreadSheetWriterMatchedDo.CreateSpreadsheet(docComparator.MatchedDocs1CDO, false);
 
-                    spreadSheetWriterMatcheUpp = new(programParamsRepository.SpreadsheetsRegistry.Matched);
+                    spreadSheetWriterMatcheUpp = new(progParamsRepo.SpreadsheetsRegistry.Matched);
                     spreadSheetWriterMatcheUpp.CreateSpreadsheet(docComparator.MatchedDocs1CUPP, false);
                 }
             }
@@ -154,7 +152,7 @@
 
             void CloseProgram()
             {
-                if (programParamsRepository.Common.IsAskAboutCloseProgram)
+                if (progParamsRepo.Common.IsAskAboutCloseProgram)
                 {
                     Console.WriteLine("Для завершения программы нажмите любую клавишу.");
                     Console.ReadKey();
