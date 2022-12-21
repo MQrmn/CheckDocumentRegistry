@@ -14,9 +14,9 @@ namespace RegComparator
         public override void SetDefaults()
         {
             Console.WriteLine(this.GetType());
-            SpreadsheetParams1CDO = "SpreadsheetParams1CDO.json";
-            SpreadsheetParamsRegistry = "SpreadsheetParamsRegistry.json";
-            ProgramReportFilePath = "C:\\1C\\АРХИВНЫЕ ДОКУМЕНТЫ\\РЕЗУЛЬТАТЫ СРАВНЕНИЯ\\report.txt";
+            SpreadsheetParams1CDO = "Spreadsheets1CDO.json";
+            SpreadsheetParamsRegistry = "SpreadsheetsRegistry.json";
+            ProgramReportFilePath = "Report.txt";
             IsPrintMatchedDocuments = false;
             IsAskAboutCloseProgram = true;
             RegistryMode = "KA";
