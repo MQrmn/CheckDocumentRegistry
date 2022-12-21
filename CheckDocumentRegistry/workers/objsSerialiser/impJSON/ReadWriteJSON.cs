@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace RegComparator
 {
@@ -12,6 +14,7 @@ namespace RegComparator
             {
                 string jsonString = File.ReadAllText(filePathParams);
                 deserialisedJsonData = JsonSerializer.Deserialize<T>(jsonString);
+                
             }
             catch
             {
@@ -22,5 +25,24 @@ namespace RegComparator
             }
             return deserialisedJsonData;
         }
+
+        public void PutObj(object obj, string filePath)
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string jsonstring = JsonSerializer.Serialize(obj, options);
+
+            try
+            {
+                File.WriteAllText(filePath, jsonstring);
+            }
+            catch
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Не удалось записать файл " + filePath);
+                Console.ResetColor();
+            }
+        }
+
+
     }
 }

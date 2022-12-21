@@ -1,13 +1,21 @@
 ﻿
+using System.Text.Json.Serialization;
+
 namespace RegComparator
 {
     public class CommonParams : IParameters
     {
+        [JsonInclude]
         public string SpreadsheetParams1CDO;
+        [JsonInclude]
         public string SpreadsheetParamsRegistry;
+        [JsonInclude]
         public string ProgramReportFilePath;
+        [JsonInclude]
         public bool IsPrintMatchedDocuments;
+        [JsonInclude]
         public bool IsAskAboutCloseProgram;
+        [JsonInclude]
         public string RegistryMode;
         public void SetDefaults()
         {
