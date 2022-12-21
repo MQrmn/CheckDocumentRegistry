@@ -1,7 +1,7 @@
 ﻿
 namespace RegComparator
 {
-    public class RootConfigFilePath : IParameters
+    public class RootConfigFilePath : ProgramParametersBase
     {
         public string CommonParamsFilePath;
         public RootConfigFilePath()
@@ -14,7 +14,7 @@ namespace RegComparator
             CommonParamsFilePath = "CommonParams.json";
         }
 
-        public void VerifyFields()
+        public override void VerifyFields()
         {
             if (CommonParamsFilePath == string.Empty || CommonParamsFilePath is null)
                 throw new Exception();

@@ -26,19 +26,19 @@
                     SpreadsheetsRegistry.VerifyFields, SpreadsheetsRegistry.SetDefaults);
         }
 
-        private protected override void SetField<T>(IParameters field)
+        private protected override void SetField<T>(ProgramParametersBase field)
         {
             throw new NotImplementedException();
         }
 
-        private protected override void GetObj<T>(T obj, string path, Action verify, Action setDefaults)
+        private protected override void GetObj<T>(ProgramParametersBase obj, string path, Action verify, Action setDefaults) where T : class
         {
             try
             {
                 Console.WriteLine("HashCode " + obj.GetHashCode());
                 obj = _objConverter.GetObj<T>(path);
                 Console.WriteLine("HashCode " + obj.GetHashCode());
-                verify();
+                obj.VerifyFields();
             }
             catch
             {

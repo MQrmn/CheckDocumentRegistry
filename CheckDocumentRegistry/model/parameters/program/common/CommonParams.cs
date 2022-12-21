@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace RegComparator
 {
-    public class CommonParams : IParameters
+    public class CommonParams : ProgramParametersBase
     {
         public string SpreadsheetParams1CDO;
         public string SpreadsheetParamsRegistry;
@@ -22,7 +22,7 @@ namespace RegComparator
             RegistryMode = "KA";
         }
 
-        public void VerifyFields()
+        public override void VerifyFields()
         {
             if (SpreadsheetParams1CDO == string.Empty || SpreadsheetParams1CDO is null)
                 throw new Exception();
