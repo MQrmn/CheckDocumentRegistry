@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace RegComparator
 {
-    public class ReadWriteJSON : IObjsSerialiser
+    public class ReadWriteJSON : IObjsConverter
     {
         public T? GetObj<T>(string filePathParams)
         {
@@ -13,13 +13,14 @@ namespace RegComparator
             try
             {
                 string jsonString = File.ReadAllText(filePathParams);
-                deserialisedJsonData = JsonSerializer.Deserialize<T>(jsonString);
-                
+                var options = new JsonSerializerOptions { IncludeFields = true };
+                deserialisedJsonData = JsonSerializer.Deserialize<T>(jsonString, options)!;
+
             }
             catch
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Не удалось прочитать файл " + filePathParams );
+                Console.WriteLine("Не удалось прочитать файл " + filePathParams);
                 Console.ResetColor();
                 throw new Exception();
             }

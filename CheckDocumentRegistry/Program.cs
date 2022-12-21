@@ -5,7 +5,7 @@
         static void Main(string[] args)
         {
             IUserReporter userReporter;                                             // Reports providing
-            IObjsSerialiser objectSerialiser;                                       // Objects Reader-Writer in/to file
+            IObjsConverter objectConverter;                                       // Objects Reader-Writer in/to file
             ISpreadSheetReader spreadSheetReader;                                   // Getting data from spreadsheetd
             IArrToObjConverter arrToObjConverter;                                   // Getting objs from file, putting objs to file
             
@@ -25,10 +25,10 @@
 
             // CRETING INSTANCES
             userReporter = new ConsoleWriter();
-            objectSerialiser = new ReadWriteJSON();
+            objectConverter = new ReadWriteJSON();
             // Set program patameters
             rootConfigFilePath = new RootConfigFilePath();
-            progParamsRepo = new ProgramParamsRepository(objectSerialiser, rootConfigFilePath);
+            progParamsRepo = new ProgramParamsRepository(objectConverter, rootConfigFilePath);
             // Creating documents processors
             spreadSheetReader = new SpreadSheetReaderXLSX();
             arrToObjConverter = new ArrToObjConverter();

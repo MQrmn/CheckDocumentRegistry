@@ -2,21 +2,25 @@
 {
     public class ProgramParamsRepository : ProgramParamsRepositoryBase
     {
-        public ProgramParamsRepository(IObjsSerialiser objSerialiser, RootConfigFilePath rootConfig)
+        public ProgramParamsRepository(IObjsConverter objSerialiser, RootConfigFilePath rootConfig)
         {
             _rootConfig = rootConfig;
-            _objSerialiser = objSerialiser;
+            _objConverter = objSerialiser;
             Common = new CommonParams();
             Spreadsheets1CDO = new SpreadsheetsPaths1CDO();
             SpreadsheetsRegistry = new SpreadsheetsPathsRegistry();
 
+
+            //Console.WriteLine( Common.GetHashCode());
             GetObj<CommonParams>
                 (   Common, _rootConfig.CommonParamsFilePath, Common.VerifyFields, Common.SetDefaults);
-            
+
+            Console.WriteLine(Spreadsheets1CDO.GetHashCode());
             GetObj<SpreadsheetsPaths1CDO>
                 (   Spreadsheets1CDO, Common.SpreadsheetParams1CDO, 
                     Spreadsheets1CDO.VerifyFields, Spreadsheets1CDO.SetDefaults);
-            
+
+            Console.WriteLine(SpreadsheetsRegistry.GetHashCode());
             GetObj<SpreadsheetsPathsRegistry>
                 (   SpreadsheetsRegistry, Common.SpreadsheetParamsRegistry, 
                     SpreadsheetsRegistry.VerifyFields, SpreadsheetsRegistry.SetDefaults);
@@ -31,8 +35,9 @@
         {
             try
             {
-                obj = _objSerialiser.GetObj<T>(path);
-
+                Console.WriteLine("HashCode " + obj.GetHashCode());
+                obj = _objConverter.GetObj<T>(path);
+                Console.WriteLine("HashCode " + obj.GetHashCode());
                 verify();
             }
             catch
@@ -49,7 +54,7 @@
         {
             try
             {
-                _objSerialiser.PutObj(obj, path);
+                _objConverter.PutObj(obj, path);
                 Console.WriteLine("Записан файл конфигурации по умолчанию " + path);
             }
             catch

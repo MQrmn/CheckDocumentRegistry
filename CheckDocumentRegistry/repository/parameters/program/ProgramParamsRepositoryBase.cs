@@ -3,7 +3,7 @@
     public abstract class ProgramParamsRepositoryBase
     {
         private protected RootConfigFilePath _rootConfig;
-        private protected IObjsSerialiser _objSerialiser;
+        private protected IObjsConverter _objConverter;
         public CommonParams Common;
         public SpreadsheetsPaths1CDO Spreadsheets1CDO;
         public SpreadsheetsPathsRegistry SpreadsheetsRegistry;
