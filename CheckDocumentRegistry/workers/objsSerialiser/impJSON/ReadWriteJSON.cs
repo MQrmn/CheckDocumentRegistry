@@ -1,45 +1,59 @@
 ﻿using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 namespace RegComparator
 {
     public class ReadWriteJSON : IObjsConverter
     {
-        public T? GetObj<T>(string filePathParams)
+        public T? GetObj<T>(string path)
         {
-            T? deserialisedJsonData;
+            string jsonString;
 
             try
             {
-                string jsonString = File.ReadAllText(filePathParams);
+                using (StreamReader reader = new StreamReader(path))
+                {
+                    jsonString = reader.ReadToEnd();
+                }
+
                 var options = new JsonSerializerOptions { IncludeFields = true };
-                deserialisedJsonData = JsonSerializer.Deserialize<T>(jsonString, options)!;
+                var obj = JsonSerializer.Deserialize<T>(jsonString, options)!;
+                return obj;
 
             }
             catch
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Не удалось прочитать файл " + filePathParams);
+                Console.WriteLine("Не удалось прочитать файл " + path);
                 Console.ResetColor();
                 throw new Exception();
             }
-            return deserialisedJsonData;
         }
 
-        public void PutObj(object obj, string filePath)
+        public void PutObj(object obj, string path)
         {
-            var options = new JsonSerializerOptions { WriteIndented = true, IncludeFields = true };
+            var options = new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic),
+                WriteIndented = true,
+                IncludeFields = true
+            };
+
             string jsonstring = JsonSerializer.Serialize(obj, options);
 
             try
             {
-                File.WriteAllText(filePath, jsonstring);
+                using (StreamWriter writer = new StreamWriter(path, false, Encoding.UTF8))
+                {
+                    writer.WriteLineAsync(jsonstring);
+                }
             }
             catch
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Не удалось записать файл " + filePath);
+                Console.WriteLine("Не удалось записать файл " + path);
                 Console.ResetColor();
             }
         }

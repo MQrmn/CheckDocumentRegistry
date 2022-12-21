@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace RegComparator
 {
-    public class CommonParams : ProgramParametersBase
+    public class MainParams : ProgramParametersBase
     {
         public string SpreadsheetParams1CDO;
         public string SpreadsheetParamsRegistry;

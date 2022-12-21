@@ -4,7 +4,7 @@
     {
         private protected RootConfigFilePath _rootConfig;
         private protected IObjsConverter _objConverter;
-        public CommonParams Common;
+        public MainParams Common;
         public SpreadsheetsPaths1CDO Spreadsheets1CDO;
         public SpreadsheetsPathsRegistry SpreadsheetsRegistry;
 

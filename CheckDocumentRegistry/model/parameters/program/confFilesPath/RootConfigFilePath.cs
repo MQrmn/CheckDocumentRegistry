@@ -11,7 +11,7 @@ namespace RegComparator
 
         public override void SetDefaults()
         {
-            CommonParamsFilePath = "CommonParams.json";
+            CommonParamsFilePath = "MainParams.json";
         }
 
         public override void VerifyFields()

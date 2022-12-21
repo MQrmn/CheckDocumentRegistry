@@ -7,7 +7,7 @@
             _rootConfig = rootConfig;
             _objConverter = objSerialiser;
 
-            Common = GetObj<CommonParams>(_rootConfig.CommonParamsFilePath);
+            Common = GetObj<MainParams>(_rootConfig.CommonParamsFilePath);
             Spreadsheets1CDO = GetObj<SpreadsheetsPaths1CDO>(Common.SpreadsheetParams1CDO);
             SpreadsheetsRegistry = GetObj<SpreadsheetsPathsRegistry>( Common.SpreadsheetParamsRegistry);
         }
@@ -34,9 +34,6 @@
                 PutObj(obj, path);
                 return obj;
             }
-
-            
-
         }
 
         private protected override void PutObj(object obj, string path)
