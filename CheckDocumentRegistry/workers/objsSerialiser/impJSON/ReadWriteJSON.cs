@@ -28,7 +28,7 @@ namespace RegComparator
 
         public void PutObj(object obj, string filePath)
         {
-            var options = new JsonSerializerOptions { WriteIndented = true };
+            var options = new JsonSerializerOptions { WriteIndented = true, IncludeFields = true };
             string jsonstring = JsonSerializer.Serialize(obj, options);
 
             try
