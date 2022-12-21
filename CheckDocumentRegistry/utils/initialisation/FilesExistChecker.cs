@@ -1,76 +1,38 @@
-﻿using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Spreadsheet;
-
-namespace RegComparator
+﻿namespace RegComparator
 {
-    public class WorkAbilityChecker
+    public class FileExistChecker
     {
+        public void CheckCritical(List<string> paths)
+        {
+            if (!Check(paths, true))
+            {
+                Console.WriteLine("Завершение работы программы");
+                Environment.Exit(0);
+            }
+        }
 
-        //    internal protected static void CheckFiles(CommonParams programParameters)
-        //    {
-        //        bool doExist = File.Exists(programParameters.inputSpreadsheetDocManagePath[0]);
-        //        bool uppExist = File.Exists(programParameters.inputSpreadsheetDocRegistryPath[0]);
+        public void CheckNonCritical(List<string> paths)
+        {
+            Check(paths, false);
+        }
 
-        //        if (doExist && uppExist)
-        //        {
-        //            TryOpenSpreadSheet(programParameters.inputSpreadsheetDocManagePath[0]);
-        //            TryOpenSpreadSheet(programParameters.inputSpreadsheetDocRegistryPath[0]);
-        //        }
-        //        else
-        //        {
-        //            if (!doExist)
-        //            {
-        //                WriteMessageExit($"Error: Файл \"{programParameters.inputSpreadsheetDocManagePath}\" не найден.");
-        //            }
-        //            if (!uppExist)
-        //            {
-        //                WriteMessageExit($"Error: Файл \"{programParameters.inputSpreadsheetDocRegistryPath}\" не найден.");
-        //            }
-        //        }
+        private bool Check(List<string> paths, bool isStrict)
+        {
+            foreach (var p in paths) 
+            {
+                bool isExist = File.Exists(p);
+                if (!isExist)
+                {
+                    Console.WriteLine("Файл не найден: " + p);
 
-        //        TryCreateSpreadSheet(programParameters.outputUnmatchDocManagePath);
-        //        TryCreateSpreadSheet(programParameters.outputUnmatchedDocRegistryPath);
-        //    }
-
-        //    internal protected static void TryOpenSpreadSheet(string filePath)
-        //    {
-        //        try
-        //        {
-        //            using (File.Open(filePath, FileMode.Open)) { }
-        //        }
-        //        catch
-        //        {
-        //            WriteMessageExit($"Error: Невозможно открыть файл \"{filePath}\".");
-        //        }
-        //    }
-
-        //    internal protected static void TryCreateSpreadSheet(string filePath)
-        //    {
-        //        try
-        //        {
-        //            SpreadsheetDocument spreadsheetDocument = SpreadsheetDocument
-        //            .Create(filePath, DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook);
-
-        //            WorkbookPart workbookpart = spreadsheetDocument.AddWorkbookPart();
-        //            workbookpart.Workbook = new Workbook();
-        //            workbookpart.Workbook.Save();
-        //            spreadsheetDocument.Close();
-        //        }
-        //        catch
-        //        {
-        //            WriteMessageExit($"Error: Невозможно создать файл \"{filePath}\".");
-        //        }
-        //    }
-
-        //    internal protected static void WriteMessageExit(string message)
-        //    {
-        //        Console.ForegroundColor = ConsoleColor.Red;
-        //        Console.WriteLine(message);
-        //        Console.ResetColor();
-        //        Console.WriteLine("Для завершения программы нажмите любую клавишу.");
-        //        Console.ReadLine();
-        //        Environment.Exit(0);
-        //    }
-        //}
+                    if (isStrict)
+                    {
+                        return isExist;
+                    }
+                }
+            }
+            return true;
+        }
     }
 }
+

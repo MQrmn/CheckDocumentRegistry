@@ -9,9 +9,10 @@
         public SpreadsheetsPathsRegistry SpreadsheetsRegistry;
 
         private protected abstract T GetObj<T>(string path) where T : ProgramParametersBase;
-
-        private protected abstract void SetField<T>(ProgramParametersBase field);
-
         private protected abstract void PutObj(object obj, string path);
+        public abstract List<string> GetSourcePaths();
+        public abstract List<string> GetSkippedPaths();
+        private protected abstract List<string> CreatePathList(string[][] paramsObjs);
+        
     }
 }

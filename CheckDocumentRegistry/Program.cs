@@ -8,11 +8,11 @@
             IObjsConverter objectConverter;                                         // Objects Reader-Writer in/to file
             ISpreadSheetReader spreadSheetReader;                                   // Getting data from spreadsheetd
             IArrToObjConverter arrToObjConverter;                                   // Getting objs from file, putting objs to file
-            
+            FileExistChecker fileExistChecker;
+
             // Parameters
             RootConfigFilePath rootConfigFilePath;                                  // Contains main config file path
             ProgramParamsRepositoryBase progParamsRepo;                             // Contains programs parameters
-            //FieldsSettingsRepositoryBase fieldsSettings;                          // Contains settings of document fields
             SpreadsheetsPathsBase spreadsheetsPaths1CDO, spreadsheetsPathsRegistry; // Contains spreadsheets paths in file system
             FieldsSettingsRepositoryBase fieldsSettings1CDO, fieldsSettingsRegistry;
             // Documents
@@ -29,6 +29,10 @@
             // Set program patameters
             rootConfigFilePath = new RootConfigFilePath();
             progParamsRepo = new ProgramParamsRepository(objectConverter, rootConfigFilePath);
+            // Check spreadsheets existing
+            fileExistChecker = new();
+            fileExistChecker.CheckCritical(progParamsRepo.GetSourcePaths());
+            fileExistChecker.CheckNonCritical(progParamsRepo.GetSkippedPaths());
             // Creating documents processors
             spreadSheetReader = new SpreadSheetReaderXLSX();
             arrToObjConverter = new ArrToObjConverter();

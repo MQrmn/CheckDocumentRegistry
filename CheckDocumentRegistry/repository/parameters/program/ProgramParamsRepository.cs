@@ -12,9 +12,28 @@
             SpreadsheetsRegistry = GetObj<SpreadsheetsPathsRegistry>( Common.SpreadsheetParamsRegistry);
         }
 
-        private protected override void SetField<T>(ProgramParametersBase field)
+        public override List<string> GetSourcePaths()
         {
-            throw new NotImplementedException();
+            return CreatePathList(new string[][] { Spreadsheets1CDO.Source, SpreadsheetsRegistry.Source });
+        }
+
+        public override List<string> GetSkippedPaths()
+        {
+            return CreatePathList(new string[][] { Spreadsheets1CDO.Skipped, SpreadsheetsRegistry.Skipped });
+        }
+
+        private protected override List<string> CreatePathList(string[][] paramsArrs)
+        {
+            List<string> pathList = new();
+
+            foreach (var arr in paramsArrs)
+            {
+                foreach (var path in arr)
+                {
+                    pathList.Add(path);
+                }
+            }
+            return pathList;
         }
 
         private protected override T GetObj<T>(string path)
