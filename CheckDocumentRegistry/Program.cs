@@ -5,14 +5,14 @@
         static void Main(string[] args)
         {
             IUserReporter userReporter;                                             // Reports providing
-            IObjsConverter objectConverter;                                       // Objects Reader-Writer in/to file
+            IObjsConverter objectConverter;                                         // Objects Reader-Writer in/to file
             ISpreadSheetReader spreadSheetReader;                                   // Getting data from spreadsheetd
             IArrToObjConverter arrToObjConverter;                                   // Getting objs from file, putting objs to file
             
             // Parameters
             RootConfigFilePath rootConfigFilePath;                                  // Contains main config file path
-            ProgramParamsRepositoryBase progParamsRepo;                    // Contains programs parameters
-            //FieldsSettingsRepositoryBase fieldsSettings;                            // Contains settings of document fields
+            ProgramParamsRepositoryBase progParamsRepo;                             // Contains programs parameters
+            //FieldsSettingsRepositoryBase fieldsSettings;                          // Contains settings of document fields
             SpreadsheetsPathsBase spreadsheetsPaths1CDO, spreadsheetsPathsRegistry; // Contains spreadsheets paths in file system
             FieldsSettingsRepositoryBase fieldsSettings1CDO, fieldsSettingsRegistry;
             // Documents
