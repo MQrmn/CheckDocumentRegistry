@@ -7,7 +7,7 @@
         public string Matched;
         public string Unmatched;
         public string Excepted;
-        public abstract void SetDefaults();
+        //public abstract void SetDefaults();
         public override void VerifyFields()
         {
             if (Source?[0] == string.Empty || Source?[0] is null)

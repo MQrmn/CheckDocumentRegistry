@@ -8,7 +8,7 @@
         public SpreadsheetsPaths1CDO Spreadsheets1CDO;
         public SpreadsheetsPathsRegistry SpreadsheetsRegistry;
 
-        private protected abstract void GetObj<T>(ProgramParametersBase field, string path, Action verify, Action setDefaults) where T : ProgramParametersBase;
+        private protected abstract T GetObj<T>(string path) where T : ProgramParametersBase;
 
         private protected abstract void SetField<T>(ProgramParametersBase field);
 

@@ -11,7 +11,7 @@ namespace RegComparator
         public bool IsPrintMatchedDocuments;
         public bool IsAskAboutCloseProgram;
         public string RegistryMode;
-        public void SetDefaults()
+        public override void SetDefaults()
         {
             Console.WriteLine(this.GetType());
             SpreadsheetParams1CDO = "SpreadsheetParams1CDO.json";

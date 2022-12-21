@@ -9,7 +9,7 @@ namespace RegComparator
             SetDefaults();
         }
 
-        public void SetDefaults()
+        public override void SetDefaults()
         {
             CommonParamsFilePath = "CommonParams.json";
         }
