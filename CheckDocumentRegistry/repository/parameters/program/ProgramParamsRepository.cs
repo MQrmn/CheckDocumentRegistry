@@ -2,12 +2,12 @@
 {
     public class ProgramParamsRepository : ProgramParamsRepositoryBase
     {
-        public ProgramParamsRepository(IObjsConverter objSerialiser, RootConfigFilePath rootConfig)
+        public ProgramParamsRepository(IObjsConverter objSerialiser, RootConfig rootConfig)
         {
             _rootConfig = rootConfig;
             _objConverter = objSerialiser;
 
-            Common = GetObj<MainParams>(_rootConfig.CommonParamsFilePath);
+            Common = GetObj<MainParams>(_rootConfig.MainParamsFilePath);
             Spreadsheets1CDO = GetObj<SpreadsheetsPaths1CDO>(Common.SpreadsheetParams1CDO);
             SpreadsheetsRegistry = GetObj<SpreadsheetsPathsRegistry>( Common.SpreadsheetParamsRegistry);
         }

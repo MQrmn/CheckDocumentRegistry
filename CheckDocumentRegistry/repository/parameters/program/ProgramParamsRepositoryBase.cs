@@ -2,7 +2,7 @@
 {
     public abstract class ProgramParamsRepositoryBase
     {
-        private protected RootConfigFilePath _rootConfig;
+        private protected RootConfig _rootConfig;
         private protected IObjsConverter _objConverter;
         public MainParams Common;
         public SpreadsheetsPaths1CDO Spreadsheets1CDO;

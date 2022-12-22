@@ -1,7 +1,4 @@
-﻿
-using System.Text.Json.Serialization;
-
-namespace RegComparator
+﻿namespace RegComparator
 {
     public class MainParams : ProgramParametersBase
     {

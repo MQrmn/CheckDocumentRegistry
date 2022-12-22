@@ -11,10 +11,11 @@
             FileExistChecker fileExistChecker;
 
             // Parameters
-            RootConfigFilePath rootConfigFilePath;                                  // Contains main config file path
+            RootConfig rootConfigFilePath;                                  // Contains main config file path
             ProgramParamsRepositoryBase progParamsRepo;                             // Contains programs parameters
             SpreadsheetsPathsBase spreadsheetsPaths1CDO, spreadsheetsPathsRegistry; // Contains spreadsheets paths in file system
             FieldsSettingsRepositoryBase fieldsSettings1CDO, fieldsSettingsRegistry;
+
             // Documents
             DocRepositoryBase doc1CDORepository, docRegistryRepository;
             DocRepositoryFiller docRepoFiller1CDO, docRepoFillerRegidtry;
@@ -26,36 +27,36 @@
             // CRETING INSTANCES
             userReporter = new ConsoleWriter();
             objectConverter = new ReadWriteJSON();
+
             // Set program patameters
-            rootConfigFilePath = new RootConfigFilePath();
+            ArgsHandler argsHandler = new(args);
+            rootConfigFilePath = argsHandler.GetParams();
             progParamsRepo = new ProgramParamsRepository(objectConverter, rootConfigFilePath);
+
             // Check spreadsheets existing
             fileExistChecker = new();
             fileExistChecker.CheckCritical(progParamsRepo.GetSourcePaths());
             fileExistChecker.CheckNonCritical(progParamsRepo.GetSkippedPaths());
+
             // Creating documents processors
             spreadSheetReader = new SpreadSheetReaderXLSX();
             arrToObjConverter = new ArrToObjConverter();
             arrToObjConverter.ErrNotify += userReporter.ReportError;
             DocLoader docLoader = new(arrToObjConverter, spreadSheetReader);
             docLoader.Notify += userReporter.ReportInfo;
+
             // Creating document fields settings repositories
             fieldsSettings1CDO = new FieldsSettings1CDORepository();
             fieldsSettingsRegistry = new FieldsSettingsRegistryRepository();
+
             // Creating Documents repositories
             doc1CDORepository = new DocRepository1CDO();
             docRegistryRepository = new DocRepositoryRegistry();
-            
 
             DocAmountReportData reportDocAmount = new();
-            //userReporter = new ConsoleWriter();
-            // WorkAbilityChecker.CheckFiles(workParams);                    // Checkimg for existing files to comparing
-            //arrToObjConverter = new ArrToObjConverter();
-            
 
-
-            // Creating dovuments repositories fillers
-            docRepoFiller1CDO = new(    docLoader, 
+            // Creating documents repositories fillers
+            docRepoFiller1CDO     = new(docLoader, 
                                         fieldsSettings1CDO, 
                                         doc1CDORepository,
                                         progParamsRepo.Spreadsheets1CDO
@@ -85,8 +86,7 @@
 
             void CompareDocuments()
             {
-                docComparator = new(
-                                    doc1CDORepository.SourceDocs,
+                docComparator = new(doc1CDORepository.SourceDocs,
                                     docRegistryRepository.SourceDocs,
                                     docRegistryRepository.SkippedDocs,
                                     docRegistryRepository.SkippedDocs
@@ -95,24 +95,6 @@
                                                docComparator.UnmatchedDocs1CUPP);
                 unmatchedDocsCommentator.CommentUnmatchedDocuments();
             }
-
-            //void ArgsHandler(string[] args)
-            //{ 
-            //    if(args.Length < 2)
-            //        return;
-            //    if (args[0] == "-c")
-            //    {
-            //        configFilesPath.CommonParamsFilePath = args[1];
-            //    }
-            //}
-
-            //CommonParams GetWorkParams(string[] args)
-            //{
-            //    configFilesPath = new();
-            //    ArgsHandler(args);
-            //    WorkParametersReadWrite workParametersReadWrite = new(configFilesPath.CommonParamsFilePath);
-            //    return workParametersReadWrite.GetProgramParameters();
-            //}
 
             void GenerateOutputSpreadsheets()
             {
