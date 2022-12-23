@@ -2,7 +2,6 @@
   "profiles": {
     "CheckDocumentRegistry": {
       "commandName": "Project",
-      "commandLineArgs": "-c X.json",
       "workingDirectory": "C:\\Users\\querm\\source\\repos\\MQrmn\\CheckDocumentRegistry\\CheckDocumentRegistry\\bin\\Debug\\net6.0"
     }
   }

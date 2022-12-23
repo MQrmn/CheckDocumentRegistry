@@ -18,16 +18,21 @@
 
         private bool Check(List<string> paths, bool isStrict)
         {
-            foreach (var p in paths) 
+            //foreach (string? p in paths[0]) 
+            for (var i = 0; i < paths.Count; i++)
             {
-                bool isExist = File.Exists(p);
+                bool isExist = File.Exists(paths[i]);
                 if (!isExist)
                 {
-                    Console.WriteLine("Файл не найден: " + p);
+                    Console.WriteLine("Файл не найден: " + paths[i]);
 
                     if (isStrict)
                     {
                         return isExist;
+                    }
+                    else
+                    {
+                        paths[i] = null;
                     }
                 }
             }
