@@ -21,8 +21,12 @@
             string[][] docArrsTmp;
             foreach (var spreadsheetPath in spreadsheetPathArr)
             {
-                docArrsTmp = GetDocsArraysFromFile(spreadsheetPath);
-                _arrToObjConverter.ConvertArrToObjs(docArrsTmp, addDocumentAction, fieldsSettings);
+                if (spreadsheetPath is not null)
+                {
+                    docArrsTmp = GetDocsArraysFromFile(spreadsheetPath);
+                    _arrToObjConverter.ConvertArrToObjs(docArrsTmp, addDocumentAction, fieldsSettings);
+                }
+                
             }
         }
 

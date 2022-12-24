@@ -21,8 +21,9 @@
             DocRepositoryFiller docRepoFiller1CDO, docRepoFillerRegidtry;
 
             // NOT REFACTORED
-            UnmatchedDocCommentSetter unmatchedDocsCommentator;
             DocComparator docComparator;
+            UnmatchedDocCommentSetter unmatchedDocsCommentator;
+            
 
             // CRETING INSTANCES
             userReporter = new ConsoleWriter();

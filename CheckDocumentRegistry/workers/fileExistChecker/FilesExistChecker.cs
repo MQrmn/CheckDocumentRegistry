@@ -18,11 +18,13 @@
 
         private bool CheckArr(string[] paths, bool isStrict)
         {
-            bool isExist = true;
+            bool isExistResult = true;
             for (var i = 0; i < paths.Length; i++)
             {
-                isExist = File.Exists(paths[i]);
-                if (!isExist)
+                bool isExistTmp = File.Exists(paths[i]);
+                isExistResult = !isExistResult ? isExistResult : isExistTmp;
+
+                if (!isExistTmp)
                 {
                     Console.WriteLine("Файл не найден: " + paths[i]);
                     if (!isStrict)
@@ -31,7 +33,7 @@
                     }
                 }
             }
-            return isExist;
+            return isExistResult;
         }
     }
 }
