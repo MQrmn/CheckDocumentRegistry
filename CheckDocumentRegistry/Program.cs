@@ -11,7 +11,7 @@
             IFileExistChecker fileExistChecker;
 
             // Parameters
-            RootConfig rootConfigFilePath;                                  // Contains main config file path
+            RootConfig rootConfigFilePath;                                          // Contains main config file path
             ProgramParamsRepositoryBase progParamsRepo;                             // Contains programs parameters
             SpreadsheetsPathsBase spreadsheetsPaths1CDO, spreadsheetsPathsRegistry; // Contains spreadsheets paths in file system
             FieldsSettingsRepositoryBase fieldsSettings1CDO, fieldsSettingsRegistry;
