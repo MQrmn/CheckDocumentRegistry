@@ -1,42 +1,37 @@
 ﻿namespace RegComparator
 {
-    public class FileExistChecker
+    public class FileExistChecker : IFileExistChecker
     {
-        public void CheckCritical(List<string> paths)
+        public void CheckCritical(string[] paths)
         {
-            if (!Check(paths, true))
+            if (!CheckArr(paths, true))
             {
                 Console.WriteLine("Завершение работы программы");
                 Environment.Exit(0);
             }
         }
 
-        public void CheckNonCritical(List<string> paths)
+        public void CheckNonCritical(string[] paths)
         {
-            Check(paths, false);
+            CheckArr(paths, false);
         }
 
-        private bool Check(List<string> paths, bool isStrict)
+        private bool CheckArr(string[] paths, bool isStrict)
         {
-            //foreach (string? p in paths[0]) 
-            for (var i = 0; i < paths.Count; i++)
+            bool isExist = true;
+            for (var i = 0; i < paths.Length; i++)
             {
-                bool isExist = File.Exists(paths[i]);
+                isExist = File.Exists(paths[i]);
                 if (!isExist)
                 {
                     Console.WriteLine("Файл не найден: " + paths[i]);
-
-                    if (isStrict)
-                    {
-                        return isExist;
-                    }
-                    else
+                    if (!isStrict)
                     {
                         paths[i] = null;
                     }
                 }
             }
-            return true;
+            return isExist;
         }
     }
 }

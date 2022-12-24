@@ -8,7 +8,7 @@
             IObjsConverter objectConverter;                                         // Objects Reader-Writer in/to file
             ISpreadSheetReader spreadSheetReader;                                   // Getting data from spreadsheetd
             IArrToObjConverter arrToObjConverter;                                   // Getting objs from file, putting objs to file
-            FileExistChecker fileExistChecker;
+            IFileExistChecker fileExistChecker;
 
             // Parameters
             RootConfig rootConfigFilePath;                                  // Contains main config file path
@@ -27,16 +27,12 @@
             // CRETING INSTANCES
             userReporter = new ConsoleWriter();
             objectConverter = new ReadWriteJSON();
-
+            fileExistChecker = new FileExistChecker();
             // Set program patameters
+
             ArgsHandler argsHandler = new(args);
             rootConfigFilePath = argsHandler.GetParams();
-            progParamsRepo = new ProgramParamsRepository(objectConverter, rootConfigFilePath);
-
-            // Check spreadsheets existing
-            fileExistChecker = new();
-            fileExistChecker.CheckCritical(progParamsRepo.GetSourcePaths());
-            fileExistChecker.CheckNonCritical(progParamsRepo.GetSkippedPaths());
+            progParamsRepo = new ProgramParamsRepository(rootConfigFilePath, objectConverter, fileExistChecker);
 
             // Creating documents processors
             spreadSheetReader = new SpreadSheetReaderXLSX();

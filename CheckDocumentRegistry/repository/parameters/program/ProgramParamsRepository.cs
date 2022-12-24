@@ -2,38 +2,21 @@
 {
     public class ProgramParamsRepository : ProgramParamsRepositoryBase
     {
-        public ProgramParamsRepository(IObjsConverter objSerialiser, RootConfig rootConfig)
+        public ProgramParamsRepository(RootConfig rootConfig, IObjsConverter objSerialiser, IFileExistChecker fileExistChecker)
         {
             _rootConfig = rootConfig;
             _objConverter = objSerialiser;
+            _fileExistChecker = fileExistChecker;
 
             Common = GetObj<MainParams>(_rootConfig.MainParamsFilePath);
             Spreadsheets1CDO = GetObj<SpreadsheetsPaths1CDO>(Common.SpreadsheetParams1CDO);
             SpreadsheetsRegistry = GetObj<SpreadsheetsPathsRegistry>( Common.SpreadsheetParamsRegistry);
-        }
-
-        public override List<string> GetSourcePaths()
-        {
-            return CreatePathList(new string[][] { Spreadsheets1CDO.Source, SpreadsheetsRegistry.Source });
-        }
-
-        public override List<string> GetSkippedPaths()
-        {
-            return CreatePathList(new string[][] { Spreadsheets1CDO.Skipped, SpreadsheetsRegistry.Skipped });
-        }
-
-        private protected override List<string> CreatePathList(string[][] paramsArrs)
-        {
-            List<string> pathList = new();
-
-            foreach (var arr in paramsArrs)
-            {
-                foreach (var path in arr)
-                {
-                    pathList.Add(path);
-                }
-            }
-            return pathList;
+            
+            // Check file existing
+            _fileExistChecker.CheckCritical(Spreadsheets1CDO.Source);
+            _fileExistChecker.CheckCritical(SpreadsheetsRegistry.Source);
+            _fileExistChecker.CheckNonCritical(Spreadsheets1CDO.Skipped);
+            _fileExistChecker.CheckNonCritical(SpreadsheetsRegistry.Skipped);
         }
 
         private protected override T GetObj<T>(string path)
@@ -67,7 +50,5 @@
                 Console.WriteLine("Не удалось записать файл конфигурации по умолчанию " + path);
             }
         }
-
-
     }
 }
