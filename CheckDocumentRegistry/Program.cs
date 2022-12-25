@@ -9,7 +9,7 @@
             ISpreadSheetReader spreadSheetReader;                                   // Getting data from spreadsheetd
             IArrToObjConverter arrToObjConverter;                                   // Getting objs from file, putting objs to file
             IFileExistChecker fileExistChecker;
-            DocLoader docLoader;
+            IDocLoader docLoader;
             // Parameters
             RootConfig rootConfigFilePath;                                          // Contains main config file path
             ProgramParamsRepositoryBase progParamsRepo;                             // Contains programs parameters

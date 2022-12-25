@@ -2,13 +2,13 @@
 {
     public class DocRepositoryFiller
     {
-        private DocLoader _loader;
+        private IDocLoader _loader;
         private FieldsSettingsRepositoryBase _fieldsSetRepo;
         private DocRepositoryBase _docRepo;
         private SpreadsheetsPathsBase _spreadsheetsPaths;
 
         public DocRepositoryFiller(
-                                    DocLoader loader,
+                                    IDocLoader loader,
                                     FieldsSettingsRepositoryBase fieldsSetRepo,
                                     DocRepositoryBase docRepo,
                                     SpreadsheetsPathsBase spreadsheetsPaths
