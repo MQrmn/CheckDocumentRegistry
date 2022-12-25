@@ -26,7 +26,8 @@
             objectConverter = new ReadWriteJSON();
             objectConverter.ErrNotify += userReporter.ReportError;
             fileExistChecker = new FileExistChecker();
-            
+            fileExistChecker.ErrNotify += userReporter.ReportError;
+
             // Set program patameters
             argsHandler = new ArgsHandler(args);
             progParamsRepo = new ProgramParamsRepository(argsHandler.GetParams(), objectConverter, fileExistChecker);
