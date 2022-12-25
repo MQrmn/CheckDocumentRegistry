@@ -10,7 +10,6 @@
         public string RegistryMode;
         public override void SetDefaults()
         {
-            Console.WriteLine(this.GetType());
             SpreadsheetParams1CDO = "Spreadsheets1CDO.json";
             SpreadsheetParamsRegistry = "SpreadsheetsRegistry.json";
             ProgramReportFilePath = "Report.txt";

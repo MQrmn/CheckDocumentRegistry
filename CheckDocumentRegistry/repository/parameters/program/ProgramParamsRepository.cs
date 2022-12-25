@@ -2,16 +2,21 @@
 {
     public class ProgramParamsRepository : ProgramParamsRepositoryBase
     {
+        public override event EventHandler<string>? ErrNotify;
+        public override event EventHandler<string>? Notify;
         public ProgramParamsRepository(RootConfig rootConfig, IObjsConverter objSerialiser, IFileExistChecker fileExistChecker)
         {
             _rootConfig = rootConfig;
             _objConverter = objSerialiser;
             _fileExistChecker = fileExistChecker;
+        }
 
+        public override void FillRepository() 
+        {
             Common = GetObj<MainParams>(_rootConfig.MainParamsFilePath);
             Spreadsheets1CDO = GetObj<SpreadsheetsPaths1CDO>(Common.SpreadsheetParams1CDO);
-            SpreadsheetsRegistry = GetObj<SpreadsheetsPathsRegistry>( Common.SpreadsheetParamsRegistry);
-            
+            SpreadsheetsRegistry = GetObj<SpreadsheetsPathsRegistry>(Common.SpreadsheetParamsRegistry);
+
             // Check file existing
             _fileExistChecker.CheckCritical(Spreadsheets1CDO.Source);
             _fileExistChecker.CheckCritical(SpreadsheetsRegistry.Source);
@@ -29,10 +34,10 @@
             }
             catch
             {
-                Console.WriteLine("Не удалось прочитать файл конфигурации " + path);
+                ErrNotify?.Invoke(this, "Не удалось получить конфигурацию из файла: " + path);
                 var obj = (T)Activator.CreateInstance(typeof(T));
                 obj.SetDefaults();
-                Console.WriteLine("Установлена конфигурация по умолчанию ");
+                Notify?.Invoke(this, "Установлена конфигурация по умолчанию ");
                 PutObj(obj, path);
                 return obj;
             }
@@ -43,11 +48,11 @@
             try
             {
                 _objConverter.PutObj(obj, path);
-                Console.WriteLine("Записан файл конфигурации по умолчанию " + path);
+                Notify?.Invoke(this, "Записан файл конфигурации по умолчанию: " + path);
             }
             catch
             {
-                Console.WriteLine("Не удалось записать файл конфигурации по умолчанию " + path);
+                ErrNotify?.Invoke(this, "Не удалось записать файл конфигурации по умолчанию: " + path);
             }
         }
     }

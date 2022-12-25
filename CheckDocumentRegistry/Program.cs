@@ -31,6 +31,9 @@
             // Set program patameters
             argsHandler = new ArgsHandler(args);
             progParamsRepo = new ProgramParamsRepository(argsHandler.GetParams(), objectConverter, fileExistChecker);
+            progParamsRepo.Notify += userReporter.ReportInfo;
+            progParamsRepo.ErrNotify += userReporter.ReportError;
+            progParamsRepo.FillRepository();
 
             // Creating docprocessors
             spreadSheetReader = new SpreadSheetReaderXLSX();
