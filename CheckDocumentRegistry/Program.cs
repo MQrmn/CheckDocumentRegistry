@@ -4,36 +4,30 @@
     {
         static void Main(string[] args)
         {
+            // Utils
             IUserReporter userReporter;                                             // Reports providing
             IObjsConverter objectConverter;                                         // Objects Reader-Writer in/to file
             ISpreadSheetReader spreadSheetReader;                                   // Getting data from spreadsheetd
             IArrToObjConverter arrToObjConverter;                                   // Getting objs from file, putting objs to file
             IFileExistChecker fileExistChecker;
             IDocLoader docLoader;
-            // Parameters
-            RootConfig rootConfigFilePath;                                          // Contains main config file path
+            DocRepositoryFiller docRepoFiller1CDO, docRepoFillerRegidtry;           // NOT INTERFACE, NOT ABSTRACT
+
+            // Repositories
             ProgramParamsRepositoryBase progParamsRepo;                             // Contains programs parameters
             SpreadsheetsPathsBase spreadsheetsPaths1CDO, spreadsheetsPathsRegistry; // Contains spreadsheets paths in file system
             FieldsSettingsRepositoryBase fieldsSettings1CDO, fieldsSettingsRegistry;
-
-            // Documents
-            DocRepositoryBase doc1CDORepository, docRegistryRepository;
-            DocRepositoryFiller docRepoFiller1CDO, docRepoFillerRegidtry;
-
-            // NOT REFACTORED
-            DocComparator docComparator;
-            UnmatchedDocCommentSetter unmatchedDocsCommentator;
+            DocRepositoryBase docRepo1CDO, docRepoRegistry;
             
-
-            // CRETING INSTANCES
+            // CREATING INSTANCES
+            // Common utils
             userReporter = new ConsoleWriter();
             objectConverter = new ReadWriteJSON();
             fileExistChecker = new FileExistChecker();
+            
             // Set program patameters
-
             ArgsHandler argsHandler = new(args);
-            rootConfigFilePath = argsHandler.GetParams();
-            progParamsRepo = new ProgramParamsRepository(rootConfigFilePath, objectConverter, fileExistChecker);
+            progParamsRepo = new ProgramParamsRepository(argsHandler.GetParams(), objectConverter, fileExistChecker);
 
             // Creating documents processors
             spreadSheetReader = new SpreadSheetReaderXLSX();
@@ -47,25 +41,29 @@
             fieldsSettingsRegistry = new FieldsSettingsRegistryRepository();
 
             // Creating Documents repositories
-            doc1CDORepository = new DocRepository1CDO();
-            docRegistryRepository = new DocRepositoryRegistry();
+            docRepo1CDO = new DocRepository1CDO();
+            docRepoRegistry = new DocRepositoryRegistry();
 
-            DocAmountReportData reportDocAmount = new();
+            DocAmountReportData reportDocAmount = new();  // NOT REFACTORED
 
             // Creating documents repositories fillers
             docRepoFiller1CDO     = new(docLoader, 
                                         fieldsSettings1CDO, 
-                                        doc1CDORepository,
+                                        docRepo1CDO,
                                         progParamsRepo.Spreadsheets1CDO
                                         );
             docRepoFillerRegidtry = new(docLoader,
                                         fieldsSettingsRegistry,
-                                        docRegistryRepository,
+                                        docRepoRegistry,
                                         progParamsRepo.SpreadsheetsRegistry
                                         );
             // Filling doc repositories 
             docRepoFiller1CDO.FillRepository();
             docRepoFillerRegidtry.FillRepository();
+
+            // NOT REFACTORED
+            DocComparator docComparator;
+            UnmatchedDocCommentSetter unmatchedDocsCommentator;
 
             FillSrcDocAmount();
             // Comparing documents
@@ -74,7 +72,7 @@
             
             DocumentAmountReporter documentsAmountReporter = new(progParamsRepo.Common.ProgramReportFilePath);
             documentsAmountReporter.CreateAllReports(
-                                                    docRegistryRepository.SourceDocs,
+                                                    docRepoRegistry.SourceDocs,
                                                     reportDocAmount
                                                     );
             // Result spreadsheets generating
@@ -83,10 +81,10 @@
 
             void CompareDocuments()
             {
-                docComparator = new(doc1CDORepository.SourceDocs,
-                                    docRegistryRepository.SourceDocs,
-                                    docRegistryRepository.SkippedDocs,
-                                    docRegistryRepository.SkippedDocs
+                docComparator = new(docRepo1CDO.SourceDocs,
+                                    docRepoRegistry.SourceDocs,
+                                    docRepoRegistry.SkippedDocs,
+                                    docRepoRegistry.SkippedDocs
                                     );
                 unmatchedDocsCommentator = new(docComparator.UnmatchedDocs1CDO,
                                                docComparator.UnmatchedDocs1CUPP);
@@ -119,10 +117,10 @@
 
             void FillSrcDocAmount()
             {
-                reportDocAmount.doDocumentsCount = doc1CDORepository.SourceDocs.Count;
-                reportDocAmount.uppDocumentsCount = docRegistryRepository.SourceDocs.Count;
-                reportDocAmount.ignoreDoDocumentsCount = doc1CDORepository.SkippedDocs.Count;
-                reportDocAmount.ignoreUppDocumentsCount = docRegistryRepository.SkippedDocs.Count;
+                reportDocAmount.doDocumentsCount = docRepo1CDO.SourceDocs.Count;
+                reportDocAmount.uppDocumentsCount = docRepoRegistry.SourceDocs.Count;
+                reportDocAmount.ignoreDoDocumentsCount = docRepo1CDO.SkippedDocs.Count;
+                reportDocAmount.ignoreUppDocumentsCount = docRepoRegistry.SkippedDocs.Count;
             }
 
             void FillResultDocAmount()
