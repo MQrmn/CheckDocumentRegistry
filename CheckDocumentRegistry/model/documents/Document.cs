@@ -14,6 +14,7 @@ namespace RegComparator
         public bool IsUpd { get; set; }
         public string? Comment { get; set; }
         public int StylePosition { get; set; }
+        public bool Skip;
 
         public Document()
         {
@@ -31,6 +32,7 @@ namespace RegComparator
 
             if (docFields[docFieldsIndex[docFieldsIndex.Length - 1]] == "Да") IsUpd = true;
             Comment = string.Empty;
+            Skip = false;
         }
 
         public string[] GetArray()

@@ -1,6 +1,6 @@
 ﻿namespace RegComparator
 {
-    internal class DocComparator_old : IDocComparator
+    internal class DocComparator_old
     {
         private List<Document> _matchedDocs1CUPPbuffer = new();
         private DocRepositoryBase _documents1CDO;

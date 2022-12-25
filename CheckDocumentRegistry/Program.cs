@@ -68,6 +68,10 @@
             docRepoFiller1CDO.FillRepository();
             docRepoFillerRegidtry.FillRepository();
 
+            docComparator = new DocComparator(docRepo1CDO, docRepoRegistry);
+            docComparator.CompareDocuments();
+
+
             // NOT REFACTORED
             //DocComparator docComparator;
             UnmatchedDocCommentSetter unmatchedDocsCommentator;
@@ -85,7 +89,6 @@
 
             void CompareDocuments()
             {
-                docComparator = new DocComparator(docRepo1CDO, docRepoRegistry);
                 unmatchedDocsCommentator = new(docRepo1CDO.UnmatchedDocs, docRepoRegistry.UnmatchedDocs);
                 unmatchedDocsCommentator.CommentUnmatchedDocuments();
             }

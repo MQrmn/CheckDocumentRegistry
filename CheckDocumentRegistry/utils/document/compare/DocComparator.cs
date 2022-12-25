@@ -10,65 +10,105 @@
         {
             _documents1CDO = documents1CDO;
             _documentsRegistry = documentsRegistry;
-
-            ClearSrcBySkip(_documents1CDO.SkippedDocs, _documents1CDO.SourceDocs);
-            ClearSrcBySkip(_documentsRegistry.SkippedDocs, _documentsRegistry.SourceDocs);
-
-            CompareDocuments();
-
-            RemoveDocList(_documents1CDO.SourceDocs, _documents1CDO.MatchedDocs);
-            RemoveDocList(_documentsRegistry.SourceDocs, _documentsRegistry.MatchedDocs);
         }
-        private void ClearSrcBySkip(List<Document> skipList, List<Document> srcList)
+
+        public void CompareDocuments()
         {
-            foreach (Document doc in skipList)
+            //var i = 1;
+            //Console.WriteLine($"{i++} " + DateTime.Now);
+            foreach (var doc in _documents1CDO.SourceDocs)
             {
-                RemoveSingleDoc(srcList, doc);
+                if (CheckByContaining(_documents1CDO.SkippedDocs, doc))
+                    doc.Skip = true;
             }
-        }
 
-        private void CompareDocuments()
-        {
-            _documents1CDO.SourceDocs.ForEach(FindDocumentAddToMatchedSetUPD);
-
-            // Matching related Upp documents
-            foreach (Document doc1CUPP in _matchedDocs1CUPPbuffer)
+            //Console.WriteLine($"{i++} " + DateTime.Now);
+            foreach (var doc in _documentsRegistry.SourceDocs)
             {
-                FindUPDDocumentIn1CUPPAddToMatchList(doc1CUPP);
+                if (CheckByContaining(_documentsRegistry.SkippedDocs, doc))
+                    doc.Skip = true;
+            }
+
+            //Console.WriteLine($"{i++} " + DateTime.Now);
+            foreach (var doc in _documents1CDO.SourceDocs)
+            {
+                FillMatchList(doc);
+            }
+            //Console.WriteLine($"{i++} " + DateTime.Now);
+            foreach (var doc in _matchedDocs1CUPPbuffer)
+            {
+                FindUPD(doc);
+            }
+            //Console.WriteLine($"{i++} " + DateTime.Now);
+
+            foreach (var doc in _documents1CDO.MatchedDocs)
+            {
+                FillUnMatchList(_documents1CDO.SourceDocs, _documents1CDO.UnmatchedDocs, doc);
+            }
+
+            foreach (var doc in _documentsRegistry.MatchedDocs)
+            {
+                FillUnMatchList(_documentsRegistry.SourceDocs, _documentsRegistry.UnmatchedDocs, doc);
             }
         }
 
         // FIrst step of matching documents
-        private void FindDocumentAddToMatchedSetUPD(Document doc1CDO)
+        private void FillMatchList(Document doc1CDO)
         {
-            _documentsRegistry.SourceDocs.ForEach(delegate(Document docReg)
+            foreach (Document docReg in _documentsRegistry.SourceDocs)
             {
-                bool isMatched = CompareByAllFields(docReg, doc1CDO);
-
+                bool isMatched = CompareByAllFields(docReg, doc1CDO) && 
+                                    !doc1CDO.Skip && 
+                                    !docReg.Skip;
                 if (isMatched)
                 {
                     docReg.IsUpd = doc1CDO.IsUpd;
 
                     if (!_documents1CDO.MatchedDocs.Contains(doc1CDO))
-                         _documents1CDO.MatchedDocs.Add(doc1CDO);
-
-                    if(!_documentsRegistry.MatchedDocs.Contains(docReg))
-                         _documentsRegistry.MatchedDocs.Add(docReg);
-
+                        _documents1CDO.MatchedDocs.Add(doc1CDO);
+                    
                     if (!_matchedDocs1CUPPbuffer.Contains(docReg))
-                         _matchedDocs1CUPPbuffer.Add(docReg);
+                        _matchedDocs1CUPPbuffer.Add(docReg);
+
+                    if (!_documentsRegistry.MatchedDocs.Contains(docReg))
+                        _documentsRegistry.MatchedDocs.Add(docReg);
                 }
-            });
+            }
         }
 
-        private void FindUPDDocumentIn1CUPPAddToMatchList(Document docRegBuff)
+        private void FillUnMatchList(List<Document> docListSrc, List<Document> docListUnmatch, Document docMatch)
+        {
+            if (!docListSrc.Contains(docMatch))
+            {
+                if (!docListUnmatch.Contains(docMatch) && !docMatch.Skip)
+                {
+                    docListUnmatch.Add(docMatch);
+                }
+            }
+        }
+
+        private bool CheckByContaining(List<Document> docList, Document document)
+        {
+            bool isContainTmp;
+            bool isContainRes = false;
+            foreach (var doc in docList)
+            {
+                isContainTmp = CompareByAllFields(document, doc);
+                isContainRes = isContainRes ? isContainTmp : isContainRes;
+                if (isContainRes)
+                    return isContainRes;
+            }
+            return isContainRes;
+        }
+
+        private void FindUPD(Document docRegBuff)
         {
             foreach (Document docReg in _documentsRegistry.SourceDocs)
             {
                 bool isMatch = false;
 
                 if (docRegBuff != docReg && docRegBuff.IsUpd )
-                    isMatch = CompareSingleDocumentsMainFields(docReg, docRegBuff);
+                    isMatch = CompareByMainFields(docReg, docRegBuff);
 
                 if (isMatch)
                 {
@@ -80,35 +120,16 @@
             }
         }
 
-        // Remove one document from list
-        private void RemoveSingleDoc(List<Document> docList, Document removeDoc)
-        {
-            List<Document> docRemoveList = docList.FindAll(delegate (Document document)
-            {
-                return CompareByAllFields(document, removeDoc);
-            });
-            RemoveDocList(docList, docRemoveList);
-        }
-
-        // Clear source document list by matched documents
-        private void RemoveDocList(List<Document> docsSrc, List<Document> docRemoveList)
-        {
-            docRemoveList.ForEach(delegate (Document docRemove)
-            {
-                docsSrc.Remove(docRemove);
-            });
-        }
-
         // Comparing documents
         private bool CompareByAllFields(Document docFirst, Document docsecond)
         {
-            bool isMainFieldsMatch = CompareSingleDocumentsMainFields(docFirst, docsecond);
+            bool isMainFieldsMatch = CompareByMainFields(docFirst, docsecond);
 
             if (!isMainFieldsMatch) return isMainFieldsMatch;
             else return docFirst.Type == docsecond.Type;
         }
 
-        private bool CompareSingleDocumentsMainFields(Document docFirst, Document docsecond)
+        private bool CompareByMainFields(Document docFirst, Document docsecond)
         {
             return docFirst.Number == docsecond.Number
                             && docFirst.Salary == docsecond.Salary
