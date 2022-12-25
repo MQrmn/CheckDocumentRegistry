@@ -48,14 +48,14 @@
 
             commonReportData[0] = "Результат сравнения документов, внесенных в 1С:ДО, с реестром\n";
             commonReportData[1] = "От " + DateTime.Now.ToLongDateString() + ":\n\n";
-            commonReportData[2] = "Документов в 1С:ДО всего: " + documentsAmount.doDocumentsCount + "\n";
-            commonReportData[3] = "Документов в реестре всего: " + documentsAmount.uppDocumentsCount + "\n";
-            commonReportData[4] = "Документов 1С:ДО не внесенных в реестр: " + documentsAmount.ignoreDoDocumentsCount + "\n";
-            commonReportData[5] = "Документов реестра исключено из проверки: " + documentsAmount.ignoreUppDocumentsCount + "\n";
-            commonReportData[6] = "Документов 1С:ДО совпали с реестром:  " + documentsAmount.Documents1CDoMatchedCount + "\n";
-            commonReportData[7] = "Документов реестра совпали с 1С:ДО: " + documentsAmount.Documents1CUppMatchedCount + "\n";
-            commonReportData[8] = "Документов 1С:ДО внесенных с ошибкой: " + documentsAmount.Documents1CDoUnmatchedCount + "\n";
-            commonReportData[9] = "Документов осталось внести: " + documentsAmount.Documents1CUppUnmatchedCount + "\n\n";
+            commonReportData[2] = "Документов в 1С:ДО Source: " + documentsAmount.doDocumentsCount + "\n";
+            commonReportData[3] = "Документов в реестре Source: " + documentsAmount.uppDocumentsCount + "\n";
+            commonReportData[4] = "Документов 1С:ДО Skipped: " + documentsAmount.ignoreDoDocumentsCount + "\n";
+            commonReportData[5] = "Документов реестра Skipped: " + documentsAmount.ignoreUppDocumentsCount + "\n";
+            commonReportData[6] = "Документов 1С:ДО Matched:  " + documentsAmount.Documents1CDoMatchedCount + "\n";
+            commonReportData[7] = "Документов реестра Matched: " + documentsAmount.Documents1CUppMatchedCount + "\n";
+            commonReportData[8] = "Документов 1С:ДО Unmatched: " + documentsAmount.Documents1CDoUnmatchedCount + "\n";
+            commonReportData[9] = "Документов Registry Unmatched: " + documentsAmount.Documents1CUppUnmatchedCount + "\n\n";
 
             return commonReportData;
         }
