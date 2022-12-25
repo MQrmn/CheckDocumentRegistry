@@ -55,15 +55,15 @@
 
             // Creating documents repositories fillers
             docRepoFiller1CDO     = new DocRepositoryFiller(docLoader, 
-                                        fieldsSettings1CDO, 
-                                        docRepo1CDO,
-                                        progParamsRepo.Spreadsheets1CDO
-                                        );
+                                                            fieldsSettings1CDO, 
+                                                            docRepo1CDO,
+                                                            progParamsRepo.Spreadsheets1CDO
+                                                            );
             docRepoFillerRegidtry = new DocRepositoryFiller(docLoader,
-                                        fieldsSettingsRegistry,
-                                        docRepoRegistry,
-                                        progParamsRepo.SpreadsheetsRegistry
-                                        );
+                                                            fieldsSettingsRegistry,
+                                                            docRepoRegistry,
+                                                            progParamsRepo.SpreadsheetsRegistry
+                                                            );
             // Filling doc repositories 
             docRepoFiller1CDO.FillRepository();
             docRepoFillerRegidtry.FillRepository();
