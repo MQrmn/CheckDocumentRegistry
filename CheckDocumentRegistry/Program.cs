@@ -23,6 +23,7 @@
             // Common utils
             userReporter = new ConsoleWriter();
             objectConverter = new ReadWriteJSON();
+            objectConverter.ErrNotify += userReporter.ReportError;
             fileExistChecker = new FileExistChecker();
             
             // Set program patameters

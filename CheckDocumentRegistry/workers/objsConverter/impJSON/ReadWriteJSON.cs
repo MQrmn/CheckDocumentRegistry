@@ -7,6 +7,7 @@ namespace RegComparator
 {
     public class ReadWriteJSON : IObjsConverter
     {
+        public event EventHandler<string>? ErrNotify;
         public T? GetObj<T>(string path)
         {
             string jsonString;
@@ -25,9 +26,7 @@ namespace RegComparator
             }
             catch
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Не удалось прочитать файл " + path);
-                Console.ResetColor();
+                ErrNotify?.Invoke(this, "Не удалось прочитать файл " + path);
                 throw new Exception();
             }
         }
@@ -52,9 +51,7 @@ namespace RegComparator
             }
             catch
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Не удалось записать файл " + path);
-                Console.ResetColor();
+                ErrNotify?.Invoke(this, "Не удалось записать файл " + path);
             }
         }
 

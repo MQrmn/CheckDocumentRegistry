@@ -46,9 +46,9 @@
                     ErrNotify?.Invoke(this, docField + " ");    // Using Console.WriteLine unsted Console.Write
                 }
                 rowCount++;
-                Console.WriteLine();
+                ErrNotify?.Invoke(this,"");
             }
-            Console.WriteLine();
+            ErrNotify?.Invoke(this, "");
         }
     }
 }
