@@ -14,41 +14,36 @@
 
         public void CompareDocuments()
         {
-            //var i = 1;
-            //Console.WriteLine($"{i++} " + DateTime.Now);
             foreach (var doc in _documents1CDO.SourceDocs)
             {
                 if (CheckByContaining(_documents1CDO.SkippedDocs, doc))
                     doc.Skip = true;
             }
 
-            //Console.WriteLine($"{i++} " + DateTime.Now);
             foreach (var doc in _documentsRegistry.SourceDocs)
             {
                 if (CheckByContaining(_documentsRegistry.SkippedDocs, doc))
                     doc.Skip = true;
             }
 
-            //Console.WriteLine($"{i++} " + DateTime.Now);
             foreach (var doc in _documents1CDO.SourceDocs)
             {
                 FillMatchList(doc);
             }
-            //Console.WriteLine($"{i++} " + DateTime.Now);
+
             foreach (var doc in _matchedDocs1CUPPbuffer)
             {
                 FindUPD(doc);
             }
-            //Console.WriteLine($"{i++} " + DateTime.Now);
 
-            foreach (var doc in _documents1CDO.MatchedDocs)
+            foreach (var doc in _documents1CDO.SourceDocs)
             {
-                FillUnMatchList(_documents1CDO.SourceDocs, _documents1CDO.UnmatchedDocs, doc);
+                FillUnMatchList(_documents1CDO.MatchedDocs, _documents1CDO.UnmatchedDocs, doc);
             }
 
-            foreach (var doc in _documentsRegistry.MatchedDocs)
+            foreach (var doc in _documentsRegistry.SourceDocs)
             {
-                FillUnMatchList(_documentsRegistry.SourceDocs, _documentsRegistry.UnmatchedDocs, doc);
+                FillUnMatchList(_documentsRegistry.MatchedDocs, _documentsRegistry.UnmatchedDocs, doc);
             }
         }
 
@@ -76,13 +71,13 @@
             }
         }
 
-        private void FillUnMatchList(List<Document> docListSrc, List<Document> docListUnmatch, Document docMatch)
+        private void FillUnMatchList(List<Document> docListMatch, List<Document> docListUnmatch, Document docSrc)
         {
-            if (!docListSrc.Contains(docMatch))
+            if (!docListMatch.Contains(docSrc))
             {
-                if (!docListUnmatch.Contains(docMatch) && !docMatch.Skip)
+                if (!docListUnmatch.Contains(docSrc) && !docSrc.Skip)
                 {
-                    docListUnmatch.Add(docMatch);
+                    docListUnmatch.Add(docSrc);
                 }
             }
         }
