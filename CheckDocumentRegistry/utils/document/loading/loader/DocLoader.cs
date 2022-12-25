@@ -1,6 +1,6 @@
 ﻿namespace RegComparator
 {
-    public class DocLoader
+    public class DocLoader : IDocLoader
     {
         private IArrToObjConverter _arrToObjConverter;
         private ISpreadSheetReader _spreadSheetReader;

@@ -9,7 +9,7 @@
             ISpreadSheetReader spreadSheetReader;                                   // Getting data from spreadsheetd
             IArrToObjConverter arrToObjConverter;                                   // Getting objs from file, putting objs to file
             IFileExistChecker fileExistChecker;
-
+            DocLoader docLoader;
             // Parameters
             RootConfig rootConfigFilePath;                                          // Contains main config file path
             ProgramParamsRepositoryBase progParamsRepo;                             // Contains programs parameters
@@ -39,7 +39,7 @@
             spreadSheetReader = new SpreadSheetReaderXLSX();
             arrToObjConverter = new ArrToObjConverter();
             arrToObjConverter.ErrNotify += userReporter.ReportError;
-            DocLoader docLoader = new(arrToObjConverter, spreadSheetReader);
+            docLoader = new DocLoader(arrToObjConverter, spreadSheetReader);
             docLoader.Notify += userReporter.ReportInfo;
 
             // Creating document fields settings repositories

@@ -27,10 +27,7 @@
                 if (!isExistTmp)
                 {
                     Console.WriteLine("Файл не найден: " + paths[i]);
-                    if (!isStrict)
-                    {
-                        paths[i] = null;
-                    }
+                    paths[i] = null;
                 }
             }
             return isExistResult;
