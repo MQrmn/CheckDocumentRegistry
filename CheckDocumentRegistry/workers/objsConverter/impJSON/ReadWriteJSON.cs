@@ -26,7 +26,7 @@ namespace RegComparator
             }
             catch
             {
-                ErrNotify?.Invoke(this, "Не удалось прочитать файл " + path);
+                ErrNotify?.Invoke(this, "Не удалось прочитать файл: " + path);
                 throw new Exception();
             }
         }
@@ -51,7 +51,7 @@ namespace RegComparator
             }
             catch
             {
-                ErrNotify?.Invoke(this, "Не удалось записать файл " + path);
+                ErrNotify?.Invoke(this, "Не удалось записать файл: " + path);
             }
         }
 

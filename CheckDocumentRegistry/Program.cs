@@ -11,7 +11,8 @@
             IArrToObjConverter arrToObjConverter;                                   // Getting objs from file, putting objs to file
             IFileExistChecker fileExistChecker;
             IDocLoader docLoader;
-            IDocRepositoryFiller docRepoFiller1CDO, docRepoFillerRegidtry;           // NOT INTERFACE, NOT ABSTRACT
+            IDocRepositoryFiller docRepoFiller1CDO, docRepoFillerRegidtry;
+            IArgsHandler argsHandler;
 
             // Repositories
             ProgramParamsRepositoryBase progParamsRepo;                             // Contains programs parameters
@@ -27,7 +28,7 @@
             fileExistChecker = new FileExistChecker();
             
             // Set program patameters
-            ArgsHandler argsHandler = new(args);
+            argsHandler = new ArgsHandler(args);
             progParamsRepo = new ProgramParamsRepository(argsHandler.GetParams(), objectConverter, fileExistChecker);
 
             // Creating docprocessors

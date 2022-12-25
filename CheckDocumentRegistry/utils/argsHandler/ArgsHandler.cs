@@ -1,6 +1,6 @@
 ﻿namespace RegComparator
 {
-    internal class ArgsHandler
+    internal class ArgsHandler : IArgsHandler
     {
         private string[] _args;
         
