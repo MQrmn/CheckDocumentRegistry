@@ -13,6 +13,7 @@
             IDocLoader docLoader;
             IDocRepositoryFiller docRepoFiller1CDO, docRepoFillerRegidtry;
             IArgsHandler argsHandler;
+            IDocComparator docComparator;
 
             // Repositories
             ProgramParamsRepositoryBase progParamsRepo;                             // Contains programs parameters
@@ -68,7 +69,7 @@
             docRepoFillerRegidtry.FillRepository();
 
             // NOT REFACTORED
-            DocComparator docComparator;
+            //DocComparator docComparator;
             UnmatchedDocCommentSetter unmatchedDocsCommentator;
 
             FillSrcDocAmount();
@@ -77,23 +78,15 @@
             FillResultDocAmount();
             
             DocumentAmountReporter documentsAmountReporter = new(progParamsRepo.Common.ProgramReportFilePath);
-            documentsAmountReporter.CreateAllReports(
-                                                    docRepoRegistry.SourceDocs,
-                                                    reportDocAmount
-                                                    );
+            documentsAmountReporter.CreateAllReports(docRepoRegistry.SourceDocs,reportDocAmount);
             // Result spreadsheets generating
             GenerateOutputSpreadsheets();
             CloseProgram();
 
             void CompareDocuments()
             {
-                docComparator = new(docRepo1CDO.SourceDocs,
-                                    docRepoRegistry.SourceDocs,
-                                    docRepoRegistry.SkippedDocs,
-                                    docRepoRegistry.SkippedDocs
-                                    );
-                unmatchedDocsCommentator = new(docComparator.UnmatchedDocs1CDO,
-                                               docComparator.UnmatchedDocs1CUPP);
+                docComparator = new DocComparator(docRepo1CDO, docRepoRegistry);
+                unmatchedDocsCommentator = new(docRepo1CDO.UnmatchedDocs, docRepoRegistry.UnmatchedDocs);
                 unmatchedDocsCommentator.CommentUnmatchedDocuments();
             }
 
@@ -103,10 +96,10 @@
                 SpreadSheetWriterXLSX spreadSheetWriterPassedUpp;               
 
                 spreadsheetWriterPassedDo = new(progParamsRepo.Spreadsheets1CDO.Unmatched);
-                spreadsheetWriterPassedDo.CreateSpreadsheet(docComparator.UnmatchedDocs1CDO);
+                spreadsheetWriterPassedDo.CreateSpreadsheet(docRepo1CDO.UnmatchedDocs);
 
                 spreadSheetWriterPassedUpp = new(progParamsRepo.SpreadsheetsRegistry.Unmatched);
-                spreadSheetWriterPassedUpp.CreateSpreadsheet(docComparator.UnmatchedDocs1CUPP, false);
+                spreadSheetWriterPassedUpp.CreateSpreadsheet(docRepoRegistry.UnmatchedDocs, false);
 
                 if (progParamsRepo.Common.IsPrintMatchedDocuments)
                 {
@@ -114,10 +107,10 @@
                     SpreadSheetWriterXLSX spreadSheetWriterMatcheUpp;               
 
                     spreadSheetWriterMatchedDo = new(progParamsRepo.Spreadsheets1CDO.Matched);
-                    spreadSheetWriterMatchedDo.CreateSpreadsheet(docComparator.MatchedDocs1CDO, false);
+                    spreadSheetWriterMatchedDo.CreateSpreadsheet(docRepo1CDO.MatchedDocs, false);
 
                     spreadSheetWriterMatcheUpp = new(progParamsRepo.SpreadsheetsRegistry.Matched);
-                    spreadSheetWriterMatcheUpp.CreateSpreadsheet(docComparator.MatchedDocs1CUPP, false);
+                    spreadSheetWriterMatcheUpp.CreateSpreadsheet(docRepoRegistry.MatchedDocs, false);
                 }
             }
 
@@ -131,10 +124,10 @@
 
             void FillResultDocAmount()
             {
-                reportDocAmount.Documents1CDoUnmatchedCount = docComparator.UnmatchedDocs1CDO.Count;
-                reportDocAmount.Documents1CUppUnmatchedCount = docComparator.UnmatchedDocs1CUPP.Count;
-                reportDocAmount.Documents1CDoMatchedCount = docComparator.MatchedDocs1CDO.Count;
-                reportDocAmount.Documents1CUppMatchedCount = docComparator.MatchedDocs1CUPP.Count;
+                reportDocAmount.Documents1CDoUnmatchedCount = docRepo1CDO.UnmatchedDocs.Count;
+                reportDocAmount.Documents1CUppUnmatchedCount = docRepoRegistry.UnmatchedDocs.Count;
+                reportDocAmount.Documents1CDoMatchedCount = docRepo1CDO.MatchedDocs.Count;
+                reportDocAmount.Documents1CUppMatchedCount = docRepoRegistry.MatchedDocs.Count;
             }
 
             void CloseProgram()
