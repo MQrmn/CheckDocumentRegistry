@@ -11,7 +11,7 @@
             IArrToObjConverter arrToObjConverter;                                   // Getting objs from file, putting objs to file
             IFileExistChecker fileExistChecker;
             IDocLoader docLoader;
-            DocRepositoryFiller docRepoFiller1CDO, docRepoFillerRegidtry;           // NOT INTERFACE, NOT ABSTRACT
+            IDocRepositoryFiller docRepoFiller1CDO, docRepoFillerRegidtry;           // NOT INTERFACE, NOT ABSTRACT
 
             // Repositories
             ProgramParamsRepositoryBase progParamsRepo;                             // Contains programs parameters
@@ -29,7 +29,7 @@
             ArgsHandler argsHandler = new(args);
             progParamsRepo = new ProgramParamsRepository(argsHandler.GetParams(), objectConverter, fileExistChecker);
 
-            // Creating documents processors
+            // Creating docprocessors
             spreadSheetReader = new SpreadSheetReaderXLSX();
             arrToObjConverter = new ArrToObjConverter();
             arrToObjConverter.ErrNotify += userReporter.ReportError;
@@ -47,12 +47,12 @@
             DocAmountReportData reportDocAmount = new();  // NOT REFACTORED
 
             // Creating documents repositories fillers
-            docRepoFiller1CDO     = new(docLoader, 
+            docRepoFiller1CDO     = new DocRepositoryFiller(docLoader, 
                                         fieldsSettings1CDO, 
                                         docRepo1CDO,
                                         progParamsRepo.Spreadsheets1CDO
                                         );
-            docRepoFillerRegidtry = new(docLoader,
+            docRepoFillerRegidtry = new DocRepositoryFiller(docLoader,
                                         fieldsSettingsRegistry,
                                         docRepoRegistry,
                                         progParamsRepo.SpreadsheetsRegistry

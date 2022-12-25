@@ -1,6 +1,6 @@
 ﻿namespace RegComparator
 {
-    public class DocRepositoryFiller
+    public class DocRepositoryFiller : IDocRepositoryFiller
     {
         private IDocLoader _loader;
         private FieldsSettingsRepositoryBase _fieldsSetRepo;
