@@ -74,7 +74,7 @@
 
             // NOT REFACTORED
             //DocComparator docComparator;
-            UnmatchedDocCommentSetter unmatchedDocsCommentator;
+            UnmatchedDocMarker unmatchedDocsCommentator;
 
             FillSrcDocAmount();
             // Comparing documents
@@ -90,7 +90,7 @@
             void CompareDocuments()
             {
                 unmatchedDocsCommentator = new(docRepo1CDO.UnmatchedDocs, docRepoRegistry.UnmatchedDocs);
-                unmatchedDocsCommentator.CommentUnmatchedDocuments();
+                unmatchedDocsCommentator.MarkDocuments();
             }
 
             void GenerateOutputSpreadsheets()

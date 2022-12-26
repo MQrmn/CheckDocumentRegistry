@@ -1,9 +1,9 @@
 ﻿namespace RegComparator
 {
-    internal class UnmatchedDocCommentSetter
+    internal class UnmatchedDocMarker
     {
-        internal List<Document> DocumentsDo;
-        internal List<Document> DocumentsUpp;
+        private List<Document> _docList1CDO;
+        private List<Document> _docListReg;
 
         enum UnmatchedField
         {
@@ -13,25 +13,43 @@
             None = 3
         }
 
-        internal UnmatchedDocCommentSetter(List<Document> documentsDo, List<Document> documentsUpp)
+        internal UnmatchedDocMarker(List<Document> docList1CDO, List<Document> docListReg)
         {
-            DocumentsDo = documentsDo;
-            DocumentsUpp = documentsUpp;
+            _docList1CDO = docList1CDO;
+            _docListReg = docListReg;
         }
 
-        internal void CommentUnmatchedDocuments()
+        internal void MarkDocuments()
         {
-            this.DocumentsDo.ForEach(FindDocumentSetComment);
+            _docList1CDO.ForEach(FindDocumentSetComment);
         }
 
         private void FindDocumentSetComment(Document documentDo)
         {
-            foreach (Document documentUpp in this.DocumentsUpp)
+            foreach (Document documentUpp in _docListReg)
             {
-                bool isDocumentMatch = this.CompareSingleDocuments(documentDo, documentUpp);
+                bool isDocumentMatch = CompareSingleDocuments(documentDo, documentUpp);
                 if (isDocumentMatch) break;
             }
         }
+
+        private int GetEqDegree(Document documentDo, Document documentUpp)
+        {
+            bool isDateMatch = documentDo.Date == documentUpp.Date;
+            bool isNumberMatch = documentDo.Number == documentUpp.Number;
+            bool isSalaryMatch = documentDo.Salary == documentUpp.Salary;
+            bool isTypeMatch = documentDo.Type == documentUpp.Type;;
+
+            int numberOfMatch = new();
+
+            if (isDateMatch) numberOfMatch++;
+            if (isNumberMatch) numberOfMatch++;
+            if (isSalaryMatch) numberOfMatch++;
+            if (isTypeMatch) numberOfMatch++;
+
+            return numberOfMatch;
+        }
+
 
         private bool CompareSingleDocuments(Document documentDo, Document documentUpp)
         {
@@ -41,7 +59,7 @@
             bool isSalaryMatch = documentDo.Salary == documentUpp.Salary;
             bool isTypeMatch = documentDo.Type == documentUpp.Type;
             bool isDocumentMatched = false;
-            int stylePosition = 0;
+            int stylePosition = new();
 
             int numberOfMatch = new();
 
@@ -71,12 +89,10 @@
                     unmatchedField = UnmatchedField.Salary;
                     stylePosition = 6;
                 }
-                    
-                    
             }
 
-            this.SetComment(documentDo, documentUpp, unmatchedField);
-            this.SetStylePosition(documentDo, stylePosition);
+            SetComment(documentDo, documentUpp, unmatchedField);
+            SetStylePosition(documentDo, stylePosition);
 
             return isDocumentMatched;
         }
