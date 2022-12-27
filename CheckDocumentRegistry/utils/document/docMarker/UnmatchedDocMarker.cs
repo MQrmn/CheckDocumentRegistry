@@ -33,24 +33,6 @@
             }
         }
 
-        private int GetEqDegree(Document documentDo, Document documentUpp)
-        {
-            bool isDateMatch = documentDo.Date == documentUpp.Date;
-            bool isNumberMatch = documentDo.Number == documentUpp.Number;
-            bool isSalaryMatch = documentDo.Salary == documentUpp.Salary;
-            bool isTypeMatch = documentDo.Type == documentUpp.Type;;
-
-            int numberOfMatch = new();
-
-            if (isDateMatch) numberOfMatch++;
-            if (isNumberMatch) numberOfMatch++;
-            if (isSalaryMatch) numberOfMatch++;
-            if (isTypeMatch) numberOfMatch++;
-
-            return numberOfMatch;
-        }
-
-
         private bool CompareSingleDocuments(Document documentDo, Document documentUpp)
         {
             
@@ -63,10 +45,14 @@
 
             int numberOfMatch = new();
 
-            if (isDateMatch) numberOfMatch++;
-            if (isNumberMatch) numberOfMatch++;
-            if (isSalaryMatch) numberOfMatch++;
-            if (isTypeMatch) numberOfMatch++;
+            if (isDateMatch) 
+                numberOfMatch++;
+            if (isNumberMatch) 
+                numberOfMatch++;
+            if (isSalaryMatch) 
+                numberOfMatch++;
+            if (isTypeMatch) 
+                numberOfMatch++;
 
             UnmatchedField unmatchedField = UnmatchedField.None;
 
@@ -116,7 +102,7 @@
                     documentDo.Comment = $"Сумма: {documentUpp.Salary.ToString()}";
                     break;
                 case UnmatchedField.None:
-                    documentDo.Comment = "Документ не найден в Реестре";
+                    documentDo.Comment = "Документ не найден в реестре";
                     break;
             }
         }
