@@ -72,7 +72,7 @@
             docComparator = new DocComparator(docRepo1CDO, docRepoRegistry);
             docComparator.CompareDocuments();
 
-            //DocComparator docComparator;
+            // Mark unmatched docs
             unmatchedDocMarker = new UnmatchedDocMarker(docRepo1CDO.UnmatchedDocs, docRepoRegistry.UnmatchedDocs);
             unmatchedDocMarker.MarkDocuments();
 
@@ -86,7 +86,21 @@
             GenerateOutputSpreadsheets();
             CloseProgram();
 
-            
+            void FillSrcDocAmount()
+            {
+                reportDocAmount.doDocumentsCount = docRepo1CDO.SourceDocs.Count;
+                reportDocAmount.uppDocumentsCount = docRepoRegistry.SourceDocs.Count;
+                reportDocAmount.ignoreDoDocumentsCount = docRepo1CDO.SkippedDocs.Count;
+                reportDocAmount.ignoreUppDocumentsCount = docRepoRegistry.SkippedDocs.Count;
+            }
+
+            void FillResultDocAmount()
+            {
+                reportDocAmount.Documents1CDoUnmatchedCount = docRepo1CDO.UnmatchedDocs.Count;
+                reportDocAmount.Documents1CUppUnmatchedCount = docRepoRegistry.UnmatchedDocs.Count;
+                reportDocAmount.Documents1CDoMatchedCount = docRepo1CDO.MatchedDocs.Count;
+                reportDocAmount.Documents1CUppMatchedCount = docRepoRegistry.MatchedDocs.Count;
+            }
 
             void GenerateOutputSpreadsheets()
             {
@@ -112,21 +126,7 @@
                 }
             }
 
-            void FillSrcDocAmount()
-            {
-                reportDocAmount.doDocumentsCount = docRepo1CDO.SourceDocs.Count;
-                reportDocAmount.uppDocumentsCount = docRepoRegistry.SourceDocs.Count;
-                reportDocAmount.ignoreDoDocumentsCount = docRepo1CDO.SkippedDocs.Count;
-                reportDocAmount.ignoreUppDocumentsCount = docRepoRegistry.SkippedDocs.Count;
-            }
 
-            void FillResultDocAmount()
-            {
-                reportDocAmount.Documents1CDoUnmatchedCount = docRepo1CDO.UnmatchedDocs.Count;
-                reportDocAmount.Documents1CUppUnmatchedCount = docRepoRegistry.UnmatchedDocs.Count;
-                reportDocAmount.Documents1CDoMatchedCount = docRepo1CDO.MatchedDocs.Count;
-                reportDocAmount.Documents1CUppMatchedCount = docRepoRegistry.MatchedDocs.Count;
-            }
 
             void CloseProgram()
             {
