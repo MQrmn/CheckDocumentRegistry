@@ -1,6 +1,6 @@
 ﻿namespace RegComparator
 {
-    internal class UnmatchedDocMarker
+    internal class UnmatchedDocMarker : IUnmatchedDocMarker
     {
         private List<Document> _docList1CDO;
         private List<Document> _docListReg;
@@ -19,7 +19,7 @@
             _docListReg = docListReg;
         }
 
-        internal void MarkDocuments()
+        public void MarkDocuments()
         {
             _docList1CDO.ForEach(FindDocumentSetComment);
         }

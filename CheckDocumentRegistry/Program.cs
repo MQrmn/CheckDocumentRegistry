@@ -14,6 +14,7 @@
             IDocRepositoryFiller docRepoFiller1CDO, docRepoFillerRegidtry;
             IArgsHandler argsHandler;
             IDocComparator docComparator;
+            IUnmatchedDocMarker unmatchedDocMarker;
 
             // Repositories
             ProgramParamsRepositoryBase progParamsRepo;                             // Contains programs parameters
@@ -71,14 +72,12 @@
             docComparator = new DocComparator(docRepo1CDO, docRepoRegistry);
             docComparator.CompareDocuments();
 
-
-            // NOT REFACTORED
             //DocComparator docComparator;
-            UnmatchedDocMarker unmatchedDocsCommentator;
+            unmatchedDocMarker = new UnmatchedDocMarker(docRepo1CDO.UnmatchedDocs, docRepoRegistry.UnmatchedDocs);
+            unmatchedDocMarker.MarkDocuments();
 
             FillSrcDocAmount();
             // Comparing documents
-            CompareDocuments();
             FillResultDocAmount();
             
             DocumentAmountReporter documentsAmountReporter = new(progParamsRepo.Common.ProgramReportFilePath);
@@ -87,11 +86,7 @@
             GenerateOutputSpreadsheets();
             CloseProgram();
 
-            void CompareDocuments()
-            {
-                unmatchedDocsCommentator = new(docRepo1CDO.UnmatchedDocs, docRepoRegistry.UnmatchedDocs);
-                unmatchedDocsCommentator.MarkDocuments();
-            }
+            
 
             void GenerateOutputSpreadsheets()
             {
