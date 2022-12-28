@@ -4,44 +4,44 @@ using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace RegComparator
 {
-    public class SpreadSheetWriterXLSX
+    public class SpreadSheetWriterXLSX : ISpreadSheetWriterXLSX
     {
-        internal protected SpreadsheetDocument spreadsheetDocument;
-        internal protected WorkbookPart workbookpart;
-        internal protected WorksheetPart worksheetPart;
-        internal protected Worksheet worksheet;
+        private SpreadsheetDocument _spreadsheetDocument;
+        private WorkbookPart _workbookpart;
+        private WorksheetPart _worksheetPart;
+        private Worksheet _worksheet;
 
-        internal protected SpreadSheetWriterXLSX(string filePath)
+        public SpreadSheetWriterXLSX(string filePath)
         {
-            this.spreadsheetDocument = SpreadsheetDocument
+            _spreadsheetDocument = SpreadsheetDocument
                 .Create(filePath, DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook);
-            this.workbookpart = spreadsheetDocument.AddWorkbookPart();
-            this.worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
-            workbookpart.Workbook = new Workbook();
-            this.worksheetPart.Worksheet = new Worksheet(new SheetData());
+            _workbookpart = _spreadsheetDocument.AddWorkbookPart();
+            _worksheetPart = _workbookpart.AddNewPart<WorksheetPart>();
+            _workbookpart.Workbook = new Workbook();
+            _worksheetPart.Worksheet = new Worksheet(new SheetData());
 
-            Sheets sheets = spreadsheetDocument.WorkbookPart.Workbook.
+            Sheets sheets = _spreadsheetDocument.WorkbookPart.Workbook.
                 AppendChild<Sheets>(new Sheets());
-            WorkbookStylesPart stylePart = workbookpart.AddNewPart<WorkbookStylesPart>();
+            WorkbookStylesPart stylePart = _workbookpart.AddNewPart<WorkbookStylesPart>();
             stylePart.Stylesheet = GenerateStylesheet();
             stylePart.Stylesheet.Save();
 
             Sheet sheet = new Sheet()
             {
-                Id = spreadsheetDocument.WorkbookPart.GetIdOfPart(worksheetPart),
+                Id = _spreadsheetDocument.WorkbookPart.GetIdOfPart(_worksheetPart),
                 SheetId = 1,
                 Name = "Sheet 1"
             };
 
             sheets.Append(sheet);
-            this.worksheet = worksheetPart.Worksheet;
+            _worksheet = _worksheetPart.Worksheet;
         }
 
-        internal protected void CreateSpreadsheet(List<Document> documents, bool isDoDocument = true)
+        public void CreateSpreadsheet(List<Document> documents, bool isDoDocument = true)
         {
             // Setting columns
-            SetColumns(ref this.worksheetPart);
-            SheetData sheetData = this.worksheet.GetFirstChild<SheetData>();
+            SetColumns(ref _worksheetPart);
+            SheetData sheetData = _worksheet.GetFirstChild<SheetData>();
 
             // Filling header row
             string[] titlesOfColumns = new string[9] {"Тип", "Наименование", "Контрагент", 
@@ -59,30 +59,12 @@ namespace RegComparator
                 sheetData.Append(row);
             });
 
-            this.workbookpart.Workbook.Save();
-            this.spreadsheetDocument.Close();
+            _workbookpart.Workbook.Save();
+            _spreadsheetDocument.Close();
         }
-
-
-        internal protected void CreateSpreadsheet(List<string[]> documents)
-        {
-            // Setting columns
-            SheetData sheetData = this.worksheet.GetFirstChild<SheetData>();
-
-            // Filling body
-            documents.ForEach(delegate (string[] document)
-            {
-                Row row = GetRow(document);
-                sheetData.Append(row);
-            });
-
-            this.workbookpart.Workbook.Save();
-            this.spreadsheetDocument.Close();
-        }
-
 
         // Getting slyle index by document data
-        internal protected uint GetStyleIndex(Document document, int currentPosition, bool isDoDocument)
+        private uint GetStyleIndex(Document document, int currentPosition, bool isDoDocument)
         {
             if (!isDoDocument) return 0;
 
@@ -99,7 +81,7 @@ namespace RegComparator
         }
 
         // Filling body
-        internal protected Row GetRow( Document document, bool isDoDocument)
+        private Row GetRow( Document document, bool isDoDocument)
         {
             Row row = new Row();
 
@@ -123,7 +105,7 @@ namespace RegComparator
             return row;
         }
 
-        internal protected Row GetRow(string[] document)
+        private Row GetRow(string[] document)
         {
             Row row = new Row();
 
@@ -146,7 +128,7 @@ namespace RegComparator
 
 
         // Filling header
-        internal protected Row GetHeaderRow(string[] titleOfColumn)
+        private Row GetHeaderRow(string[] titleOfColumn)
         {
             Row row = new Row();
             foreach (var i in titleOfColumn)
@@ -164,7 +146,7 @@ namespace RegComparator
         }
 
         // Setting columns
-        internal protected void SetColumns(ref WorksheetPart worksheetPart)
+        private void SetColumns(ref WorksheetPart worksheetPart)
         {
             Columns columns = worksheetPart.Worksheet.GetFirstChild<Columns>();
             columns = new Columns();
@@ -184,7 +166,7 @@ namespace RegComparator
         }
 
         // Setting styles
-        internal protected Stylesheet GenerateStylesheet()
+        private Stylesheet GenerateStylesheet()
         {
             Stylesheet styleSheet = null;
 

@@ -16,6 +16,7 @@
             IDocComparator docComparator;
             IUnmatchedDocMarker unmatchedDocMarker;
             IDocAmountsReporter docAmountsReporter;
+            ISpreadSheetWriterXLSX spWriter;
 
             // Repositories
             ProgramParamsRepositoryBase progParamsRepo;                             // Contains program parameters
@@ -90,23 +91,17 @@
 
             void GenerateOutputSpreadsheets()
             {
-                SpreadSheetWriterXLSX spreadsheetWriterPassedDo;                
-                SpreadSheetWriterXLSX spreadSheetWriterPassedUpp;               
-
-                spreadsheetWriterPassedDo = new(progParamsRepo.Spreadsheets1CDO.Unmatched);
-                spreadsheetWriterPassedDo.CreateSpreadsheet(docRepo1CDO.UnmatchedDocs);
-                spreadSheetWriterPassedUpp = new(progParamsRepo.SpreadsheetsRegistry.Unmatched);
-                spreadSheetWriterPassedUpp.CreateSpreadsheet(docRepoRegistry.UnmatchedDocs, false);
+                spWriter = new SpreadSheetWriterXLSX(progParamsRepo.Spreadsheets1CDO.Unmatched);
+                spWriter.CreateSpreadsheet(docRepo1CDO.UnmatchedDocs);
+                spWriter = new SpreadSheetWriterXLSX(progParamsRepo.SpreadsheetsRegistry.Unmatched);
+                spWriter.CreateSpreadsheet(docRepoRegistry.UnmatchedDocs, false);
 
                 if (progParamsRepo.Common.IsPrintMatchedDocuments)
                 {
-                    SpreadSheetWriterXLSX spreadSheetWriterMatchedDo;               
-                    SpreadSheetWriterXLSX spreadSheetWriterMatcheUpp;               
-
-                    spreadSheetWriterMatchedDo = new(progParamsRepo.Spreadsheets1CDO.Matched);
-                    spreadSheetWriterMatchedDo.CreateSpreadsheet(docRepo1CDO.MatchedDocs, false);
-                    spreadSheetWriterMatcheUpp = new(progParamsRepo.SpreadsheetsRegistry.Matched);
-                    spreadSheetWriterMatcheUpp.CreateSpreadsheet(docRepoRegistry.MatchedDocs, false);
+                    spWriter = new SpreadSheetWriterXLSX(progParamsRepo.Spreadsheets1CDO.Matched);
+                    spWriter.CreateSpreadsheet(docRepo1CDO.MatchedDocs, false);
+                    spWriter = new SpreadSheetWriterXLSX(progParamsRepo.SpreadsheetsRegistry.Matched);
+                    spWriter.CreateSpreadsheet(docRepoRegistry.MatchedDocs, false);
                 }
             }
 
