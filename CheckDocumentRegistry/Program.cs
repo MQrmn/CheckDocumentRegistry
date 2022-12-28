@@ -4,7 +4,6 @@
     {
         static void Main(string[] args)
         {
-            
             // Utils
             IUserReporter userReporter;                                             // Reports providing
             IObjsConverter objectConverter;                                         // Objects Reader-Writer in/to file
@@ -27,7 +26,7 @@
             DocAmountsRepositoryBase docAmounts;
             
             // CREATING INSTANCES
-            // Common utils
+            // Create common utils
             userReporter = new ConsoleWriter();
             objectConverter = new ReadWriteJSON();
             objectConverter.ErrNotify += userReporter.ReportError;
@@ -41,23 +40,23 @@
             progParamsRepo.ErrNotify += userReporter.ReportError;
             progParamsRepo.FillRepository();
 
-            // Creating docprocessors
+            // Create docprocessors
             spreadSheetReader = new SpreadSheetReaderXLSX();
             arrToObjConverter = new ArrToObjConverter();
             arrToObjConverter.ErrNotify += userReporter.ReportError;
             docLoader = new DocLoader(arrToObjConverter, spreadSheetReader);
             docLoader.Notify += userReporter.ReportInfo;
 
-            // Creating document fields settings repositories
+            // Create document fields settings repositories
             fieldsSettings1CDO = new FieldsSettings1CDORepository();
             fieldsSettingsRegistry = new FieldsSettingsRegistryRepository();
 
-            // Creating Documents repositories
+            // Create documents repositories
             docRepo1CDO = new DocRepository1CDO();
             docRepoRegistry = new DocRepositoryRegistry();
 
-            // Creating documents repositories fillers
-            docRepoFiller1CDO     = new DocRepositoryFiller(docLoader, 
+            // Filling doc repositories
+            docRepoFiller1CDO = new DocRepositoryFiller(docLoader, 
                                                             fieldsSettings1CDO, 
                                                             docRepo1CDO,
                                                             progParamsRepo.Spreadsheets1CDO
@@ -68,11 +67,10 @@
                                                             progParamsRepo.SpreadsheetsRegistry
                                                             );
 
-            // Filling doc repositories 
             docRepoFiller1CDO.FillRepository();
             docRepoFillerRegidtry.FillRepository();
 
-            // Documents comparing
+            // Compare documents
             docComparator = new DocComparator(docRepo1CDO, docRepoRegistry);
             docComparator.CompareDocuments();
 
@@ -80,13 +78,13 @@
             unmatchedDocMarker = new UnmatchedDocMarker(docRepo1CDO.UnmatchedDocs, docRepoRegistry.UnmatchedDocs);
             unmatchedDocMarker.MarkDocuments();
             
-            // Report generating
+            // Generate reports
             docAmounts = new DocAmountsRepository(new DocAmounts(docRepo1CDO), new DocAmounts(docRepoRegistry));
             docAmountsReporter = new DocAmountsReporter(docAmounts, docRepoRegistry);
             docAmountsReporter.Notify += userReporter.ReportSpecial;
             docAmountsReporter.CreateReport();
 
-            // Result spreadsheets generating
+            // Generate result spreadsheets
             GenerateOutputSpreadsheets();
             CloseProgram();
 
