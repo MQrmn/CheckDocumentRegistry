@@ -53,8 +53,6 @@
             docRepo1CDO = new DocRepository1CDO();
             docRepoRegistry = new DocRepositoryRegistry();
 
-            DocAmountReportData reportDocAmount = new();  // NOT REFACTORED
-
             // Creating documents repositories fillers
             docRepoFiller1CDO     = new DocRepositoryFiller(docLoader, 
                                                             fieldsSettings1CDO, 
@@ -70,40 +68,23 @@
             docRepoFiller1CDO.FillRepository();
             docRepoFillerRegidtry.FillRepository();
 
+            // Documents comparing
             docComparator = new DocComparator(docRepo1CDO, docRepoRegistry);
             docComparator.CompareDocuments();
 
             // Mark unmatched docs
             unmatchedDocMarker = new UnmatchedDocMarker(docRepo1CDO.UnmatchedDocs, docRepoRegistry.UnmatchedDocs);
             unmatchedDocMarker.MarkDocuments();
-
-            FillSrcDocAmount();
-            // Comparing documents
-            FillResultDocAmount();
-
+            
+            // Report generating
             docAmounts = new DocAmountsRepository(new DocAmounts(docRepo1CDO), new DocAmounts(docRepoRegistry));
+            DocumentAmountReporter documentsAmountReporter = new(docAmounts);
 
-            DocumentAmountReporter documentsAmountReporter = new(progParamsRepo.Common.ProgramReportFilePath);
-            documentsAmountReporter.CreateAllReports(docRepoRegistry.SourceDocs,reportDocAmount);
+            documentsAmountReporter.CreateAllReports();
+
             // Result spreadsheets generating
             GenerateOutputSpreadsheets();
             CloseProgram();
-
-            void FillSrcDocAmount()
-            {
-                reportDocAmount.doDocumentsCount = docRepo1CDO.SourceDocs.Count;
-                reportDocAmount.uppDocumentsCount = docRepoRegistry.SourceDocs.Count;
-                reportDocAmount.ignoreDoDocumentsCount = docRepo1CDO.SkippedDocs.Count;
-                reportDocAmount.ignoreUppDocumentsCount = docRepoRegistry.SkippedDocs.Count;
-            }
-
-            void FillResultDocAmount()
-            {
-                reportDocAmount.Documents1CDoUnmatchedCount = docRepo1CDO.UnmatchedDocs.Count;
-                reportDocAmount.Documents1CUppUnmatchedCount = docRepoRegistry.UnmatchedDocs.Count;
-                reportDocAmount.Documents1CDoMatchedCount = docRepo1CDO.MatchedDocs.Count;
-                reportDocAmount.Documents1CUppMatchedCount = docRepoRegistry.MatchedDocs.Count;
-            }
 
             void GenerateOutputSpreadsheets()
             {
@@ -128,8 +109,6 @@
                     spreadSheetWriterMatcheUpp.CreateSpreadsheet(docRepoRegistry.MatchedDocs, false);
                 }
             }
-
-
 
             void CloseProgram()
             {

@@ -2,22 +2,25 @@
 {
     internal class DocumentAmountReporter
     {
-        private string reportFilePath;
+        //private string reportFilePath;
 
-        internal DocumentAmountReporter(string filePath)
+        private DocAmountsRepositoryBase _docAmounts;
+
+
+        internal DocumentAmountReporter(DocAmountsRepositoryBase docAmounts)
         {
-            this.reportFilePath = filePath;
+            _docAmounts = docAmounts;
         }
 
-        internal void CreateAllReports(List<Document> docList, DocAmountReportData documentsAmount)
+        internal void CreateAllReports()
         {
-            string[] docAmounts = GetReportDataCommon(documentsAmount);
-            List<string> companiesList = GetCompanies(docList);
-            string[] compiledReportEntries = GetReportDataByCompanies(docList, companiesList);
-            string[] arrayReportData = docAmounts.Concat(compiledReportEntries).ToArray();
-            string stringReportData = GetStringFromArr(arrayReportData);
+            string[] docAmounts = GetReportDataCommon();
+            //List<string> companiesList = GetCompanies(docList);
+            //string[] compiledReportEntries = GetReportDataByCompanies(docList, companiesList);
+            //string[] arrayReportData = docAmounts.Concat(compiledReportEntries).ToArray();
+            string stringReportData = GetStringFromArr(docAmounts);
             this.PutReportConsole(stringReportData);
-            this.PutReportTXT(this.reportFilePath, stringReportData);
+            //this.PutReportTXT(this.reportFilePath, stringReportData);
         }
 
         private void PutReportConsole(string reportData)
@@ -28,34 +31,34 @@
             Console.ResetColor();
         }
 
-        private void PutReportTXT(string reportFilePath, string reportData)
-        {
-            try
-            {
-                File.WriteAllText(reportFilePath, reportData);
-            }
-            catch
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Не удалось записать файл: " + reportFilePath);
-                Console.ResetColor();
-            }
-        }
+        //private void PutReportTXT(string reportFilePath, string reportData)
+        //{
+        //    try
+        //    {
+        //        File.WriteAllText(reportFilePath, reportData);
+        //    }
+        //    catch
+        //    {
+        //        Console.ForegroundColor = ConsoleColor.Red;
+        //        Console.WriteLine("Не удалось записать файл: " + reportFilePath);
+        //        Console.ResetColor();
+        //    }
+        //}
 
-        private string[] GetReportDataCommon(DocAmountReportData documentsAmount)
+        private string[] GetReportDataCommon()
         {
             string[] commonReportData = new string[10];
 
             commonReportData[0] = "Результат сравнения документов, внесенных в 1С:ДО, с реестром\n";
             commonReportData[1] = "От " + DateTime.Now.ToLongDateString() + ":\n\n";
-            commonReportData[2] = "Документов в 1С:ДО Source: " + documentsAmount.doDocumentsCount + "\n";
-            commonReportData[3] = "Документов в реестре Source: " + documentsAmount.uppDocumentsCount + "\n";
-            commonReportData[4] = "Документов 1С:ДО Skipped: " + documentsAmount.ignoreDoDocumentsCount + "\n";
-            commonReportData[5] = "Документов реестра Skipped: " + documentsAmount.ignoreUppDocumentsCount + "\n";
-            commonReportData[6] = "Документов 1С:ДО Matched:  " + documentsAmount.Documents1CDoMatchedCount + "\n";
-            commonReportData[7] = "Документов реестра Matched: " + documentsAmount.Documents1CUppMatchedCount + "\n";
-            commonReportData[8] = "Документов 1С:ДО Unmatched: " + documentsAmount.Documents1CDoUnmatchedCount + "\n";
-            commonReportData[9] = "Документов Registry Unmatched: " + documentsAmount.Documents1CUppUnmatchedCount + "\n\n";
+            commonReportData[2] = "Документов в 1С:ДО Source: " + _docAmounts.Amounts1CDO.Source + "\n";
+            commonReportData[3] = "Документов в реестре Source: " + _docAmounts.AmountsReg.Source + "\n";
+            commonReportData[4] = "Документов 1С:ДО Skipped: " + _docAmounts.Amounts1CDO.Skip + "\n";
+            commonReportData[5] = "Документов реестра Skipped: " + _docAmounts.AmountsReg.Skip + "\n";
+            commonReportData[6] = "Документов 1С:ДО Matched:  " + _docAmounts.Amounts1CDO.Matched + "\n";
+            commonReportData[7] = "Документов реестра Matched: " + _docAmounts.AmountsReg.Matched + "\n";
+            commonReportData[8] = "Документов 1С:ДО Unmatched: " + _docAmounts.Amounts1CDO.Unmatched + "\n";
+            commonReportData[9] = "Документов Registry Unmatched: " + _docAmounts.AmountsReg.Unmatched + "\n\n";
 
             return commonReportData;
         }
