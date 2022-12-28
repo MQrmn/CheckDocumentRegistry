@@ -15,6 +15,7 @@
             IArgsHandler argsHandler;
             IDocComparator docComparator;
             IUnmatchedDocMarker unmatchedDocMarker;
+            IDocAmountsReporter docAmountsReporter;
 
             // Repositories
             ProgramParamsRepositoryBase progParamsRepo;                             // Contains program parameters
@@ -79,9 +80,9 @@
             
             // Report generating
             docAmounts = new DocAmountsRepository(new DocAmounts(docRepo1CDO), new DocAmounts(docRepoRegistry));
-            DocumentAmountReporter documentsAmountReporter = new(docAmounts, docRepoRegistry);
-
-            documentsAmountReporter.CreateAllReports();
+            docAmountsReporter = new DocAmountsReporter(docAmounts, docRepoRegistry);
+            docAmountsReporter.Notify += userReporter.ReportSpecial;
+            docAmountsReporter.CreateReport();
 
             // Result spreadsheets generating
             GenerateOutputSpreadsheets();
