@@ -5,45 +5,29 @@
         //private string reportFilePath;
 
         private DocAmountsRepositoryBase _docAmounts;
+        private DocRepositoryBase _docRepository;
 
 
-        internal DocumentAmountReporter(DocAmountsRepositoryBase docAmounts)
+        internal DocumentAmountReporter(DocAmountsRepositoryBase docAmounts, DocRepositoryBase docRepository)
         {
             _docAmounts = docAmounts;
+            _docRepository = docRepository;
         }
 
         internal void CreateAllReports()
         {
             string[] docAmounts = GetReportDataCommon();
-            //List<string> companiesList = GetCompanies(docList);
-            //string[] compiledReportEntries = GetReportDataByCompanies(docList, companiesList);
-            //string[] arrayReportData = docAmounts.Concat(compiledReportEntries).ToArray();
-            string stringReportData = GetStringFromArr(docAmounts);
-            this.PutReportConsole(stringReportData);
-            //this.PutReportTXT(this.reportFilePath, stringReportData);
+            List<string> companiesList = GetCompanies(_docRepository.UnmatchedDocs);
+            string[] compiledReportEntries = GetReportDataByCompanies(_docRepository.UnmatchedDocs, companiesList);
+            string[] arrayReportData = docAmounts.Concat(compiledReportEntries).ToArray();
+            string stringReportData = GetStringFromArr(arrayReportData);
+            //this.PutReportConsole(stringReportData);
         }
 
-        private void PutReportConsole(string reportData)
+        private void PutReport()
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine();
-            Console.WriteLine(reportData);
-            Console.ResetColor();
-        }
 
-        //private void PutReportTXT(string reportFilePath, string reportData)
-        //{
-        //    try
-        //    {
-        //        File.WriteAllText(reportFilePath, reportData);
-        //    }
-        //    catch
-        //    {
-        //        Console.ForegroundColor = ConsoleColor.Red;
-        //        Console.WriteLine("Не удалось записать файл: " + reportFilePath);
-        //        Console.ResetColor();
-        //    }
-        //}
+        }
 
         private string[] GetReportDataCommon()
         {

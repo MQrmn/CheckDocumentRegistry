@@ -78,7 +78,7 @@
             
             // Report generating
             docAmounts = new DocAmountsRepository(new DocAmounts(docRepo1CDO), new DocAmounts(docRepoRegistry));
-            DocumentAmountReporter documentsAmountReporter = new(docAmounts);
+            DocumentAmountReporter documentsAmountReporter = new(docAmounts, docRepoRegistry);
 
             documentsAmountReporter.CreateAllReports();
 
