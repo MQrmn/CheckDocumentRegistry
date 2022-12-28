@@ -2,10 +2,10 @@
 {
     public abstract class DocAmountsRepositoryBase
     {
-        public DocAmountBase Amounts1CDO;
-        public DocAmountBase AmountsReg;
+        public DocAmountsBase Amounts1CDO;
+        public DocAmountsBase AmountsReg;
 
-        public DocAmountsRepositoryBase(DocAmountBase amounts1CDO, DocAmountBase amountsReg)
+        public DocAmountsRepositoryBase(DocAmountsBase amounts1CDO, DocAmountsBase amountsReg)
         {
             Amounts1CDO = amounts1CDO;
             AmountsReg = amountsReg;

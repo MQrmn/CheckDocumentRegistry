@@ -1,6 +1,6 @@
 ﻿namespace RegComparator
 {
-    public class DocAmountBase
+    public class DocAmountsBase
     {
         public int Source;
         public int Skip;
@@ -8,7 +8,7 @@
         public int Unmatched;
         private DocRepositoryBase _docRepo;
 
-        public DocAmountBase(DocRepositoryBase docRepo)
+        public DocAmountsBase(DocRepositoryBase docRepo)
         {
             _docRepo = docRepo;
             Source = _docRepo.SourceDocs.Count;

@@ -21,6 +21,7 @@
             SpreadsheetsPathsBase spreadsheetsPaths1CDO, spreadsheetsPathsRegistry; // Contains spreadsheets paths in file system
             FieldsSettingsRepositoryBase fieldsSettings1CDO, fieldsSettingsRegistry;
             DocRepositoryBase docRepo1CDO, docRepoRegistry;
+            DocAmountsRepositoryBase docAmounts;
             
             // CREATING INSTANCES
             // Common utils
@@ -79,7 +80,9 @@
             FillSrcDocAmount();
             // Comparing documents
             FillResultDocAmount();
-            
+
+            docAmounts = new DocAmountsRepository(new DocAmounts(docRepo1CDO), new DocAmounts(docRepoRegistry));
+
             DocumentAmountReporter documentsAmountReporter = new(progParamsRepo.Common.ProgramReportFilePath);
             documentsAmountReporter.CreateAllReports(docRepoRegistry.SourceDocs,reportDocAmount);
             // Result spreadsheets generating
