@@ -4,6 +4,7 @@
     {
         static void Main(string[] args)
         {
+            
             // Utils
             IUserReporter userReporter;                                             // Reports providing
             IObjsConverter objectConverter;                                         // Objects Reader-Writer in/to file
