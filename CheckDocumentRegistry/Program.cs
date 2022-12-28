@@ -17,7 +17,7 @@
             IUnmatchedDocMarker unmatchedDocMarker;
 
             // Repositories
-            ProgramParamsRepositoryBase progParamsRepo;                             // Contains programs parameters
+            ProgramParamsRepositoryBase progParamsRepo;                             // Contains program parameters
             SpreadsheetsPathsBase spreadsheetsPaths1CDO, spreadsheetsPathsRegistry; // Contains spreadsheets paths in file system
             FieldsSettingsRepositoryBase fieldsSettings1CDO, fieldsSettingsRegistry;
             DocRepositoryBase docRepo1CDO, docRepoRegistry;

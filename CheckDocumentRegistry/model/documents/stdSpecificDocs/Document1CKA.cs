@@ -22,7 +22,8 @@ namespace RegComparator
                 typeCode = 1;
             else if (RegexResult(patternSf))
                 typeCode = 2;
-
+            else
+                throw new Exception();
             //Console.WriteLine(typeCode);
 
             return typeCode;
