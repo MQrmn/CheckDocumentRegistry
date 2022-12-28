@@ -64,6 +64,7 @@
                                                             docRepoRegistry,
                                                             progParamsRepo.SpreadsheetsRegistry
                                                             );
+
             // Filling doc repositories 
             docRepoFiller1CDO.FillRepository();
             docRepoFillerRegidtry.FillRepository();
@@ -93,7 +94,6 @@
 
                 spreadsheetWriterPassedDo = new(progParamsRepo.Spreadsheets1CDO.Unmatched);
                 spreadsheetWriterPassedDo.CreateSpreadsheet(docRepo1CDO.UnmatchedDocs);
-
                 spreadSheetWriterPassedUpp = new(progParamsRepo.SpreadsheetsRegistry.Unmatched);
                 spreadSheetWriterPassedUpp.CreateSpreadsheet(docRepoRegistry.UnmatchedDocs, false);
 
@@ -104,7 +104,6 @@
 
                     spreadSheetWriterMatchedDo = new(progParamsRepo.Spreadsheets1CDO.Matched);
                     spreadSheetWriterMatchedDo.CreateSpreadsheet(docRepo1CDO.MatchedDocs, false);
-
                     spreadSheetWriterMatcheUpp = new(progParamsRepo.SpreadsheetsRegistry.Matched);
                     spreadSheetWriterMatcheUpp.CreateSpreadsheet(docRepoRegistry.MatchedDocs, false);
                 }
