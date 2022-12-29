@@ -5,10 +5,11 @@
         static void Main(string[] args)
         {
             // Utils
-            IUserReporter userReporter;                                             // Reports providing
-            IObjsConverter objectConverter;                                         // Objects Reader-Writer in/to file
-            ISpreadSheetReader spreadSheetReader;                                   // Getting data from spreadsheetd
-            IArrToObjConverter arrToObjConverter;                                   // Getting objs from file, putting objs to file
+            IUserReporter consoleWriter;                                             // Reports providing
+            IUserReporter fileWriter;
+            IObjsConverter objFileConverter;                                         // Objects Reader-Writer in/to file
+            ISpreadSheetReader spsReader;                                            // Getting data from spreadsheetd
+            IArrToObjConverter arrToObjConverter;                                    // Getting objs from file, putting objs to file
             IFileExistChecker fileExistChecker;
             IDocLoader docLoader;
             IDocRepositoryFiller docRepoFiller1CDO, docRepoFillerRegidtry;
@@ -16,7 +17,8 @@
             IDocComparator docComparator;
             IUnmatchedDocMarker unmatchedDocMarker;
             IDocAmountsReporter docAmountsReporter;
-            ISpreadSheetWriterXLSX spWriter;
+            ISpreadSheetWriterXLSX spsWriter;
+            
 
             // Repositories
             ProgramParamsRepositoryBase progParamsRepo;                             // Contains program parameters
@@ -27,25 +29,26 @@
             
             // CREATING INSTANCES
             // Create common utils
-            userReporter = new ConsoleWriter();
-            objectConverter = new ReadWriteJSON();
-            objectConverter.ErrNotify += userReporter.ReportError;
+            consoleWriter = new ConsoleWriter();
+            
+            objFileConverter = new ReadWriteJSON();
+            objFileConverter.ErrNotify += consoleWriter.ReportError;
             fileExistChecker = new FileExistChecker();
-            fileExistChecker.ErrNotify += userReporter.ReportError;
+            fileExistChecker.ErrNotify += consoleWriter.ReportError;
 
             // Set program patameters
             argsHandler = new ArgsHandler(args);
-            progParamsRepo = new ProgramParamsRepository(argsHandler.GetParams(), objectConverter, fileExistChecker);
-            progParamsRepo.Notify += userReporter.ReportInfo;
-            progParamsRepo.ErrNotify += userReporter.ReportError;
+            progParamsRepo = new ProgramParamsRepository(argsHandler.GetParams(), objFileConverter, fileExistChecker);
+            progParamsRepo.Notify += consoleWriter.ReportInfo;
+            progParamsRepo.ErrNotify += consoleWriter.ReportError;
             progParamsRepo.FillRepository();
 
             // Create docprocessors
-            spreadSheetReader = new SpreadSheetReaderXLSX();
+            spsReader = new SpreadSheetReaderXLSX();
             arrToObjConverter = new ArrToObjConverter();
-            arrToObjConverter.ErrNotify += userReporter.ReportError;
-            docLoader = new DocLoader(arrToObjConverter, spreadSheetReader);
-            docLoader.Notify += userReporter.ReportInfo;
+            arrToObjConverter.ErrNotify += consoleWriter.ReportError;
+            docLoader = new DocLoader(arrToObjConverter, spsReader);
+            docLoader.Notify += consoleWriter.ReportInfo;
 
             // Create document fields settings repositories
             fieldsSettings1CDO = new FieldsSettings1CDORepository();
@@ -77,11 +80,13 @@
             // Mark unmatched docs
             unmatchedDocMarker = new UnmatchedDocMarker(docRepo1CDO.UnmatchedDocs, docRepoRegistry.UnmatchedDocs);
             unmatchedDocMarker.MarkDocuments();
-            
+
             // Generate reports
+            fileWriter = new FileWriterTXT(progParamsRepo.Common.ProgramReportFilePath);
             docAmounts = new DocAmountsRepository(new DocAmounts(docRepo1CDO), new DocAmounts(docRepoRegistry));
             docAmountsReporter = new DocAmountsReporter(docAmounts, docRepoRegistry);
-            docAmountsReporter.Notify += userReporter.ReportSpecial;
+            docAmountsReporter.Notify += consoleWriter.ReportSpecial;
+            docAmountsReporter.Notify += fileWriter.ReportSpecial;
             docAmountsReporter.CreateReport();
 
             // Generate result spreadsheets
@@ -90,17 +95,17 @@
 
             void GenerateOutputSpreadsheets()
             {
-                spWriter = new SpreadSheetWriterXLSX(progParamsRepo.Spreadsheets1CDO.Unmatched);
-                spWriter.CreateSpreadsheet(docRepo1CDO.UnmatchedDocs);
-                spWriter = new SpreadSheetWriterXLSX(progParamsRepo.SpreadsheetsRegistry.Unmatched);
-                spWriter.CreateSpreadsheet(docRepoRegistry.UnmatchedDocs, false);
+                spsWriter = new SpreadSheetWriterXLSX(progParamsRepo.Spreadsheets1CDO.Unmatched);
+                spsWriter.CreateSpreadsheet(docRepo1CDO.UnmatchedDocs);
+                spsWriter = new SpreadSheetWriterXLSX(progParamsRepo.SpreadsheetsRegistry.Unmatched);
+                spsWriter.CreateSpreadsheet(docRepoRegistry.UnmatchedDocs, false);
 
                 if (progParamsRepo.Common.IsPrintMatchedDocuments)
                 {
-                    spWriter = new SpreadSheetWriterXLSX(progParamsRepo.Spreadsheets1CDO.Matched);
-                    spWriter.CreateSpreadsheet(docRepo1CDO.MatchedDocs, false);
-                    spWriter = new SpreadSheetWriterXLSX(progParamsRepo.SpreadsheetsRegistry.Matched);
-                    spWriter.CreateSpreadsheet(docRepoRegistry.MatchedDocs, false);
+                    spsWriter = new SpreadSheetWriterXLSX(progParamsRepo.Spreadsheets1CDO.Matched);
+                    spsWriter.CreateSpreadsheet(docRepo1CDO.MatchedDocs, false);
+                    spsWriter = new SpreadSheetWriterXLSX(progParamsRepo.SpreadsheetsRegistry.Matched);
+                    spsWriter.CreateSpreadsheet(docRepoRegistry.MatchedDocs, false);
                 }
             }
 

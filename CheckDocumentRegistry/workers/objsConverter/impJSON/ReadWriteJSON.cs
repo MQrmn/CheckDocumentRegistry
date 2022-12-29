@@ -46,7 +46,7 @@ namespace RegComparator
             {
                 using (StreamWriter writer = new StreamWriter(path, false, Encoding.UTF8))
                 {
-                    writer.WriteLineAsync(jsonstring);
+                    writer.WriteLine(jsonstring);
                 }
             }
             catch
