@@ -7,7 +7,7 @@ namespace RegComparator
         public List<Document> MatchedDocs;
         public List<Document> UnmatchedDocs;
         public List<Document> SkippedDocs;
-
+        
         public DocRepositoryBase()
         {
             SourceDocs = new();
@@ -17,8 +17,9 @@ namespace RegComparator
         }
 
         public abstract void AddSourceDoc(string[] docFieldsArr, int[] docFieldsIndex);
-        public void AddSkippedDoc(string[] docFieldsArr, int[] docFieldsIndex) {
+        public virtual void AddSkippedDoc(string[] docFieldsArr, int[] docFieldsIndex) {
             SkippedDocs.Add(new Document(docFieldsArr, docFieldsIndex));
         }
+
     }
 }
